@@ -1,0 +1,27 @@
+/* when the html has a dark class, make the font red */
+html {
+  @apply text-neutral-900 bg-neutral-50;
+}
+
+html.dark {
+  @apply text-neutral-300 bg-neutral-900;
+}
+
+html.dark a {
+  /* @apply text-stone-400 font-medium; */
+}
+
+/* prevent pull down refresh on chrome mobile */
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+}
+
+.disable-scroll {
+  overflow: hidden;
+  width: 100%;
+}
+
+a {
+  @apply underline font-bold hover:opacity-80;
+}

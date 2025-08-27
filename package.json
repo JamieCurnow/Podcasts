@@ -1,0 +1,48 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "generate-pwa-assets": "pwa-asset-generator -b \"#171717\" -m manifest.json -a \"/pwa-icons\" -q 100 -i index-pwa-icons.html -f public/icon-horizontal.svg public/pwa-icons"
+  },
+  "overrides": {
+    "eslint": "9.14"
+  },
+  "dependencies": {
+    "@iconify-json/ic": "^1.1.17",
+    "@iconify-json/mdi": "^1.1.67",
+    "@nuxt/fonts": "^0.7.1",
+    "@nuxt/ui": "^2.19.2",
+    "@pinia/nuxt": "^0.11.1",
+    "@vueuse/nuxt": "^12.0.0",
+    "fast-xml-parser": "^5.2.5",
+    "html-entities": "^2.6.0",
+    "lodash.throttle": "^4.1.1",
+    "nanoid": "^5.0.7",
+    "nuxt": "^3.17.7",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.4.1",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^0.7.0",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/node": "^20.8.9",
+    "@vite-pwa/assets-generator": "^0.2.4",
+    "@vite-pwa/nuxt": "^0.10.6",
+    "dayjs-nuxt": "^2.1.9",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "pwa-asset-generator": "^6.4.0",
+    "tsx": "^4.12.0",
+    "typescript": "^5.2.2"
+  }
+}
