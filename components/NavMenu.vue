@@ -1,6 +1,6 @@
 <template>
   <USlideover v-model="isOpen">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 h-dvh overflow-auto">
       <!-- top bar -->
       <div class="px-6 pt-4">
         <!-- back -->

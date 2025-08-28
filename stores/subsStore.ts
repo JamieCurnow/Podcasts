@@ -58,11 +58,11 @@ export const useSubsStore = defineStore(
       }
     }
 
-    onMounted(() => {
-      if (!urls.value) {
-        addSubscription('https://lexfridman.com/feed/podcast/')
-      }
-    })
+    // onMounted(() => {
+    //   if (!urls.value) {
+    //     addSubscription('https://lexfridman.com/feed/podcast/')
+    //   }
+    // })
 
     return {
       urls,

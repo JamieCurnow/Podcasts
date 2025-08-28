@@ -39,20 +39,42 @@
 
     <Divider />
 
+    <div class="flex flex-col gap-2">
+      <div class="text-lg font-semibold">Import/Export</div>
+      <div class="flex flex-col gap-4">
+        <div>
+          <UButton color="primary" variant="solid" :icon="'mdi-import'" trailing @click="openImportDialog"
+            >Import OPML</UButton
+          >
+          <ImportOPMLDialog v-model="isImportDialogOpen" />
+        </div>
+        <div>
+          <UButton color="primary" variant="solid" :icon="'mdi-export'" trailing @click="openExportDialog"
+            >Export OPML</UButton
+          >
+          <ExportOPMLDialog v-model="isExportDialogOpen" />
+        </div>
+      </div>
+    </div>
+
+    <Divider />
+
     <div class="p-4 pt-2 px-2 flex flex-col border-red-500 border rounded-md gap-2">
       <div class="text-red-500 text-lg">Danger Zone</div>
       <div class="flex flex-col gap-4">
         <div>
-          <UButton
-            :disabled="!history?.length"
-            @click="clearAllHistory()"
-            color="white"
-            variant="solid"
-            :icon="history?.length ? 'mdi-close' : 'mdi-check'"
-            trailing
-          >
-            Clear all history
-          </UButton>
+          <ClientOnly>
+            <UButton
+              :disabled="!history?.length"
+              @click="clearAllHistory()"
+              color="white"
+              variant="solid"
+              :icon="history?.length ? 'mdi-close' : 'mdi-check'"
+              trailing
+            >
+              Clear all history
+            </UButton>
+          </ClientOnly>
         </div>
       </div>
     </div>
@@ -66,4 +88,15 @@ const { clearAllHistory } = historyStore
 
 const userConfigStore = useUserConfigStore()
 const { amountOfPodsToInitiallyFetch, pullDownWeight } = storeToRefs(userConfigStore)
+
+const isImportDialogOpen = ref(false)
+const isExportDialogOpen = ref(false)
+
+const openImportDialog = () => {
+  isImportDialogOpen.value = true
+}
+
+const openExportDialog = () => {
+  isExportDialogOpen.value = true
+}
 </script>

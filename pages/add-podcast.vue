@@ -71,4 +71,12 @@ const addPodcast = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  const encodedFeedUrl = useRoute().query.url
+  if (encodedFeedUrl && typeof encodedFeedUrl === 'string') {
+    rssUrl.value = decodeURIComponent(encodedFeedUrl)
+    addPodcast()
+  }
+})
 </script>

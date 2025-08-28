@@ -16,13 +16,14 @@
 const currentPath = computed(() => useRoute().path)
 const topNavPaths = [
   '/',
-  '/search',
+  '/start',
   '/add-podcast',
   '/library',
   '/bookmarks',
   '/queue',
   '/downloads',
   '/history',
-  '/settings'
+  '/settings',
+  '/import'
 ]
 </script>

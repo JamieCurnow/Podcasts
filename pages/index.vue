@@ -177,7 +177,7 @@ watch(
   async (v) => {
     if (v === 0) {
       loading.value = false
-      return useRouter().push('/search')
+      return useRouter().push('/start')
     }
     try {
       loading.value = true
