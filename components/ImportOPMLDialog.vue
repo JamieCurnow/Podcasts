@@ -103,13 +103,19 @@ const importSelected = () => {
 
 const loading = ref(false)
 
+const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
+
 watch(file, async (val) => {
   if (val) {
     loading.value = true
     const fileContent = await val.text()
     const newUrls = parseOpml(fileContent)
     const maybePods = await Promise.all(
-      newUrls.map((url) => $fetch('/api/podcast/feed', { query: { url, limit: 1 } }).catch(() => null))
+      newUrls.map((url) =>
+        $fetch('/api/podcast/feed', { query: { url, limit: amountOfPodsToInitiallyFetch.value } }).catch(
+          () => null
+        )
+      )
     )
     const pods = maybePods.map((res) => res?.podcast).filter((pod): pod is Podcast => !!pod)
     const uniquePods = pods.reduce((acc, pod) => {

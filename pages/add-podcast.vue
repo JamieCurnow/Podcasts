@@ -59,8 +59,12 @@ const addPodcast = async () => {
   error.value = null
 
   try {
+    const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
+
     // we don't need the response, just to check if it's a valid feed
-    await $fetch('/api/podcast/feed', { query: { url: rssUrl.value, limit: 1 } })
+    await $fetch('/api/podcast/feed', {
+      query: { url: rssUrl.value, limit: amountOfPodsToInitiallyFetch.value }
+    })
 
     subsStore.addSubscription(rssUrl.value)
     router.push(`/podcast?url=${encodeURIComponent(rssUrl.value)}`)

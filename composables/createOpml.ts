@@ -41,7 +41,11 @@ export const createOpml = async (rssUrls: string[]) => {
 
 const getPodMeta = async (rssUrl: string) => {
   try {
-    const response = await $fetch('/api/podcast/feed', { query: { url: rssUrl, limit: 1 } })
+    const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
+
+    const response = await $fetch('/api/podcast/feed', {
+      query: { url: rssUrl, limit: amountOfPodsToInitiallyFetch.value }
+    })
     return response.podcast || null
   } catch (error) {
     console.error('Error fetching podcast metadata:', error)

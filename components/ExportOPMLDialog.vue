@@ -85,12 +85,18 @@ const exportSelected = async () => {
 
 const loading = ref(false)
 
+const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
+
 watch([open, urls], async ([val, actualUrls]) => {
   console.log('watch', val, actualUrls)
   if (val && actualUrls) {
     loading.value = true
     const maybePods = await Promise.all(
-      actualUrls.map((url) => $fetch('/api/podcast/feed', { query: { url, limit: 1 } }).catch(() => null))
+      actualUrls.map((url) =>
+        $fetch('/api/podcast/feed', { query: { url, limit: amountOfPodsToInitiallyFetch.value } }).catch(
+          () => null
+        )
+      )
     )
     const pods = maybePods.map((res) => res?.podcast).filter((pod): pod is Podcast => !!pod)
     podcasts.value = pods.map((pod) => ({ ...pod, selected: true }))
