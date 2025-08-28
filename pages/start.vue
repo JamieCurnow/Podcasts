@@ -15,7 +15,7 @@
         Import from OPML
       </UButton>
     </div>
-    <div class="flex gap-2 justify-center mb-8">
+    <div class="flex flex-wrap gap-2 justify-center mb-8">
       <UButton
         icon="i-mdi-github"
         to="https://github.com/JamieCurnow/Podcasts"
