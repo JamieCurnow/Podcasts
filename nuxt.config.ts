@@ -15,7 +15,8 @@ const preRenderRoutes = [
   '/',
   '/library',
   '/queue',
-  '/settings'
+  '/settings',
+  '/start'
 ]
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
