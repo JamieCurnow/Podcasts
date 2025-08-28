@@ -39,13 +39,6 @@
         </div>
       </div>
     </div>
-    <div
-      v-if="!loading && !urls?.length"
-      class="text-2xl text-center pt-20 text-neutral-300 dark:text-neutral-600 bg-neutral-50 dark:bg-neutral-900"
-    >
-      No podcast subs!
-      <p class="text-xl md:text-2xl">Click explore below to find your favorite pod</p>
-    </div>
   </PullToRefesh>
   <FullScreenLoading v-if="loading" />
 </template>

@@ -15,6 +15,8 @@ import SearchPods from '~/components/SearchPods.vue'
 
 const { urls } = storeToRefs(useSubsStore())
 
+const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
+
 const podcasts = ref<Podcast[] | null>(null)
 const loading = ref(false)
 const getSubs = async () => {
@@ -22,7 +24,10 @@ const getSubs = async () => {
     loading.value = true
     const pods = await Promise.all(
       urls.value?.map((url) => {
-        return $fetch('/api/podcast/feed', { method: 'GET', query: { url, limit: 0 } }).catch(() => null)
+        return $fetch('/api/podcast/feed', {
+          method: 'GET',
+          query: { url, limit: amountOfPodsToInitiallyFetch.value }
+        }).catch(() => null)
       }) || []
     )
     podcasts.value = pods.filter((p) => p?.podcast?.feedUrl).map((x) => x!.podcast)

@@ -1,6 +1,52 @@
 <template>
   <div class="flex flex-col gap-4 pt-4 pb-40 px-4">
     <div class="flex flex-col gap-2">
+      <div class="text-lg font-semibold">About</div>
+      <div class="flex flex-col gap-4">
+        <div>
+          <p class="mb-2">
+            Podcasts is a free and open-source podcast app, for the love of pods.
+            <br />
+            No ads. No tracking. Just pure podcasting goodness.
+          </p>
+          <UButton
+            icon="i-mdi-github"
+            to="https://github.com/JamieCurnow/Podcasts"
+            target="_blank"
+            color="gray"
+            class="no-underline"
+          >
+            Star this app on GitHub
+          </UButton>
+          <p class="mb-2 mt-6">
+            If you like what I'm doing, please consider supporting me. Every little helps keep projects like
+            this alive!
+          </p>
+          <div class="flex gap-2">
+            <UButton
+              to="https://www.buymeacoffee.com/jamiecurnow"
+              target="_blank"
+              color="gray"
+              class="no-underline"
+            >
+              ☕ Buy me a coffee
+            </UButton>
+            <UButton
+              to="https://github.com/sponsors/JamieCurnow"
+              target="_blank"
+              color="gray"
+              class="no-underline"
+            >
+              ❤️ Sponsor me on GitHub
+            </UButton>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <Divider />
+
+    <div class="flex flex-col gap-2">
       <div class="text-lg font-semibold">General</div>
       <div class="flex flex-col gap-4">
         <div>

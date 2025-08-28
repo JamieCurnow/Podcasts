@@ -15,13 +15,28 @@
         Import from OPML
       </UButton>
     </div>
-    <a
-      href="https://github.com/JamieCurnow/Podcasts"
-      target="_blank"
-      class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-    >
-      ⭐ Star us on GitHub
-    </a>
+    <div class="flex gap-2 justify-center mb-8">
+      <UButton
+        icon="i-mdi-github"
+        to="https://github.com/JamieCurnow/Podcasts"
+        target="_blank"
+        color="gray"
+        class="no-underline"
+      >
+        Star this app on GitHub
+      </UButton>
+      <UButton
+        to="https://www.buymeacoffee.com/jamiecurnow"
+        target="_blank"
+        color="gray"
+        class="no-underline"
+      >
+        ☕ Buy me a coffee
+      </UButton>
+      <UButton to="https://github.com/sponsors/JamieCurnow" target="_blank" color="gray" class="no-underline">
+        ❤️ Sponsor me on GitHub
+      </UButton>
+    </div>
     <ImportOPMLDialog v-model="importDialogVisible" />
   </div>
 </template>
