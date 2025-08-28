@@ -50,6 +50,7 @@ export const useSubsStore = defineStore(
     }
 
     const addSubscription = (url: string) => {
+      if (!url) return
       if (!urls.value) {
         urls.value = []
       }
@@ -62,6 +63,9 @@ export const useSubsStore = defineStore(
       if (!urls.value) {
         // addSubscription('https://lexfridman.com/feed/podcast/')
         urls.value = []
+      } else {
+        // cleanup any duplicates or empty strings
+        urls.value = Array.from(new Set(urls.value.filter((u) => u && typeof u === 'string' && u.trim())))
       }
     })
 
