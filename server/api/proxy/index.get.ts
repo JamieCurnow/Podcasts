@@ -31,9 +31,19 @@ export default defineEventHandler(async (event) => {
   }
 
   // Set CORS headers
-  const corsDomains = ['http://localhost:3000', 'https://lovepodcasts.com']
+  const corsDomain = process.env.CORS_DOMAINS || ''
+  const corsDomains = corsDomain
+    .split(',')
+    .map((d) => d.trim())
+    .filter((d) => d.length > 0)
   const origin = event.node.req.headers.origin
-  if (origin && corsDomains.includes(origin)) event.node.res.setHeader('Access-Control-Allow-Origin', origin)
+  if (corsDomains.length) {
+    if (origin && corsDomains.includes(origin))
+      event.node.res.setHeader('Access-Control-Allow-Origin', origin)
+  } else {
+    // if no domains are specified, allow all
+    event.node.res.setHeader('Access-Control-Allow-Origin', '*')
+  }
 
   // Set Cache-Control headers
   if (cacheMaxAge) {

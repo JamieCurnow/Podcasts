@@ -47,6 +47,10 @@ Ready to host your own instance? It's super easy!
 - **Vercel, Netlify, etc:** Fork this repo, and you'll be up and running in minutes.
 - **Homelab:** Host it yourself with Node.js for the ultimate control.
 
+### Configuration
+
+The only env var you may want to set is `CORS_DOMAINS` which is a comma-separated list of domains you want to allow CORS requests from. By default, it's set to `*` which allows all domains. For better security, you should set it to your own domain(s).
+
 ## 💻 For Developers
 
 Contributions are what make the open-source community amazing. I'd love your help!
