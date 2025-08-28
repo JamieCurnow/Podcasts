@@ -63,7 +63,7 @@ const addPodcast = async () => {
 
     // we don't need the response, just to check if it's a valid feed
     await $fetch('/api/podcast/feed', {
-      query: { url: rssUrl.value, limit: amountOfPodsToInitiallyFetch.value }
+      query: { url: rssUrl.value, start: 0, limit: amountOfPodsToInitiallyFetch.value }
     })
 
     subsStore.addSubscription(rssUrl.value)

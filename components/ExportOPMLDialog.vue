@@ -93,9 +93,9 @@ watch([open, urls], async ([val, actualUrls]) => {
     loading.value = true
     const maybePods = await Promise.all(
       actualUrls.map((url) =>
-        $fetch('/api/podcast/feed', { query: { url, limit: amountOfPodsToInitiallyFetch.value } }).catch(
-          () => null
-        )
+        $fetch('/api/podcast/feed', {
+          query: { url, start: 0, limit: amountOfPodsToInitiallyFetch.value }
+        }).catch(() => null)
       )
     )
     const pods = maybePods.map((res) => res?.podcast).filter((pod): pod is Podcast => !!pod)

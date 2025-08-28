@@ -26,7 +26,7 @@ const getSubs = async () => {
       urls.value?.map((url) => {
         return $fetch('/api/podcast/feed', {
           method: 'GET',
-          query: { url, limit: amountOfPodsToInitiallyFetch.value }
+          query: { url, start: 0, limit: amountOfPodsToInitiallyFetch.value }
         }).catch(() => null)
       }) || []
     )

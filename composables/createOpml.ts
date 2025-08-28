@@ -44,7 +44,7 @@ const getPodMeta = async (rssUrl: string) => {
     const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
 
     const response = await $fetch('/api/podcast/feed', {
-      query: { url: rssUrl, limit: amountOfPodsToInitiallyFetch.value }
+      query: { url: rssUrl, start: 0, limit: amountOfPodsToInitiallyFetch.value }
     })
     return response.podcast || null
   } catch (error) {
