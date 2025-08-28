@@ -31,6 +31,7 @@ export default defineNuxtConfig({
       deployConfig: true,
       nodeCompat: true,
       wrangler: {
+        name: 'podcasts-app',
         observability: {
           enabled: true,
           head_sampling_rate: 1,
