@@ -31,7 +31,8 @@
               size="lg"
               :disabled="noSelected"
               @click="exportSelected"
-              color="green"
+              color="primary"
+              icon="i-heroicons-arrow-down-tray"
             >
               Export
             </UButton>

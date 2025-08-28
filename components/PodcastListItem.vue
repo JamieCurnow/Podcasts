@@ -1,6 +1,6 @@
 <template>
   <div class="mb-4 flex gap-2 items-center">
-    <UCheckbox v-model="selected" color="green" />
+    <UCheckbox v-model="selected" color="primary" />
     <div
       class="flex gap-2 items-center cursor-pointer hover:opacity-80"
       @click="selected = !selected"

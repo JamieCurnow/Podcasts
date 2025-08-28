@@ -8,7 +8,13 @@
         </div>
         <div v-if="!file">
           <input type="file" accept=".opml,.xml" ref="fileInput" @change="onFileChange" class="hidden" />
-          <UButton v-if="fileInput" size="lg" color="green" @click="fileInput.click()">
+          <UButton
+            v-if="fileInput"
+            size="lg"
+            color="primary"
+            @click="fileInput.click()"
+            icon="i-heroicons-document-plus"
+          >
             Select OPML File
           </UButton>
         </div>

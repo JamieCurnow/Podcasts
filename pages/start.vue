@@ -1,22 +1,28 @@
 <template>
-  <div class="flex flex-col gap-4 p-4 mt-10">
-    <div class="text-center">
-      <h1 class="text-2xl font-bold">Welcome to the Podcast App</h1>
-      <p>The free, open-source podcast app.</p>
-      <p>No ads. No tracking. Powered by RSS. Pure.</p>
-      <p>For the love of pods.</p>
+  <div class="flex flex-col items-center justify-center min-h-[80vh] text-center p-4 pb-40">
+    <h1 class="text-4xl font-bold mb-2">Welcome to Podcasts</h1>
+    <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
+      The free, open-source podcast app.
+      <br />
+      No ads. No tracking. Just pure podcasting goodness.
+    </p>
+    <p class="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-6">"For the love of pods"</p>
+    <div class="flex gap-4 justify-center mb-8">
+      <UButton to="/add-podcast" icon="i-heroicons-plus-circle" size="lg" class="no-underline"
+        >Add by RSS</UButton
+      >
+      <UButton @click="showImportDialog" icon="i-heroicons-arrow-up-tray" size="lg" color="gray">
+        Import from OPML
+      </UButton>
     </div>
-    <div class="flex flex-col">
-      <div class="text-center">
-        <h2 class="text-xl font-semibold mb-2">Getting Started</h2>
-      </div>
-      <div class="flex gap-2 justify-center">
-        <UButton @click="$router.push('/add')" color="green" size="lg">Add your favorite Podcasts</UButton>
-        <UButton @click="showImportDialog" color="green" size="lg">Import Podcasts</UButton>
-
-        <ImportOPMLDialog v-model="importDialogVisible" />
-      </div>
-    </div>
+    <a
+      href="https://github.com/JamieCurnow/Podcasts"
+      target="_blank"
+      class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+    >
+      ⭐ Star us on GitHub
+    </a>
+    <ImportOPMLDialog v-model="importDialogVisible" />
   </div>
 </template>
 
