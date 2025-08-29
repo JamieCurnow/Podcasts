@@ -72,12 +72,19 @@ const pscChapterToPodcastJsonChapter = (pscChapter: { start: string; title?: str
   }
 }
 
+// if there are no chapters in the episode data, we can try to see if a common format is present
+// in the episode description. This is not guaranteed to be accurate, but it's a best guess.
+// We'll look for lines that start with a timestamp (e.g. 00:00, 1:23:45, 12:34:52) and use those as chapter markers.
+const bestGuessChapters = computed(() => {
+  return useBestGuessChapters(props.episode.description || '')
+})
+
 const pscChapters = computed(() => {
   return props.episode.chapters?.pscChapters || []
 })
 
 const chaptersAvailable = computed(() => {
-  return chaptersUrl.value || pscChapters.value.length > 0
+  return chaptersUrl.value || pscChapters.value.length > 0 || bestGuessChapters.value.length > 0
 })
 
 const chaptersOpen = ref(false)
@@ -85,23 +92,26 @@ const chaptersOpen = ref(false)
 const gettingChapters = ref(false)
 const getChapters = async () => {
   try {
-    // if there's no remote chapters URL, use the pscChapters from the feed
-    if (!chaptersUrl.value) {
+    // try remote first
+    if (chaptersUrl.value) {
+      gettingChapters.value = true
+      const res = await $fetch<PodcastChapterJson>(chaptersUrl.value)
+      if (res?.chapters && Array.isArray(res.chapters)) {
+        chapters.value = res.chapters
+        return
+      }
+    }
+
+    // then try pscChapters
+    if (pscChapters.value.length > 0) {
       chapters.value = pscChapters.value.map(pscChapterToPodcastJsonChapter)
       return
     }
 
-    // otherwise, fetch the chapters from the remote URL
-    gettingChapters.value = true
-    // const proxyUrl = getProxyUrl({
-    //   url: chaptersUrl.value,
-    //   cacheMaxAgeSeconds: CHAPTERS_CACHE_MAX_AGE_SECONDS
-    // })
-    const res = await $fetch<PodcastChapterJson>(chaptersUrl.value)
-    if (res?.chapters && Array.isArray(res.chapters)) {
-      chapters.value = res.chapters
-    } else {
-      throw new Error('Invalid chapters format')
+    // then try best guess
+    if (bestGuessChapters.value.length > 0) {
+      chapters.value = bestGuessChapters.value
+      return
     }
   } catch (e) {
     console.error('Error fetching chapters:', e)
