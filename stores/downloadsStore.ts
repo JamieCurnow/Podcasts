@@ -1,6 +1,5 @@
 import { openDB } from 'idb'
 import type { Episode, Podcast } from '~/types/index'
-import { getProxyUrl } from '~/utils/getProxyUrl'
 
 export interface Download {
   src: string
@@ -55,15 +54,29 @@ export const useDownloadsStore = defineStore(
       }
 
       const type = `audio/${src.split('.').pop()}`
-      await downloadAudioFile(src, type, (progress) => {
-        if (!downloads.value) return
-        downloads.value[downloadsIndex].progress = Math.round(progress)
-        downloads.value[downloadsIndex].status = 'inProgress'
-      })
 
-      // make sure the progress is set to 100% when the download is complete
-      downloads.value[downloadsIndex].progress = 100
-      downloads.value[downloadsIndex].status = 'completed'
+      try {
+        await downloadAudioFile(src, type, (progress) => {
+          if (!downloads.value) return
+          downloads.value[downloadsIndex].progress = Math.round(progress)
+          downloads.value[downloadsIndex].status = 'inProgress'
+        })
+
+        // make sure the progress is set to 100% when the download is complete
+        downloads.value[downloadsIndex].progress = 100
+        downloads.value[downloadsIndex].status = 'completed'
+      } catch (e) {
+        console.error(e)
+        if (!downloads.value) return
+        // splice remove the download from the downloads array if it fails
+        downloads.value?.splice(downloadsIndex, 1)
+        useToast().add({
+          color: 'red',
+          title: 'Download Failed',
+          description: `Failed to download ${opts.episode.title}. Contact the podcast publisher to let them know.`,
+          timeout: 5000
+        })
+      }
     }
 
     const deleteDownload = async (opts: { feedUrl: string; episodeGuid: string }) => {
@@ -124,8 +137,7 @@ export const downloadAudioFile = async (
   // if we don't, download the file and save it to indexedDB
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
-    const proxyUrl = getProxyUrl({ url })
-    xhr.open('GET', proxyUrl, true)
+    xhr.open('GET', url, true)
     xhr.responseType = 'blob'
     xhr.onprogress = (e) => {
       if (e.lengthComputable) {
@@ -200,6 +212,7 @@ const blobToArrayBuffer = (blob: Blob) => {
 }
 
 const arrayBufferToBlob = (buffer: Buffer, type: string) => {
+  /* @ts-expect-error - buffers are weird */
   return new Blob([buffer], { type })
 }
 

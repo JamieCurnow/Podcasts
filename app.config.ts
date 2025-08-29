@@ -1,5 +1,13 @@
 export default defineAppConfig({
   ui: {
+    notification: {
+      background: 'bg-neutral-100 dark:bg-neutral-800',
+      description: 'text-white font-semibold'
+    },
+    notifications: {
+      // Show toasts at the top right of the screen
+      position: 'bottom-20 top-[unset]'
+    },
     button: {
       variant: {
         ghost: 'hover:bg-transparent dark:hover:bg-transparent'

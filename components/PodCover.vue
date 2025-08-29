@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      :src="proxyImg"
+      :src="img"
       alt="podcast cover"
       :class="{ 'rounded-md': lessRounded, 'rounded-lg': !lessRounded }"
       class="cursor-pointer"
@@ -28,6 +28,6 @@ const props = defineProps({
   lessRounded: Boolean
 })
 
-const cacheForImages = 60 * 60 * 24 * 7 * 4 // 4 weeks
-const proxyImg = computed(() => getProxyUrl({ url: props.img, cacheMaxAgeSeconds: cacheForImages }))
+// const cacheForImages = 60 * 60 * 24 * 7 * 4 // 4 weeks
+// const proxyImg = computed(() => getProxyUrl({ url: props.img, cacheMaxAgeSeconds: cacheForImages }))
 </script>

@@ -93,11 +93,11 @@ const getChapters = async () => {
 
     // otherwise, fetch the chapters from the remote URL
     gettingChapters.value = true
-    const proxyUrl = getProxyUrl({
-      url: chaptersUrl.value,
-      cacheMaxAgeSeconds: CHAPTERS_CACHE_MAX_AGE_SECONDS
-    })
-    const res = await $fetch<PodcastChapterJson>(proxyUrl)
+    // const proxyUrl = getProxyUrl({
+    //   url: chaptersUrl.value,
+    //   cacheMaxAgeSeconds: CHAPTERS_CACHE_MAX_AGE_SECONDS
+    // })
+    const res = await $fetch<PodcastChapterJson>(chaptersUrl.value)
     if (res?.chapters && Array.isArray(res.chapters)) {
       chapters.value = res.chapters
     } else {

@@ -9,6 +9,8 @@
       <NowPlayingBar />
     </ClientOnly>
     <BottomNav />
+
+    <UNotifications />
   </div>
 </template>
 

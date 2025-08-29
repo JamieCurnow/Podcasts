@@ -157,14 +157,33 @@ export default defineNuxtConfig({
           // use "network first" strategy: try network first, fallback to cache if offline
           handler: 'CacheFirst'
         },
+        // Rule for all cross-origin images (from any 3rd party domain)
         {
-          urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+          urlPattern: ({ request, url }) =>
+            request.destination === 'image' && url.hostname !== self.location.hostname,
           handler: 'CacheFirst',
           options: {
-            cacheName: 'image-cache',
+            cacheName: 'cross-origin-images',
             expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+              maxEntries: 500, // Store the 500 most recent images
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+            },
+            // Crucial for 3rd-party assets that may not have proper CORS headers
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        // A separate rule for your own, same-origin images
+        {
+          urlPattern: ({ request, url }) =>
+            request.destination === 'image' && url.hostname === self.location.hostname,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'same-origin-images',
+            expiration: {
+              maxEntries: 500,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
             }
           }
         }
@@ -173,7 +192,7 @@ export default defineNuxtConfig({
       navigateFallback: '/'
     },
     registerType: 'autoUpdate',
-    devOptions: { enabled: false, type: 'module' }
+    devOptions: { enabled: true, type: 'module' }
   },
 
   piniaPluginPersistedstate: { storage: 'localStorage' }
