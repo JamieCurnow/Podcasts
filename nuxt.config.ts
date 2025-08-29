@@ -192,7 +192,7 @@ export default defineNuxtConfig({
       navigateFallback: '/'
     },
     registerType: 'autoUpdate',
-    devOptions: { enabled: true, type: 'module' }
+    devOptions: { enabled: false, type: 'module' }
   },
 
   piniaPluginPersistedstate: { storage: 'localStorage' }
