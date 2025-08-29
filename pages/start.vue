@@ -14,9 +14,6 @@
       <UButton @click="showImportDialog" icon="i-heroicons-arrow-up-tray" size="lg" color="gray">
         Import from OPML
       </UButton>
-      <UButton @click="notify" icon="i-heroicons-arrow-up-tray" size="lg" color="gray">
-        Notification test
-      </UButton>
     </div>
     <div class="flex flex-wrap gap-2 justify-center mb-8">
       <UButton
