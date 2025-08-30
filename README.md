@@ -8,8 +8,6 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/JamieCurnow/Podcasts)
 
-## What's This All About? 🤔
-
 Podcasts is an open-source podcast app with a design that pays homage to the late, great Google Podcasts. It's built with a slick, modern stack: **Nuxt 3**, **Tailwind CSS**, and **Vite**.
 
 This is a passion project in progress. The mission is to create a simple, beautiful, and easy-to-use podcast app that's completely **free of ads and tracking**. 🕵️‍♂️
