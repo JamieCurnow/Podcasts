@@ -34,7 +34,7 @@ This is a passion project in progress. The mission is to create a simple, beauti
 - [x] Bookmark timestamps in episodes
 - [x] History of played episodes
 - [x] Dark mode
-- [ ] Import/export OPML
+- [x] Import/export OPML
 - [ ] Search podcasts?
 - [ ] Sleep timer
 - [ ] Dockerize
