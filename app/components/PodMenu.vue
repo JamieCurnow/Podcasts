@@ -1,13 +1,13 @@
 <template>
-  <UDropdown :items="items" mode="click" :popper="{ placement: 'bottom-start', offsetDistance: 0 }">
+  <UDropdownMenu :items="items" :content="{ align: 'start', side: 'bottom' }">
     <button class="pt-1">
       <UIcon name="i-mdi-dots-vertical" class="size-7 dark:text-neutral-400 text-gray-500" />
     </button>
-  </UDropdown>
+  </UDropdownMenu>
 </template>
 
 <script setup lang="ts">
-import type { DropdownItem } from '#ui/types'
+import type { DropdownMenuItem } from '#ui/types'
 import type { Episode, Podcast } from '~~/shared/types/index'
 
 const props = defineProps({
@@ -28,12 +28,12 @@ const thisEpisodeDownload = computed(() =>
 )
 
 const items = computed(() => {
-  const group: DropdownItem[] = []
+  const group: DropdownMenuItem[] = []
   if (thisEpisodeDownload.value) {
     group.push({
       label: 'Remove Download',
       icon: 'i-mdi-delete',
-      click: () => {
+      onSelect: () => {
         downloadStore.deleteDownload({ episodeGuid: props.episode.guid, feedUrl: props.podcast.feedUrl })
       }
     })
@@ -43,7 +43,7 @@ const items = computed(() => {
     group.push({
       label: 'Share Episode',
       icon: 'i-mdi-share',
-      click: () => {
+      onSelect: () => {
         navigator.share({
           title: props.episode.title,
           text: props.episode.description,

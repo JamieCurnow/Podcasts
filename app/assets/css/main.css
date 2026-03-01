@@ -1,19 +1,26 @@
-/* when the html has a dark class, make the font red */
-html {
-  @apply text-neutral-900 bg-neutral-50;
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+  --font-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
-html.dark {
+@layer base {
+  html {
+    @apply text-black bg-neutral-50 dark:text-neutral-300 dark:bg-neutral-900;
+  }
+
+  body {
+    @apply border-none text-black dark:text-neutral-300 dark:bg-neutral-900;
+  }
+}
+
+/* html.dark {
   @apply text-neutral-300 bg-neutral-900;
-}
-
-html.dark a {
-  /* @apply text-stone-400 font-medium; */
-}
+} */
 
 /* prevent pull down refresh on chrome mobile */
 body {
-  /* Disables pull-to-refresh but allows overscroll glow effects. */
   overscroll-behavior-y: contain;
 }
 
@@ -24,4 +31,8 @@ body {
 
 a {
   @apply underline font-bold hover:opacity-80;
+}
+
+#__nuxt {
+  @apply bg-neutral-50 dark:bg-neutral-900;
 }

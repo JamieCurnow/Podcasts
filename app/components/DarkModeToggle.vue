@@ -2,11 +2,11 @@
   <ClientOnly>
     <UButton
       square
-      :ui="{ rounded: 'rounded-full' }"
+      :ui="{ base: 'rounded-full' }"
       :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-      :color="isDark ? 'primary' : 'gray'"
+      :color="isDark ? 'primary' : 'neutral'"
       aria-label="Theme"
-      :variant="isDark ? 'ghost' : 'soft'"
+      variant="ghost"
       @click="isDark = !isDark"
     />
 

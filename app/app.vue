@@ -1,9 +1,11 @@
 <template>
-  <NuxtPwaAssets />
+  <UApp>
+    <NuxtPwaAssets />
 
-  <NuxtLayout>
-    <KeepAlive>
-      <NuxtPage />
-    </KeepAlive>
-  </NuxtLayout>
+    <NuxtLayout>
+      <KeepAlive>
+        <NuxtPage />
+      </KeepAlive>
+    </NuxtLayout>
+  </UApp>
 </template>

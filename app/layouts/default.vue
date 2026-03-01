@@ -10,7 +10,6 @@
     </ClientOnly>
     <BottomNav />
 
-    <UNotifications />
   </div>
 </template>
 

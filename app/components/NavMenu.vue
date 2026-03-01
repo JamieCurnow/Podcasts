@@ -1,41 +1,43 @@
 <template>
-  <USlideover v-model="isOpen">
-    <div class="flex flex-col gap-4 h-dvh overflow-auto">
-      <!-- top bar -->
-      <div class="px-6 pt-4">
-        <!-- back -->
-        <div>
-          <button @click="isOpen = false">
-            <UIcon name="i-ic-close" class="size-7" />
-          </button>
+  <USlideover v-model:open="isOpen">
+    <template #content>
+      <div class="flex flex-col gap-4 h-dvh overflow-auto">
+        <!-- top bar -->
+        <div class="px-6 pt-4">
+          <!-- back -->
+          <div>
+            <button @click="isOpen = false">
+              <UIcon name="i-ic-close" class="size-7" />
+            </button>
+          </div>
+        </div>
+
+        <!-- menu items -->
+        <div class="flex flex-col">
+          <NuxtLink
+            v-for="(item, i) in menuItems"
+            :key="i"
+            class="cursor-pointer no-underline!"
+            :to="item.to"
+            @click="isOpen = false"
+          >
+            <Divider />
+            <div class="py-6 flex items-center px-6 gap-6">
+              <div class="shrink">
+                <UIcon :name="item.icon" class="size-8"></UIcon>
+              </div>
+              <div class="grow text-xl font-light">
+                {{ item.title }}
+              </div>
+              <div class="shrink">
+                <UIcon name="i-ic-baseline-keyboard-arrow-right" class="size-8"></UIcon>
+              </div>
+            </div>
+            <Divider v-if="i === menuItems.length - 1" />
+          </NuxtLink>
         </div>
       </div>
-
-      <!-- menu items -->
-      <div class="flex flex-col">
-        <NuxtLink
-          v-for="(item, i) in menuItems"
-          :key="i"
-          class="cursor-pointer no-underline"
-          :to="item.to"
-          @click="isOpen = false"
-        >
-          <Divider />
-          <div class="py-6 flex items-center px-6 gap-6">
-            <div class="shrink">
-              <UIcon :name="item.icon" class="size-8"></UIcon>
-            </div>
-            <div class="grow text-xl font-light">
-              {{ item.title }}
-            </div>
-            <div class="shrink">
-              <UIcon name="i-ic-baseline-keyboard-arrow-right" class="size-8"></UIcon>
-            </div>
-          </div>
-          <Divider v-if="i === menuItems.length - 1" />
-        </NuxtLink>
-      </div>
-    </div>
+    </template>
   </USlideover>
 </template>
 

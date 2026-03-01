@@ -36,16 +36,17 @@
         <div class="absolute inset-0 w-full">
           <BookmarkMarkers />
         </div>
-        <URange
+        <USlider
           v-model="seek"
           size="xs"
           :min="0"
           :max="duration"
+          color="neutral"
           @touchstart="startPreventingSwipe"
           @mousedown="startPreventingSwipe"
         />
       </div>
-      <div class="mt-1 flex justify-between">
+      <div class="mt-2 flex justify-between">
         <div class="text-xs font-light">
           {{ seekFormatted }}
         </div>
@@ -169,6 +170,7 @@ const seekFormatted = computed(() => formatTime(seek.value))
 watch(
   [currentTime, currentPodcastDialogOpen],
   ([val]) => {
+    console.log({ currentTime, currentPodcastDialogOpen, preventSwipe: preventSwipe.value })
     if (preventSwipe.value) return
     nextTick(() => {
       seek.value = val

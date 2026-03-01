@@ -13,8 +13,8 @@
             icon="i-mdi-github"
             to="https://github.com/JamieCurnow/Podcasts"
             target="_blank"
-            color="gray"
-            class="no-underline"
+            color="neutral"
+            class="no-underline!"
           >
             Star this app on GitHub
           </UButton>
@@ -26,16 +26,18 @@
             <UButton
               to="https://www.buymeacoffee.com/jamiecurnow"
               target="_blank"
-              color="gray"
-              class="no-underline"
+              color="neutral"
+              variant="subtle"
+              class="no-underline!"
             >
               ☕ Buy me a coffee
             </UButton>
             <UButton
               to="https://github.com/sponsors/JamieCurnow"
               target="_blank"
-              color="gray"
-              class="no-underline"
+              color="neutral"
+              variant="subtle"
+              class="no-underline!"
             >
               ❤️ Sponsor me on GitHub
             </UButton>
@@ -66,6 +68,7 @@
             type="number"
             min="1"
             max="50"
+            class="w-full"
           />
         </div>
         <div></div>
@@ -105,15 +108,15 @@
 
     <Divider />
 
-    <div class="p-4 pt-2 px-2 flex flex-col border-red-500 border rounded-md gap-2">
-      <div class="text-red-500 text-lg">Danger Zone</div>
+    <div class="p-4 pt-2 px-2 flex flex-col border-error border rounded-md gap-2">
+      <div class="text-error text-lg">Danger Zone</div>
       <div class="flex flex-col gap-4">
         <div>
           <ClientOnly>
             <UButton
               :disabled="!history?.length"
               @click="clearAllHistory()"
-              color="white"
+              color="error"
               variant="solid"
               :icon="history?.length ? 'mdi-close' : 'mdi-check'"
               trailing

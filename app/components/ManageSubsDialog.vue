@@ -1,5 +1,5 @@
 <template>
-  <UModal v-model="open">
+  <UModal v-model:open="open">
     <UCard>
       <div class="flex flex-col gap-4">
         <div class="text-xl font-semibold">Subscriptions</div>

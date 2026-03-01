@@ -1,58 +1,60 @@
 <template>
-  <UModal v-model="open" :overlay="true">
-    <UCard>
-      <div>
-        <div class="mb-4">
-          <div class="text-lg font-semibold">Import Pods</div>
-          <div><p>Import your podcast subscriptions from an OPML file</p></div>
-        </div>
-        <div v-if="!file">
-          <input type="file" accept=".opml,.xml" ref="fileInput" @change="onFileChange" class="hidden" />
-          <UButton
-            v-if="fileInput"
-            size="lg"
-            color="primary"
-            @click="fileInput.click()"
-            icon="i-heroicons-document-plus"
-          >
-            Select OPML File
-          </UButton>
-        </div>
-        <div v-if="file">
-          <div v-if="loading">
-            <Loading class="size-16" />
+  <UModal v-model:open="open">
+    <template #content>
+      <UCard>
+        <div>
+          <div class="mb-4">
+            <div class="text-lg font-semibold">Import Pods</div>
+            <div><p>Import your podcast subscriptions from an OPML file</p></div>
           </div>
-          <div v-else class="flex flex-col gap-4">
-            <div>Pods to import:</div>
-            <div v-if="!podcasts.length">No podcasts found</div>
-            <div v-else>
-              <div class="mb-4">
-                <UButton v-if="noSelected" variant="outline" @click="selectAll">Select all</UButton>
-                <UButton v-else variant="outline" @click="deselectAll">Deselect all</UButton>
+          <div v-if="!file">
+            <input type="file" accept=".opml,.xml" ref="fileInput" @change="onFileChange" class="hidden" />
+            <UButton
+              v-if="fileInput"
+              size="lg"
+              color="primary"
+              @click="fileInput.click()"
+              icon="i-heroicons-document-plus"
+            >
+              Select OPML File
+            </UButton>
+          </div>
+          <div v-if="file">
+            <div v-if="loading">
+              <Loading class="size-16" />
+            </div>
+            <div v-else class="flex flex-col gap-4">
+              <div>Pods to import:</div>
+              <div v-if="!podcasts.length">No podcasts found</div>
+              <div v-else>
+                <div class="mb-4">
+                  <UButton v-if="noSelected" variant="outline" @click="selectAll">Select all</UButton>
+                  <UButton v-else variant="outline" @click="deselectAll">Deselect all</UButton>
+                </div>
+                <PodcastListItem
+                  v-for="podcast in podcasts"
+                  :key="podcast.feedUrl"
+                  v-model="podcast.selected"
+                  :podcast="podcast"
+                />
               </div>
-              <PodcastListItem
-                v-for="podcast in podcasts"
-                :key="podcast.feedUrl"
-                v-model="podcast.selected"
-                :podcast="podcast"
-              />
-            </div>
-            <div class="flex justify-end gap-4">
-              <UButton size="lg" @click="open = false" color="gray">Cancel</UButton>
-              <UButton
-                :loading="importing"
-                size="lg"
-                :disabled="noSelected"
-                @click="importSelected"
-                color="green"
-              >
-                Import
-              </UButton>
+              <div class="flex justify-end gap-4">
+                <UButton size="lg" @click="open = false" color="neutral">Cancel</UButton>
+                <UButton
+                  :loading="importing"
+                  size="lg"
+                  :disabled="noSelected"
+                  @click="importSelected"
+                  color="success"
+                >
+                  Import
+                </UButton>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </UCard>
+      </UCard>
+    </template>
   </UModal>
 </template>
 

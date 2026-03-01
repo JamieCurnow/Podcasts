@@ -3,7 +3,7 @@
     <div v-for="pod in podcasts" :key="pod.feedUrl" class="relative">
       <NuxtLink
         :to="`/podcast?url=${encodeURIComponent(pod.feedUrl)}`"
-        class="flex flex-col gap-1 max-w-[100px] no-underline"
+        class="flex flex-col gap-1 max-w-[100px] no-underline!"
       >
         <PodCover :img="pod.image?.url || pod.itunesImage" />
         <div class="text-sm line-clamp-2">{{ pod.title }}</div>

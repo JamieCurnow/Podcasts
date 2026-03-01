@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="`/podcast?url=${encodeURIComponent(podcast.feedUrl)}`" class="cursor-pointer no-underline">
+  <NuxtLink :to="`/podcast?url=${encodeURIComponent(podcast.feedUrl)}`" class="cursor-pointer no-underline!">
     <div class="flex gap-2 justify-center">
       <div v-if="!noCover">
         <PodCover less-rounded class="w-10 mt-1" :img="img" />

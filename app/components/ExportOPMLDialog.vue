@@ -1,45 +1,47 @@
 <template>
-  <UModal v-model="open" :overlay="true">
-    <UCard>
-      <div>
-        <div class="mb-4">
-          <div class="text-lg font-semibold">Export Pods</div>
-          <div><p>Export your podcast subscriptions as OPML</p></div>
-        </div>
-        <div v-if="loading">
-          <Loading class="size-16" />
-        </div>
-        <div v-else class="flex flex-col gap-4">
-          <div>Pods to export:</div>
-          <div v-if="!podcasts.length">No podcasts found</div>
-          <div v-else>
-            <div class="mb-4">
-              <UButton v-if="noSelected" variant="outline" @click="selectAll">Select all</UButton>
-              <UButton v-else variant="outline" @click="deselectAll">Deselect all</UButton>
+  <UModal v-model:open="open">
+    <template #content>
+      <UCard>
+        <div>
+          <div class="mb-4">
+            <div class="text-lg font-semibold">Export Pods</div>
+            <div><p>Export your podcast subscriptions as OPML</p></div>
+          </div>
+          <div v-if="loading">
+            <Loading class="size-16" />
+          </div>
+          <div v-else class="flex flex-col gap-4">
+            <div>Pods to export:</div>
+            <div v-if="!podcasts.length">No podcasts found</div>
+            <div v-else>
+              <div class="mb-4">
+                <UButton v-if="noSelected" variant="outline" @click="selectAll">Select all</UButton>
+                <UButton v-else variant="outline" @click="deselectAll">Deselect all</UButton>
+              </div>
+              <PodcastListItem
+                v-for="podcast in podcasts"
+                :key="podcast.feedUrl"
+                v-model="podcast.selected"
+                :podcast="podcast"
+              />
             </div>
-            <PodcastListItem
-              v-for="podcast in podcasts"
-              :key="podcast.feedUrl"
-              v-model="podcast.selected"
-              :podcast="podcast"
-            />
-          </div>
-          <div class="flex justify-end gap-4">
-            <UButton size="lg" @click="open = false" color="gray">Cancel</UButton>
-            <UButton
-              :loading="exporting"
-              size="lg"
-              :disabled="noSelected"
-              @click="exportSelected"
-              color="primary"
-              icon="i-heroicons-arrow-down-tray"
-            >
-              Export
-            </UButton>
+            <div class="flex justify-end gap-4">
+              <UButton size="lg" @click="open = false" color="neutral">Cancel</UButton>
+              <UButton
+                :loading="exporting"
+                size="lg"
+                :disabled="noSelected"
+                @click="exportSelected"
+                color="primary"
+                icon="i-heroicons-arrow-down-tray"
+              >
+                Export
+              </UButton>
+            </div>
           </div>
         </div>
-      </div>
-    </UCard>
+      </UCard>
+    </template>
   </UModal>
 </template>
 

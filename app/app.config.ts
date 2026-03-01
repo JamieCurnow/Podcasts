@@ -1,88 +1,61 @@
 export default defineAppConfig({
   ui: {
-    notification: {
-      background: 'bg-neutral-100 dark:bg-neutral-800',
-      description: 'text-white font-semibold'
-    },
-    notifications: {
-      // Show toasts at the top right of the screen
-      position: 'bottom-20 top-[unset]'
+    colors: {
+      primary: 'stone',
+      neutral: 'neutral'
     },
     button: {
-      variant: {
-        ghost: 'hover:bg-transparent dark:hover:bg-transparent'
+      slots: {
+        base: 'cursor-pointer'
       },
-      color: {
-        custom: {
-          subtle: '...'
+      variants: {
+        variant: {
+          ghost: 'hover:bg-transparent dark:hover:bg-transparent'
         }
       }
     },
     input: {
-      placeholder: 'font-light placeholder-neutral-800 dark:placeholder-neutral-400',
-      rounded: 'rounded-lg',
-      padding: {
-        md: 'px-4 py-3'
+      slots: {
+        root: 'rounded-lg'
       },
-      leading: {
-        padding: {
-          md: 'ps-14'
-        }
-      },
-      size: {
-        md: 'text-lg'
-      },
-      gap: {
-        md: 'gap-4'
-      },
-      icon: {
-        size: {
-          md: 'size-6'
-        },
-        leading: {
-          padding: {
-            md: 'px-6'
-          }
-        }
-      },
-      color: {
-        white: {
-          outline:
-            'shadow-none bg-transparent dark:bg-transparent text-neutral-900 dark:text-neutral-300 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-500 focus:ring-none'
-        }
-      },
-      variant: {
-        outline: 'shadow-none bg-transparent'
-      },
-      default: {
-        size: 'md',
-        color: 'white',
-        loadingIcon: 'i-mdi-loading'
-      }
-    },
-    range: {
-      thumb: {
-        background:
-          '[&::-webkit-slider-thumb]:bg-current [&::-webkit-slider-thumb]:dark:bg-current [&::-moz-range-thumb]:bg-current'
-      }
-    },
-    dropdown: {
-      background: 'bg-neutral-100 dark:bg-neutral-800',
-      ring: 'ring-2 ring-neutral-200 dark:ring-neutral-900',
-      rounded: 'rounded-md',
-      item: {
-        size: 'text-md font-light',
-        icon: {
-          base: 'flex-shrink-0 size-6'
-        }
+      defaultVariants: {
+        size: 'xl'
       }
     },
     slideover: {
-      background: 'bg-neutral-100 dark:bg-neutral-800'
+      slots: {
+        content: 'bg-neutral-100 dark:bg-neutral-800'
+      }
     },
-    primary: 'stone',
-    gray: 'cool',
-    neutral: 'neutral',
-    stone: 'stone'
+    dropdownMenu: {
+      slots: {
+        content:
+          'bg-neutral-100 dark:bg-neutral-800 ring-2 ring-neutral-200 dark:ring-neutral-900 rounded-md',
+        item: 'text-md font-light',
+        itemLeadingIcon: 'size-6'
+      }
+    },
+    modal: {
+      slots: {
+        content: 'bg-neutral-100 dark:bg-neutral-800'
+      }
+    },
+    toast: {
+      slots: {
+        root: 'bg-neutral-100 dark:bg-neutral-800'
+      }
+    },
+    slider: {
+      slots: {
+        thumb: 'ring-0 bg-neutral-500 dark:bg-neutral-400'
+      },
+      variants: {
+        size: {
+          xs: {
+            track: 'h-1!'
+          }
+        }
+      }
+    }
   }
 })

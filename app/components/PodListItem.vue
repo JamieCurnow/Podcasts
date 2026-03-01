@@ -11,7 +11,7 @@
     </div>
     <NuxtLink
       :to="`/podcast/episode?url=${encodeURIComponent(podcast.feedUrl)}&episodeGuid=${encodeURIComponent(episode.guid) || ''}`"
-      class="cursor-pointer no-underline"
+      class="cursor-pointer no-underline!"
     >
       <div class="font-medium">{{ title }}</div>
       <div class="text-sm line-clamp-2 leading-tight font-light" v-html="description"></div>

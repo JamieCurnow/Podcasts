@@ -10,6 +10,8 @@
 // Thanks https://codepen.io/MoritzGiessmann/pen/XWWovQP
 </script>
 <style scoped>
+@reference "~/assets/css/main.css";
+
 .playing {
   @apply size-5;
   display: flex;

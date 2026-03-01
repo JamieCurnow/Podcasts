@@ -17,7 +17,7 @@
     <!-- pod info -->
     <div v-if="podcast" class="flex flex-col gap-6 px-4 pt-3">
       <!-- img and title -->
-      <NuxtLink :to="`/podcast?url=${encodeURIComponent(podcast.feedUrl)}`" class="flex gap-3 no-underline">
+      <NuxtLink :to="`/podcast?url=${encodeURIComponent(podcast.feedUrl)}`" class="flex gap-3 no-underline!">
         <!-- img -->
         <div>
           <PodCover :img="podcast.image?.url || podcast.itunesImage" class="size-16" />

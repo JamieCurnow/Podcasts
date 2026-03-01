@@ -3,7 +3,7 @@
     <div class="flex justify-between px-4">
       <div class="font-bold text-lg">Subscriptions</div>
       <!-- <div>
-        <NuxtLink to="/library" class="no-underline">More</NuxtLink>
+        <NuxtLink to="/library" class="no-underline!">More</NuxtLink>
       </div> -->
     </div>
     <div class="w-full max-w-full overflow-x-scroll pb-3">
@@ -11,7 +11,7 @@
         <div v-for="(pod, i) in podsWithImages" :key="i">
           <NuxtLink
             :to="`/podcast?url=${encodeURIComponent(pod.podcast.feedUrl)}`"
-            class="cursor-pointer no-underline"
+            class="cursor-pointer no-underline!"
           >
             <PodCover :img="pod.img" class="w-24" />
           </NuxtLink>

@@ -8,7 +8,7 @@
 
       <div class="mb-4 text-center text-2xl font-bold">{{ userConfigStore.playbackSpeed.toFixed(1) }}x</div>
 
-      <URange v-model="userConfigStore.playbackSpeed" :min="0.8" :max="2" :step="0.1" />
+      <USlider v-model="userConfigStore.playbackSpeed" :min="0.8" :max="2" :step="0.1" />
 
       <div class="mt-4 flex justify-around">
         <UButton

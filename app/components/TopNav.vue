@@ -5,18 +5,20 @@
     </div>
     <div class="flex flex-col grow items-center justify-center">
       <ClientOnly>
-        <img :src="logo" alt="logo" class="h-20 -rotate-90" @click="$router.push('/')" />
+        <NuxtLink to="/">
+          <img :src="logo" alt="logo" class="h-20 -rotate-90" />
+        </NuxtLink>
       </ClientOnly>
     </div>
     <div class="w-16 flex justify-end">
       <ClientOnly>
         <UButton
           square
-          :ui="{ rounded: 'rounded-full' }"
+          :ui="{ base: 'rounded-full!' }"
           icon="i-mdi-menu"
-          :color="isDark ? 'primary' : 'gray'"
+          :color="isDark ? 'primary' : 'neutral'"
           aria-label="menu"
-          :variant="isDark ? 'ghost' : 'soft'"
+          variant="ghost"
           @click="menuOpen = !menuOpen"
         />
 
