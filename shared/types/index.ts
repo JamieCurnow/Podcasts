@@ -1,2 +1,2 @@
-export * from './Edpisode'
+export * from './Episode'
 export * from './Podcast'

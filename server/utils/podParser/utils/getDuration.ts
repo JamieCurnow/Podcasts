@@ -23,8 +23,8 @@ export const getDuration = (time: unknown): number => {
     const match = time.match(timeRegex)
     if (match != null) {
       const hours = parseInt(match[1] ?? '0', 10)
-      const minutes = parseInt(match[2], 10)
-      const seconds = parseInt(match[3], 10)
+      const minutes = parseInt(match[2]!, 10)
+      const seconds = parseInt(match[3]!, 10)
       return hours * 3600 + minutes * 60 + seconds
     } else if (!isNaN(Number(time))) {
       // If the time string is a numerical value, parse it as an integer

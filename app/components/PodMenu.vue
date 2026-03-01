@@ -28,9 +28,9 @@ const thisEpisodeDownload = computed(() =>
 )
 
 const items = computed(() => {
-  const i: DropdownItem[][] = [[]]
+  const group: DropdownItem[] = []
   if (thisEpisodeDownload.value) {
-    i[0].push({
+    group.push({
       label: 'Remove Download',
       icon: 'i-mdi-delete',
       click: () => {
@@ -40,7 +40,7 @@ const items = computed(() => {
   }
 
   if (navigator?.share) {
-    i[0].push({
+    group.push({
       label: 'Share Episode',
       icon: 'i-mdi-share',
       click: () => {
@@ -53,6 +53,6 @@ const items = computed(() => {
     })
   }
 
-  return i
+  return [group]
 })
 </script>

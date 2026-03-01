@@ -36,7 +36,7 @@ export const useSubsStore = defineStore(
       if (idx !== -1) {
         episodes.value?.splice(idx, 1, {
           ...fullMeta,
-          startedAt: episodes.value[idx].startedAt || fullMeta.startedAt
+          startedAt: episodes.value[idx]!.startedAt || fullMeta.startedAt
         })
       } else {
         episodes.value?.push(fullMeta)

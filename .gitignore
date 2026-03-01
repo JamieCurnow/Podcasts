@@ -27,3 +27,4 @@ logs
 
 screenshots
 .firebaserc
+.claude/settings.local.json

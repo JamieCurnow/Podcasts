@@ -58,13 +58,13 @@ export const useDownloadsStore = defineStore(
       try {
         await downloadAudioFile(src, type, (progress) => {
           if (!downloads.value) return
-          downloads.value[downloadsIndex].progress = Math.round(progress)
-          downloads.value[downloadsIndex].status = 'inProgress'
+          downloads.value[downloadsIndex]!.progress = Math.round(progress)
+          downloads.value[downloadsIndex]!.status = 'inProgress'
         })
 
         // make sure the progress is set to 100% when the download is complete
-        downloads.value[downloadsIndex].progress = 100
-        downloads.value[downloadsIndex].status = 'completed'
+        downloads.value[downloadsIndex]!.progress = 100
+        downloads.value[downloadsIndex]!.status = 'completed'
       } catch (e) {
         console.error(e)
         if (!downloads.value) return

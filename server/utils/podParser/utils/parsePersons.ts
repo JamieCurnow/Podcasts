@@ -1,5 +1,5 @@
 import { ensureArray } from './ensureArray'
-import type { PodcastPerson } from '../../../../types/PodcastPerson'
+import type { PodcastPerson } from '../../../../shared/types/PodcastPerson'
 import type { EpisodeItem, Channel, PodcastPersonRaw as RawPodcastPerson } from '../types/ParsedPodcastXML'
 
 export const parsePersons = (item: Channel | EpisodeItem): PodcastPerson[] => {

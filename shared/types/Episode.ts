@@ -1,4 +1,4 @@
-import type { PodcastPerson } from '../../../../types/PodcastPerson'
+import type { PodcastPerson } from './PodcastPerson'
 
 export interface Episode {
   author: string

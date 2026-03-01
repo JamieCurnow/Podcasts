@@ -128,13 +128,13 @@ const fetchBatch = async (opts?: { replaceAfterFetch?: boolean; noCache?: boolea
     if (i === -1) {
       podcasts.value.push(pod)
     } else {
-      podcasts.value[i].podcast = pod.podcast
-      podcasts.value[i].episodes.push(...pod.episodes)
+      podcasts.value[i]!.podcast = pod.podcast
+      podcasts.value[i]!.episodes.push(...pod.episodes)
     }
 
     const epBatch = episodeBatches.value[batch]
     if (!epBatch) episodeBatches.value[batch] = []
-    episodeBatches.value[batch].push(...pod.episodes.map((episode) => ({ episode, podcast: pod.podcast })))
+    episodeBatches.value[batch]!.push(...pod.episodes.map((episode) => ({ episode, podcast: pod.podcast })))
   })
 
   amountFetched.value += amountOfPodsToInitiallyFetch.value

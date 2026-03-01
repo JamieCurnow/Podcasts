@@ -1,5 +1,6 @@
 import { getDuration, parseXml, ensureArray, getAttribute, toBoolean, toNumber, parsePersons } from '../utils'
-import type { ParsedPodcastXML, Podcast, Episode, EpisodeItem, Funding } from '../types'
+import type { Podcast, Episode } from '~~/shared/types'
+import type { ParsedPodcastXML, EpisodeItem, Funding } from '../types'
 
 /**
  * Inspired by

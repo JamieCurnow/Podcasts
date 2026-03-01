@@ -17,14 +17,14 @@ export const lexStyle = (description: string) => {
     const regex = /\(?(\d{1,2}:\d{2}(?::\d{2})?)\)?\s*[–-]\s*(.+)/g
     let match
     while ((match = regex.exec(description)) !== null) {
-      const timeParts = match[1].split(':').map(Number)
+      const timeParts = match[1]!.split(':').map(Number)
       let seconds = 0
       if (timeParts.length === 3) {
-        seconds = timeParts[0] * 3600 + timeParts[1] * 60 + timeParts[2]
+        seconds = timeParts[0]! * 3600 + timeParts[1]! * 60 + timeParts[2]!
       } else if (timeParts.length === 2) {
-        seconds = timeParts[0] * 60 + timeParts[1]
+        seconds = timeParts[0]! * 60 + timeParts[1]!
       }
-      chapters.push({ startTime: seconds, title: match[2].trim() })
+      chapters.push({ startTime: seconds, title: match[2]!.trim() })
     }
   } else {
     // here's the html description version like:
@@ -32,14 +32,14 @@ export const lexStyle = (description: string) => {
     const regex = /\((\d{1,2}:\d{2}(?::\d{2})?)\)\s*&#8211;\s*(.+?)(?:<br\s*\/?>|$)/g
     let match
     while ((match = regex.exec(description)) !== null) {
-      const timeParts = match[1].split(':').map(Number)
+      const timeParts = match[1]!.split(':').map(Number)
       let seconds = 0
       if (timeParts.length === 3) {
-        seconds = timeParts[0] * 3600 + timeParts[1] * 60 + timeParts[2]
+        seconds = timeParts[0]! * 3600 + timeParts[1]! * 60 + timeParts[2]!
       } else if (timeParts.length === 2) {
-        seconds = timeParts[0] * 60 + timeParts[1]
+        seconds = timeParts[0]! * 60 + timeParts[1]!
       }
-      chapters.push({ startTime: seconds, title: match[2].trim() })
+      chapters.push({ startTime: seconds, title: match[2]!.trim() })
     }
   }
 

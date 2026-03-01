@@ -14,7 +14,7 @@ export const parseOpml = (opmlString: string) => {
 
   for (let i = 0; i < outlines.length; i++) {
     const outline = outlines[i]
-    const xmlUrl = outline.getAttribute('xmlUrl')
+    const xmlUrl = outline?.getAttribute('xmlUrl')
     if (xmlUrl) {
       rssUrls.push(xmlUrl)
     }
