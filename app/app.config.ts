@@ -47,7 +47,9 @@ export default defineAppConfig({
     },
     slider: {
       slots: {
-        thumb: 'ring-0 bg-neutral-500 dark:bg-neutral-400'
+        thumb: 'ring-0 bg-neutral-500 dark:bg-neutral-400',
+        track: 'bg-neutral-200 dark:bg-neutral-700',
+        range: 'bg-neutral-500! dark:bg-neutral-400!'
       },
       variants: {
         size: {
