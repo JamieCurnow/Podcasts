@@ -19,6 +19,8 @@ const { bookmarks } = storeToRefs(bookmarksStore)
 const { podcast, episode, duration, currentTime } = storeToRefs(nowPlayingStore)
 
 const iconSize = 16
+// size-3 thumb (xs slider) = 12px, radius = 6px
+const thumbRadius = 6
 
 const thisEpisodeBookmarks = computed(() => {
   return bookmarks.value.filter(
@@ -35,9 +37,11 @@ const containerWidth = computed(() => {
 // use the width and the episode duration to calculate the position of the bookmark markers
 const bookmarkMarkers = computed(() => {
   if (!containerWidth.value || !duration.value) return []
-  const scale = containerWidth.value / duration.value
+  // Reka UI keeps the thumb center in-bounds: at 0% it sits at thumbRadius from the left,
+  // at 100% it sits at thumbRadius from the right. We match that range here.
+  const usableWidth = containerWidth.value - thumbRadius * 2
   return thisEpisodeBookmarks.value.map((bookmark) => {
-    const position = bookmark.timestamp * scale
+    const position = thumbRadius + (bookmark.timestamp / duration.value) * usableWidth
     return { ...bookmark, position }
   })
 })
