@@ -1,4 +1,4 @@
-import type { PodcastFunding } from '~/types/PodcastFunding'
+import type { PodcastFunding } from '~~/shared/types/PodcastFunding'
 import type { PodcastPerson } from '../../../../types/PodcastPerson'
 
 export interface Podcast {

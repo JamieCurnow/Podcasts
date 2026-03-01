@@ -1,4 +1,4 @@
-import { pawIconLinks } from './utils/pwaIconLinks'
+import { pawIconLinks } from './app/utils/pwaIconLinks'
 
 // stop 404 api responses from being cached (see https://firebase.google.com/docs/hosting/manage-cache)
 const noCache = () => ({

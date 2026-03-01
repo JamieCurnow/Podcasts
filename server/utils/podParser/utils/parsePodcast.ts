@@ -1,4 +1,4 @@
-import { getDuration, parseXml, ensureArray, getAttribute, toBoolean, toNumber, parsePersons } from '.'
+import { getDuration, parseXml, ensureArray, getAttribute, toBoolean, toNumber, parsePersons } from '../utils'
 import type { ParsedPodcastXML, Podcast, Episode, EpisodeItem, Funding } from '../types'
 
 /**
