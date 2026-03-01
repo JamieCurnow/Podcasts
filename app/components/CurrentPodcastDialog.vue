@@ -32,7 +32,7 @@
         </UButton>
       </div>
       <!-- seek -->
-      <div class="pt-8 relative">
+      <div class="pt-8 relative" @pointerdown.capture="startPreventingSwipe">
         <div class="absolute inset-0 w-full">
           <BookmarkMarkers />
         </div>
@@ -42,8 +42,6 @@
           :min="0"
           :max="duration"
           color="neutral"
-          @touchstart="startPreventingSwipe"
-          @mousedown="startPreventingSwipe"
         />
       </div>
       <div class="mt-2 flex justify-between">
@@ -143,14 +141,11 @@ const toggleBookmark = () => {
 const preventSwipe = ref(false)
 const startPreventingSwipe = () => {
   preventSwipe.value = true
-  window.addEventListener('mouseup', enableSwipe)
-  window.addEventListener('touchend', enableSwipe)
+  window.addEventListener('pointerup', enableSwipe, { once: true })
 }
 const enableSwipe = () => {
   preventSwipe.value = false
   seekTo(seek.value)
-  window.removeEventListener('mouseup', enableSwipe)
-  window.removeEventListener('touchend', enableSwipe)
 }
 
 const togglePlay = () => {
