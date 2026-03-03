@@ -73,3 +73,11 @@ A general-purpose proxy for external URLs. Intended for images and other media t
 ```
 GET /api/proxy?url=https%3A%2F%2Fexample.com%2Fimage.jpg&cacheMaxAge=604800
 ```
+
+---
+
+## Patterns & Learnings
+
+- This app has no MongoDB, no Firebase auth. Don't add auth or DB calls to endpoints.
+- The only two server routes are `/api/podcast/feed` (RSS parsing) and `/api/proxy` (general proxy) — keep it that way unless there's a strong reason to add more.
+- The proxy endpoint reads `CORS_DOMAINS` from env to restrict allowed origins. In dev this defaults to `*`.

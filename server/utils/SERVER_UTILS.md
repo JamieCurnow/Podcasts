@@ -126,3 +126,10 @@ Extracts `podcast:person` entries from a channel or episode item, mapping them t
 ```ts
 const people = parsePersons(channelOrItem)
 ```
+
+---
+
+## Patterns & Learnings
+
+- All RSS parsing logic is in `server/utils/podParser/`. It's a self-contained custom implementation — don't replace it with an npm package without a strong reason.
+- Episode pagination is done by slicing in `fetchPodcastFeed` — the full feed XML is always parsed first, then sliced. This works fine for typical feeds.

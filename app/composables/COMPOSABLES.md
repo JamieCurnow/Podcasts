@@ -74,3 +74,11 @@ const chapters = useBestGuessChapters(episode.description)
 ### Returns
 
 `PodcastChapterJsonChapter[]` — Array of parsed chapters with `startTime` (seconds) and `title`.
+
+---
+
+## Patterns & Learnings
+
+- Not all composables use the `use` prefix — `createOpml` and `parseOpml` are plain async/sync functions that are auto-imported. Reserve `use*` for composables with reactive state.
+- Chapter-parsing strategies live in `chapterStrategies/` and are consumed by `useBestGuessChapters`. To add a new strategy, add it to the `bestGuessChaptersStrategies` array in `chapterStrategies/index.ts`.
+- There is no `useErrorHandle` composable in this app (no auth/backend). Errors are handled inline with `try/catch` + `console.error`.

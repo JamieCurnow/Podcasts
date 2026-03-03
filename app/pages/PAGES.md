@@ -135,3 +135,14 @@ App settings page. Sections: About (GitHub/sponsor links), General (initial epis
 - Configures `useUserConfigStore`
 - Opens `<ImportOPMLDialog>` and `<ExportOPMLDialog>`
 - `clearAllHistory()` from `useHistoryStore`
+
+---
+
+## Patterns & Learnings
+
+- No auth is required for any page — there's no `authed` layout in use. This app is fully public/local.
+- All data fetching is done in `onMounted` or via `watch`, not `useAsyncData`/`useFetch`. The app is a client-side PWA.
+- Use `keepalive: true` in `definePageMeta` for pages with expensive feed fetches (home, podcast, episode) to avoid reloading on navigation.
+- The home page redirects to `/start` when there are no subscriptions — always guard for this case.
+- Episode pagination pattern: pass `start` and `limit` to `/api/podcast/feed`, increment `start` by `limit`. Trigger via `useElementVisibility` on a sentinel element near the bottom.
+- Pull-to-refresh is rate-limited to 5 min — simulate a delay if within the window, do a real `noCache` fetch otherwise.

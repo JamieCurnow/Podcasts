@@ -714,3 +714,15 @@ None
 ```vue
 <TopNav />
 ```
+
+---
+
+## Patterns & Learnings
+
+- This app has no auth. Use plain `$fetch` for all API calls.
+- The global `<audio>` element lives in `<NowPlayingBar>`. Its `ref` is wired into `useNowPlayingStore`. Never create additional persistent audio elements.
+- `<SlideUpDialog>` is the base for all bottom sheets. Use it instead of `UModal` for fullscreen mobile overlays.
+- Episode action buttons follow a consistent prop signature: `{ episode: Episode, podcast: Podcast }`.
+- Use `<PodCover>` (not `<img>` or `<NuxtImg>`) for all podcast images — it routes through `/api/proxy` automatically.
+- `<PodPlayRow>` composes `<PodPlayChip>`, `<PodAddToQueue>`, `<PodDownload>`, and `<PodMenu>` — use it on list items, not individual buttons.
+- `defineModel` is used for boolean open/close state on dialogs instead of explicit `modelValue` prop + emit.

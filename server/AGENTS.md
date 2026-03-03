@@ -22,16 +22,7 @@ There is a SERVER_ENDPOINTS.md file in this directory that documents all of the 
 - If you remove an endpoint, it must be removed from the SERVER_ENDPOINTS.md file.
 - If you update an endpoint, it must be updated in the SERVER_ENDPOINTS.md file.
 
-Whenever you make a change to the endpoints in this app, or if you learn something about endpoints that is worth preserving, you should update this file in the `## Learnings` section in this file.
-Good learning additions are app-wide patterns eg:
-
-- Always check that documents from the db exist and 404 if they don't.
-
-Don't add:
-
-- endpoint specific details
-- temporary notes
-- info already in the SERVER_ENDPOINTS.md file
+Whenever you make a change to the endpoints or server utils, or if you learn something worth preserving, update the `## Patterns & Learnings` section in the relevant catalog file (`SERVER_ENDPOINTS.md` or `SERVER_UTILS.md`).
 
 ## Auth
 
@@ -97,10 +88,3 @@ throw serverError(404, 'User not found')
 You do not need to wrap the whole handler in a try/catch block as there is a middleware
 the will catch, log, and return the error to the client.
 
-## Learnings
-
-- This app has **no MongoDB, no Firebase auth**. The AGENTS.md template mentions them but they are unused here. Don't add auth or DB calls.
-- The only two server routes are `/api/podcast/feed` (RSS parsing) and `/api/proxy` (general proxy).
-- All RSS parsing logic is in `server/utils/podParser/`. It's a self-contained custom implementation — don't replace it with an npm package without good reason.
-- Episode pagination is done by slicing in `fetchPodcastFeed` — the full feed XML is always parsed first, then sliced. This works fine for typical feeds.
-- The proxy endpoint reads `CORS_DOMAINS` from env to restrict allowed origins. In dev this defaults to `*`.

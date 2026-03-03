@@ -169,3 +169,13 @@ Response shape for a Podcast Index episode lookup by GUID. Contains the full epi
 ### `Feed`
 
 A podcast feed record from the Podcast Index API. Fields include `id`, `podcastGuid`, `title`, `url`, `image`, `artwork`, `author`, `episodeCount`, `language`, `categories`, etc.
+
+---
+
+## Patterns & Learnings
+
+- `Podcast` and `Episode` are the primary domain types. Everything else derives from or references them.
+- `EpisodeMeta` is client-generated (not from the feed) — it tracks listening progress per episode.
+- Use `feedUrl` as the unique identifier for a podcast and `guid` as the unique identifier for an episode.
+- The `PodIdx*` types are defined but not yet connected to active endpoints — they're ready for Podcast Index API integration.
+- This app has no MongoDB. The `ToMongoDoc`/`BaseDocument` patterns from the template don't apply here.

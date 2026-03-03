@@ -156,14 +156,14 @@ Read `APP_INFO.md` for the full brief on this app's purpose, brand, and target a
 
 Every domain has **two** markdown files:
 
-1. **Catalog doc** (e.g., `COMPONENTS.md`, `STORES.md`, `TYPES.md`) — lists everything that exists, how to use it
-2. **Agent doc** (`AGENTS.md`) — patterns, conventions, and learnings for that domain
+1. **Catalog doc** (e.g., `COMPONENTS.md`, `STORES.md`, `TYPES.md`) — lists everything that exists, how to use it, and has a `## Patterns & Learnings` section for accumulated knowledge
+2. **Agent doc** (`AGENTS.md`) — structural conventions for that domain (naming, file location, rules). Do not add learnings here — they go in the catalog.
 
-**When you create/update/delete anything, update BOTH the catalog and the agent doc.**
+**When you create/update/delete anything, update the catalog doc. When you learn something worth preserving, add it to the catalog doc's `## Patterns & Learnings` section.**
 
 Here's the full map:
 
-| Domain           | Catalog                          | Agent/Learnings             |
+| Domain           | Catalog (update this)            | Agent (conventions only)    |
 | ---------------- | -------------------------------- | --------------------------- |
 | Components       | `app/components/COMPONENTS.md`   | `app/components/AGENTS.md`  |
 | Composables      | `app/composables/COMPOSABLES.md` | `app/composables/AGENTS.md` |

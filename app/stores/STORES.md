@@ -304,3 +304,13 @@ Simple global loading flag, wired to the home page's main loading state.
 ```ts
 const { isLoading } = storeToRefs(useLoadingStore())
 ```
+
+---
+
+## Patterns & Learnings
+
+- All stores are persisted via `pinia-plugin-persistedstate`. Use `persist: { key: 'pod_persist_*', pick: [...] }`. Always prefix keys with `pod_persist_`.
+- Stores ARE the source of truth — there is no server sync. Don't add server sync unless the architecture changes.
+- `useNowPlayingStore` owns the `<audio>` element. Other stores must not touch audio directly.
+- Cross-store calls are common (e.g. `nowPlayingStore` calls `subsStore.updateEpisodeMeta`). In setup syntax you can call `useOtherStore()` directly inside another store — no need to pass the pinia instance.
+- `useDownloadsStore` is the only store that touches IndexedDB. Its helpers (`getBlobFromIndexedDB`, `saveBlobToIndexedDB`) are exported from the store file and used by `nowPlayingStore` to load downloaded audio.
