@@ -5,6 +5,10 @@ const noCache = () => ({
   headers: { 'Cache-Control': 'private, no-cache, no-store, max-age=0, must-revalidate, s-maxage=0' }
 })
 
+// Used as the Workbox revision for additionalManifestEntries — changes on every build
+// so prerendered pages are always re-fetched and re-cached when the SW updates.
+const buildRevision = Date.now().toString()
+
 const preRenderRoutes = [
   '/podcast',
   '/podcast/episode',
@@ -150,23 +154,59 @@ export default defineNuxtConfig({
       ]
     },
     workbox: {
+      // Precache all prerendered pages at SW install time so they're available
+      // offline even before the user has visited them. buildRevision ensures
+      // Workbox re-fetches them on every deployment.
+      additionalManifestEntries: preRenderRoutes.map((route) => ({
+        url: route,
+        revision: buildRevision
+      })),
       runtimeCaching: [
         {
-          // url pattern to match all routes
-          urlPattern: '/*',
-          // use "network first" strategy: try network first, fallback to cache if offline
-          handler: 'CacheFirst'
+          // Podcast feed API — NetworkFirst so fresh data is fetched when online
+          // and the last-known feed is served from cache when offline.
+          urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/api/podcast/feed'),
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'podcast-feeds',
+            networkTimeoutSeconds: 5,
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 24 * 60 * 60 // 24 hours
+            },
+            cacheableResponse: {
+              statuses: [200]
+            }
+          }
+        },
+        {
+          // Navigation requests (page loads) — NetworkFirst with 3s timeout:
+          // tries the network, caches the response, falls back to cache when offline.
+          // This means any page visited online will work offline on the next open.
+          urlPattern: ({ request }: { request: Request }) => request.mode === 'navigate',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'pages',
+            networkTimeoutSeconds: 3,
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 7 * 24 * 60 * 60 // 7 days
+            },
+            cacheableResponse: {
+              statuses: [200]
+            }
+          }
         },
         // Rule for all cross-origin images (from any 3rd party domain)
         {
-          urlPattern: ({ request, url }) =>
+          urlPattern: ({ request, url }: { request: Request; url: URL }) =>
             request.destination === 'image' && url.hostname !== self.location.hostname,
           handler: 'CacheFirst',
           options: {
             cacheName: 'cross-origin-images',
             expiration: {
-              maxEntries: 500, // Store the 500 most recent images
-              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+              maxEntries: 500,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
             },
             // Crucial for 3rd-party assets that may not have proper CORS headers
             cacheableResponse: {
@@ -176,20 +216,18 @@ export default defineNuxtConfig({
         },
         // A separate rule for your own, same-origin images
         {
-          urlPattern: ({ request, url }) =>
+          urlPattern: ({ request, url }: { request: Request; url: URL }) =>
             request.destination === 'image' && url.hostname === self.location.hostname,
           handler: 'CacheFirst',
           options: {
             cacheName: 'same-origin-images',
             expiration: {
               maxEntries: 500,
-              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
             }
           }
         }
-      ],
-      // fallback url when offline
-      navigateFallback: '/'
+      ]
     },
     registerType: 'autoUpdate',
     devOptions: { enabled: false, type: 'module' }
