@@ -1,5 +1,6 @@
-import { getDuration, parseXml, ensureArray, getAttribute, toBoolean, toNumber, parsePersons } from '.'
-import type { ParsedPodcastXML, Podcast, Episode, EpisodeItem, Funding } from '../types'
+import { getDuration, parseXml, ensureArray, getAttribute, toBoolean, toNumber, parsePersons } from '../utils'
+import type { Podcast, Episode } from '~~/shared/types'
+import type { ParsedPodcastXML, EpisodeItem, Funding } from '../types'
 
 /**
  * Inspired by
@@ -58,7 +59,7 @@ export const parsePodcast = (xmlText: string): { podcast: Podcast; episodes: Epi
   const episodes: Episode[] = ensureArray<EpisodeItem[]>(channel.item).map((item) => {
     const pscChaptersRaw = item['psc:chapters']?.['psc:chapter'] || []
 
-    const pscChapters = ensureArray(pscChaptersRaw).map((chapter: any) => ({
+    const pscChapters = ensureArray(pscChaptersRaw).map((chapter: unknown) => ({
       start: getAttribute(chapter, '@_start'),
       title: getAttribute(chapter, '@_title'),
       href: getAttribute(chapter, '@_href'),

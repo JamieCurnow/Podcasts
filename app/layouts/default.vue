@@ -1,0 +1,30 @@
+<template>
+  <div class="max-w-4xl mx-auto">
+    <TopNav v-if="topNavPaths.includes(currentPath)" />
+    <ClientOnly>
+      <CurrentPodcastDialog />
+    </ClientOnly>
+    <slot />
+    <ClientOnly>
+      <NowPlayingBar />
+    </ClientOnly>
+    <BottomNav />
+  </div>
+</template>
+
+<script setup lang="ts">
+const currentPath = computed(() => useRoute().path)
+const topNavPaths = [
+  '/',
+  '/start',
+  '/add-podcast',
+  '/library',
+  '/bookmarks',
+  '/queue',
+  '/downloads',
+  '/history',
+  '/stats',
+  '/settings',
+  '/import'
+]
+</script>

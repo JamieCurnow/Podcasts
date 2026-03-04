@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+  --font-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    @apply text-black bg-neutral-50 dark:text-neutral-300 dark:bg-neutral-900;
+  }
+
+  body {
+    @apply border-none text-black dark:text-neutral-300 dark:bg-neutral-900;
+  }
+}
+
+/* html.dark {
+  @apply text-neutral-300 bg-neutral-900;
+} */
+
+/* prevent pull down refresh on chrome mobile */
+body {
+  overscroll-behavior-y: contain;
+}
+
+.disable-scroll {
+  overflow: hidden;
+  width: 100%;
+}
+
+a {
+  @apply underline font-bold hover:opacity-80;
+}
+
+#__nuxt {
+  @apply bg-neutral-50 dark:bg-neutral-900;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

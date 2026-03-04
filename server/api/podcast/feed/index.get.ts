@@ -1,4 +1,4 @@
-import { fetchPodcastFeed } from '~/server/utils/podParser/fetchPodcastFeed'
+import { fetchPodcastFeed } from '~~/server/utils/podParser/fetchPodcastFeed'
 
 export default defineEventHandler(async (event) => {
   const urlParam = getQuery<{ url: string; start: number; limit: number }>(event)

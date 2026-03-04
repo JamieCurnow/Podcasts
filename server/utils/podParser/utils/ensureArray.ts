@@ -8,7 +8,7 @@
  * @param item - The input to ensure as an array.
  * @returns An array containing the input, or an empty array if the input is null or undefined.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const ensureArray = <T extends Array<unknown>>(item: unknown): T => {
   if (Array.isArray(item)) return item as T
 
