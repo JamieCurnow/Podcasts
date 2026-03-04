@@ -1,0 +1,12 @@
+name = "podcasts-app"
+compatibility_date = "2025-05-15"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true

@@ -12,6 +12,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint --ext .js,.ts,.vue .",
+    "deploy": "npm run build && npx wrangler deploy",
     "generate-pwa-assets": "pwa-asset-generator -b \"#171717\" -m manifest.json -a \"/pwa-icons\" -q 100 -i index-pwa-icons.html -f public/icon-horizontal.svg public/pwa-icons"
   },
   "dependencies": {
