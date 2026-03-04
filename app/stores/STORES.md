@@ -42,7 +42,6 @@ On mount it rehydrates the last episode/podcast from persistence and loads the a
 | `skipForwards`  | `() => void`                                                                           | Skips forward 30 seconds                                 |
 | `skipBackwards` | `() => void`                                                                           | Skips back 10 seconds                                    |
 | `seekTo`        | `(time: number) => void`                                                               | Seeks to a specific second                               |
-| `formatTime`    | `(time: number) => string`                                                             | Formats seconds to `H:MM:SS` (exported standalone too)   |
 
 ### Persistence
 
@@ -314,3 +313,4 @@ const { isLoading } = storeToRefs(useLoadingStore())
 - `useNowPlayingStore` owns the `<audio>` element. Other stores must not touch audio directly.
 - Cross-store calls are common (e.g. `nowPlayingStore` calls `subsStore.updateEpisodeMeta`). In setup syntax you can call `useOtherStore()` directly inside another store — no need to pass the pinia instance.
 - `useDownloadsStore` is the only store that touches IndexedDB. Its helpers (`getBlobFromIndexedDB`, `saveBlobToIndexedDB`) are exported from the store file and used by `nowPlayingStore` to load downloaded audio.
+- `formatTime` was moved out of `nowPlayingStore` into `app/utils/formatTime.ts`. It's now auto-imported everywhere. The store still uses it internally for `timeLeftFormatted` and `currentTimeFormatted`.

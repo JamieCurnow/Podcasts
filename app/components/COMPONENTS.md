@@ -726,3 +726,6 @@ None
 - Use `<PodCover>` (not `<img>` or `<NuxtImg>`) for all podcast images — it routes through `/api/proxy` automatically.
 - `<PodPlayRow>` composes `<PodPlayChip>`, `<PodAddToQueue>`, `<PodDownload>`, and `<PodMenu>` — use it on list items, not individual buttons.
 - `defineModel` is used for boolean open/close state on dialogs instead of explicit `modelValue` prop + emit.
+- Components that receive `episode`/`podcast` as required props should use `usePodcast()` and `useEpisode()` composables for derived values (title, image, routes, dates) instead of inline fallback chains. Pass props via getter: `usePodcast(() => props.podcast)`.
+- `PodListItem`, `PodTitle`, `PodPlayChip`, `PodcastListItem`, and `SubsHorizontalScroll` use the new composables. `CurrentPodcastDialog` and `NowPlayingBar` use inline computed values because their store refs are nullable.
+- `PodcastChapter` uses `formatTimePadded()` from `app/utils/formatTime.ts` for zero-padded chapter timestamps.

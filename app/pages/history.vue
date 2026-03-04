@@ -1,7 +1,17 @@
 <template>
   <div v-if="staticHistory?.length" class="flex flex-col gap-2 pt-4 pb-40">
     <template v-for="({ podcast, episode }, i) in staticHistory" :key="`${podcast.feedUrl}/${episode.guid}`">
-      <PodListItem :episode="episode" :podcast="podcast" class="px-4" sub-header="date" />
+      <PodListItem
+        :episode="episode"
+        :podcast="podcast"
+        class="px-4"
+        sub-header="date"
+        :extra-menu-items="[{
+          label: 'Remove from History',
+          icon: 'i-mdi-delete-outline',
+          onSelect: () => removeFromHistory({ podcast, episode }, i)
+        }]"
+      />
       <Divider v-if="i + 1 !== staticHistory.length" />
     </template>
   </div>
@@ -22,4 +32,9 @@ const staticHistory = ref<{ podcast: Podcast; episode: Episode }[]>([])
 onMounted(() => {
   if (history.value) staticHistory.value = JSON.parse(JSON.stringify(history.value))
 })
+
+const removeFromHistory = (opts: { podcast: Podcast; episode: Episode }, index: number) => {
+  store.removeFromHistory(opts)
+  staticHistory.value.splice(index, 1)
+}
 </script>

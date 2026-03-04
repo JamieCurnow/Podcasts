@@ -11,12 +11,13 @@
     </div>
     <div class="grow" />
     <div class="pr-2">
-      <PodMenu :episode="episode" :podcast="podcast" />
+      <PodMenu :episode="episode" :podcast="podcast" :extra-items="extraMenuItems" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { DropdownMenuItem } from '#ui/types'
 import type { Episode, Podcast } from '~~/shared/types/index'
 
 defineProps({
@@ -27,6 +28,10 @@ defineProps({
   podcast: {
     type: Object as PropType<Podcast>,
     required: true
+  },
+  extraMenuItems: {
+    type: Array as PropType<DropdownMenuItem[]>,
+    default: () => []
   }
 })
 </script>

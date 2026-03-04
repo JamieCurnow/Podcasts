@@ -1,5 +1,5 @@
 <template>
-  <SlideUpDialog v-model="dialog" height="568px">
+  <SlideUpDialog v-model="dialog" height="268px">
     <div class="flex flex-col p-4">
       <div class="self-center">
         <UIcon name="i-ic-round-horizontal-rule" class="size-10 text-neutral-300 dark:text-neutral-600" />
@@ -12,8 +12,13 @@
 
       <UTextarea v-model="notes" placeholder="Add notes..." class="mb-4" />
 
-      <div class="flex gap-4 justify-center">
-        <UButton icon="i-mdi-bookmark-outline" @click="saveBookmark"> Bookmark </UButton>
+      <div class="flex gap-4 justify-between">
+        <div>
+          <UButton variant="ghost" icon="i-mdi-close" @click="dialog = false"> Close </UButton>
+        </div>
+        <div>
+          <UButton icon="i-mdi-bookmark-outline" @click="saveBookmark"> Bookmark </UButton>
+        </div>
       </div>
     </div>
   </SlideUpDialog>
@@ -21,7 +26,6 @@
 
 <script setup lang="ts">
 import { useBookmarksStore } from '~/stores/bookmarksStore'
-import { useNowPlayingStore, formatTime } from '~/stores/nowPlayingStore'
 import SlideUpDialog from '~/components/SlideUpDialog.vue'
 
 const dialog = defineModel<boolean>()

@@ -17,26 +17,26 @@
     <!-- pod info -->
     <div v-if="podcast" class="flex flex-col gap-6 px-4 pt-3">
       <!-- img and title -->
-      <NuxtLink :to="`/podcast?url=${encodeURIComponent(podcast.feedUrl)}`" class="flex gap-3 no-underline!">
+      <NuxtLink :to="podcastRoute" class="flex gap-3 no-underline!">
         <!-- img -->
         <div>
-          <PodCover :img="podcast.image?.url || podcast.itunesImage" class="size-16" />
+          <PodCover :img="podImage" class="size-16" />
         </div>
         <!-- title -->
         <div class="flex flex-col gap-1">
           <!-- title -->
-          <div class="text-md font-semibold">{{ podcast.title || podcast.itunesSubtitle }}</div>
+          <div class="text-md font-semibold">{{ podTitle }}</div>
           <!-- author -->
-          <div class="text-xs font-light">{{ podcast.itunesAuthor || '' }}</div>
+          <div class="text-xs font-light">{{ podAuthor }}</div>
         </div>
       </NuxtLink>
     </div>
     <!-- date and title -->
     <div class="flex flex-col px-4 pt-2 gap-2">
       <!-- date -->
-      <div class="text-xs font-light">{{ episodeDateNormal }}</div>
+      <div class="text-xs font-light">{{ episodeFormattedDate }}</div>
       <!-- title -->
-      <div class="text-xl font-semibold">{{ title }}</div>
+      <div class="text-xl font-semibold">{{ episodeTitle }}</div>
     </div>
     <!-- playing -->
     <div class="pt-2 px-4">
@@ -53,7 +53,7 @@
     <!-- description -->
     <div
       class="pt-2 px-4 text-sm whitespace-pre-wrap"
-      v-html="episode.contentEncoded || episode.description"
+      v-html="episodeDescription"
     />
     <!-- funding -->
     <div v-if="podcast.funding?.length" class="pt-4 px-4">
@@ -69,11 +69,8 @@ import type { Episode, Podcast } from '~~/shared/types/index'
 import PodPlayRow from '~/components/PodPlayRow.vue'
 import { useUserConfigStore } from '~/stores/userConfigStore'
 import { storeToRefs } from 'pinia'
-import { decode } from 'html-entities'
 
 definePageMeta({ layout: 'default', keepalive: true })
-
-// const iconColors = 'text-neutral-500 dark:text-neutral-400'
 
 const url = computed(() => useRoute().query.url as string)
 const episodeGuid = computed(() => useRoute().query.episodeGuid as string)
@@ -85,11 +82,8 @@ const error = ref<string | undefined>(undefined)
 const userConfigStore = useUserConfigStore()
 const { amountOfPodsToInitiallyFetch } = storeToRefs(userConfigStore)
 
-const episodeDateNormal = computed(() => {
-  if (!episode.value) return ''
-  const date = new Date(episode.value.pubDate)
-  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-})
+const { title: podTitle, image: podImage, author: podAuthor, podcastRoute } = usePodcast(podcast)
+const { title: episodeTitle, formattedDate: episodeFormattedDate, description: episodeDescription } = useEpisode(episode, podcast)
 
 const status = ref<'success' | 'error' | 'loading' | 'refreshing'>('loading')
 const getData = async () => {
@@ -152,11 +146,4 @@ watch(
   { immediate: true }
 )
 
-const title = computed(
-  () =>
-    decode(episode.value?.title) ||
-    decode(episode.value?.itunesTitle) ||
-    decode(episode.value?.itunesSubtitle) ||
-    'No Title'
-)
 </script>

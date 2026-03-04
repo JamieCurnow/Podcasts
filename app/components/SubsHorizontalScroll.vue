@@ -10,7 +10,7 @@
       <div class="flex gap-3 min-w-max first:pl-4 last:pr-4">
         <div v-for="(pod, i) in podsWithImages" :key="i">
           <NuxtLink
-            :to="`/podcast?url=${encodeURIComponent(pod.podcast.feedUrl)}`"
+            :to="pod.route"
             class="cursor-pointer no-underline!"
           >
             <PodCover :img="pod.img" class="w-24" />
@@ -32,8 +32,12 @@ const props = defineProps({
   }
 })
 
-const getImg = (pod: Podcast) => pod.image?.url || pod.itunesImage
 const podsWithImages = computed(() =>
-  props.podcasts.map((podcast) => ({ podcast, img: getImg(podcast) })).filter((x) => x.img)
+  props.podcasts
+    .map((podcast) => {
+      const { image, podcastRoute } = usePodcast(podcast)
+      return { podcast, img: image.value, route: podcastRoute.value }
+    })
+    .filter((x) => x.img)
 )
 </script>

@@ -36,14 +36,14 @@
         <div class="flex gap-3">
           <!-- img -->
           <div>
-            <PodCover :img="podcast.image?.url || podcast.itunesImage" class="w-24 h-24" />
+            <PodCover :img="podImage" class="w-24 h-24" />
           </div>
           <!-- title -->
           <div class="flex flex-col gap-2">
             <!-- title -->
-            <div class="text-xl font-semibold">{{ podcast.title || podcast.itunesSubtitle }}</div>
+            <div class="text-xl font-semibold">{{ podTitle }}</div>
             <!-- author -->
-            <div class="text-xs font-light">{{ podcast.itunesAuthor || '' }}</div>
+            <div class="text-xs font-light">{{ podAuthor }}</div>
           </div>
         </div>
         <!-- Sub and other buttons -->
@@ -89,7 +89,7 @@
         <!-- People -->
         <PodcastPeople v-if="podcast.persons?.length" :people="podcast.persons" />
         <!-- discription -->
-        <div class="text-sm leading-6" v-html="podcast.contentEncoded || podcast.description"></div>
+        <div class="text-sm leading-6" v-html="podDescription"></div>
         <!-- funding -->
         <div v-if="podcast.funding?.length" class="">
           <PodcastFunding :podcast="podcast" />
@@ -164,14 +164,15 @@ const podcast = ref<Podcast | undefined>(undefined)
 const episodes = ref<Episode[]>([])
 const error = ref<string | undefined>(undefined)
 
+const { title: podTitle, image: podImage, author: podAuthor, description: podDescription } = usePodcast(podcast)
+
 const canShare = computed(() => 'share' in navigator)
 const share = () => {
   if (!navigator.share) return
-  const title = podcast.value?.title || podcast.value?.itunesSubtitle
   const text = 'Listen on your favorite podcast app'
-  const url = window.location.href
+  const shareUrl = window.location.href
   try {
-    navigator.share({ title, text, url })
+    navigator.share({ title: podTitle.value, text, url: shareUrl })
   } catch (e) {
     console.error(e)
   }

@@ -1,5 +1,5 @@
 <template>
-  <SlideUpDialog v-model="dialog" height="668px">
+  <SlideUpDialog v-model="dialog" height="324px">
     <div class="flex flex-col p-4">
       <div class="self-center">
         <UIcon name="i-ic-round-horizontal-rule" class="size-10 text-neutral-300 dark:text-neutral-600" />
@@ -23,7 +23,7 @@
         </UButton>
       </div>
 
-      <div class="mt-20 w-full flex justify-center">
+      <div class="mt-12 w-full flex justify-center">
         <UButton size="lg" variant="ghost" icon="i-ic-round-close" @click="dialog = false"> Close </UButton>
       </div>
     </div>

@@ -16,7 +16,7 @@
             : undefined,
         height
       }"
-      class="flex max-w-4xl justify-center transform-gpu flex-col fixed bottom-0 z-50 rounded-t-3xl w-full bg-neutral-50 dark:bg-neutral-800 shadow-lg"
+      class="flex max-w-4xl justify-center transform-gpu flex-col fixed bottom-0 inset-x-0 mx-auto z-50 rounded-t-3xl w-full bg-neutral-50 dark:bg-neutral-800 shadow-lg"
       @touchstart.stop
     >
       <div ref="dialogEl" class="flex-1 flex flex-col">

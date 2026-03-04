@@ -18,6 +18,10 @@ const props = defineProps({
   podcast: {
     type: Object as PropType<Podcast>,
     required: true
+  },
+  extraItems: {
+    type: Array as PropType<DropdownMenuItem[]>,
+    default: () => []
   }
 })
 
@@ -53,6 +57,7 @@ const items = computed(() => {
     })
   }
 
+  group.push(...props.extraItems)
   return [group]
 })
 </script>

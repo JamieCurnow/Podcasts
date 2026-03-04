@@ -39,7 +39,6 @@
 
 <script setup lang="ts">
 import { useBookmarksStore, type Bookmark } from '~/stores/bookmarksStore'
-import { useNowPlayingStore, formatTime } from '~/stores/nowPlayingStore'
 
 const bookmarksStore = useBookmarksStore()
 const { bookmarks } = storeToRefs(bookmarksStore)

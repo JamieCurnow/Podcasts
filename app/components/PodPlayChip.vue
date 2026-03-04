@@ -58,6 +58,8 @@ const props = defineProps({
   }
 })
 
+const { formattedDuration, audioUrl: episodeAudioUrl } = useEpisode(() => props.episode, () => props.podcast)
+
 const { getEpisodeMeta } = useSubsStore()
 const episodeMeta = getEpisodeMeta({ feedUrl: props.podcast.feedUrl, guid: props.episode.guid })
 
@@ -77,18 +79,20 @@ const loadMetaData = (e: Event) => {
 const duration = computed(
   () => props.episode?.itunesDuration || audioMetaDuration.value || episodeMeta.value?.duration || 0
 )
-// text in hrs and mins based on duration like 1 hr 11 min or 11 min
+// text in hrs and mins based on duration like 1 hr 11 min or 11 min — falls back to formattedDuration from composable
 const durationText = computed(() => {
-  const seconds = duration.value
-  if (!seconds) return ''
-  const mins = Math.floor(seconds / 60)
-  const hrs = Math.floor(mins / 60)
-  const roundedMins = Math.round(mins)
-  const min = roundedMins % 60
-  return `${hrs ? `${hrs} hr` : ''} ${min ? `${min} min` : ''}`.trim()
+  // If we have audioMetaDuration from the audio element but not itunesDuration, compute inline
+  if (!props.episode?.itunesDuration && audioMetaDuration.value) {
+    const seconds = audioMetaDuration.value
+    const mins = Math.floor(seconds / 60)
+    const hrs = Math.floor(mins / 60)
+    const min = Math.round(mins) % 60
+    return `${hrs ? `${hrs} hr` : ''} ${min ? `${min} min` : ''}`.trim()
+  }
+  return formattedDuration.value
 })
 
-const audioUrl = computed(() => props.episode.enclosure?.url)
+const audioUrl = episodeAudioUrl
 
 const nowPlayingStore = useNowPlayingStore()
 const { audioState, src } = storeToRefs(nowPlayingStore)

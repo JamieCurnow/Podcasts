@@ -12,7 +12,7 @@
             <UButton
               v-if="fileInput"
               size="lg"
-              color="primary"
+              color="neutral"
               @click="fileInput.click()"
               icon="i-heroicons-document-plus"
             >

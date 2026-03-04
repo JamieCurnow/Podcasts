@@ -9,21 +9,18 @@
         :no-title="noTitle"
       />
     </div>
-    <NuxtLink
-      :to="`/podcast/episode?url=${encodeURIComponent(podcast.feedUrl)}&episodeGuid=${encodeURIComponent(episode.guid) || ''}`"
-      class="cursor-pointer no-underline!"
-    >
+    <NuxtLink :to="episodeRoute!" class="cursor-pointer no-underline!">
       <div class="font-medium">{{ title }}</div>
       <div class="text-sm line-clamp-2 leading-tight font-light" v-html="description"></div>
     </NuxtLink>
-    <PodPlayRow :episode="episode" :podcast="podcast" class="py-1" />
+    <PodPlayRow :episode="episode" :podcast="podcast" :extra-menu-items="extraMenuItems" class="py-1" />
   </div>
 </template>
 
 <script setup lang="ts">
+import type { DropdownMenuItem } from '#ui/types'
 import type { Episode, Podcast } from '~~/shared/types/index'
 import type { PropType } from 'vue'
-import { decode } from 'html-entities'
 
 const props = defineProps({
   episode: {
@@ -39,15 +36,12 @@ const props = defineProps({
     default: ''
   },
   noCover: Boolean,
-  noTitle: Boolean
+  noTitle: Boolean,
+  extraMenuItems: {
+    type: Array as PropType<DropdownMenuItem[]>,
+    default: () => []
+  }
 })
 
-const description = computed(() => props.episode.description || props.episode.itunesSummary)
-const title = computed(
-  () =>
-    decode(props.episode.title) ||
-    decode(props.episode.itunesTitle) ||
-    decode(props.episode.itunesSubtitle) ||
-    'No Title'
-)
+const { title, description, episodeRoute } = useEpisode(() => props.episode, () => props.podcast)
 </script>

@@ -47,19 +47,7 @@ const props = defineProps({
   }
 })
 
-const startTime = computed(() => {
-  const totalSeconds = props.chapter.startTime || 0
-  const hours = Math.floor(totalSeconds / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
-
-  const parts = []
-  if (hours > 0) parts.push(hours.toString().padStart(2, '0'))
-  parts.push(minutes.toString().padStart(2, '0'))
-  parts.push(seconds.toString().padStart(2, '0'))
-
-  return parts.join(':')
-})
+const startTime = computed(() => formatTimePadded(props.chapter.startTime || 0))
 
 const nowPlayingStore = useNowPlayingStore()
 

@@ -48,8 +48,8 @@ const icon = computed(() => {
   return 'i-mdi-loading'
 })
 
-const podImage = computed(() => podcast.value?.image?.url || podcast.value?.itunesImage)
-const episodeTitle = computed(() => episode.value?.title || episode.value?.itunesTitle)
+const { image: podImage } = usePodcast(podcast)
+const { title: episodeTitle } = useEpisode(episode, podcast)
 
 const togglePlay = () => {
   if (audioState.value === 'playing') return nowPlayingStore.pause()

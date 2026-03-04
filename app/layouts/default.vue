@@ -9,7 +9,6 @@
       <NowPlayingBar />
     </ClientOnly>
     <BottomNav />
-
   </div>
 </template>
 

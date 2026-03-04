@@ -6,9 +6,9 @@
       @click="selected = !selected"
       :class="{ 'opacity-50': !selected }"
     >
-      <PodCover :img="podcast.image?.url || podcast.itunesImage" class="size-10" />
+      <PodCover :img="image" class="size-10" />
       <div class="text-lg font-semibold line-clamp-1">
-        {{ podcast.title || podcast.itunesSubtitle }}
+        {{ title }}
       </div>
     </div>
   </div>
@@ -16,7 +16,9 @@
 
 <script setup lang="ts">
 const selected = defineModel({ type: Boolean, required: true })
-defineProps({
+const props = defineProps({
   podcast: { type: Object as () => Podcast, required: true }
 })
+
+const { title, image } = usePodcast(() => props.podcast)
 </script>

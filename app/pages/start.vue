@@ -8,7 +8,12 @@
     </p>
     <p class="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-6">"For the love of pods"</p>
     <div class="flex gap-4 justify-center mb-8">
-      <UButton to="/add-podcast" icon="i-heroicons-plus-circle" size="lg" class="no-underline!"
+      <UButton
+        to="/add-podcast"
+        icon="i-heroicons-plus-circle"
+        size="lg"
+        color="neutral"
+        class="no-underline!"
         >Add by RSS</UButton
       >
       <UButton @click="showImportDialog" icon="i-heroicons-arrow-up-tray" size="lg" color="neutral">
@@ -21,6 +26,7 @@
         to="https://github.com/JamieCurnow/Podcasts"
         target="_blank"
         color="neutral"
+        variant="subtle"
         class="no-underline!"
       >
         Star this app on GitHub
@@ -29,6 +35,7 @@
         to="https://www.buymeacoffee.com/jamiecurnow"
         target="_blank"
         color="neutral"
+        variant="subtle"
         class="no-underline!"
       >
         ☕ Buy me a coffee
@@ -37,6 +44,7 @@
         to="https://github.com/sponsors/JamieCurnow"
         target="_blank"
         color="neutral"
+        variant="subtle"
         class="no-underline!"
       >
         ❤️ Sponsor me on GitHub

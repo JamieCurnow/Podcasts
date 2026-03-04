@@ -36,13 +36,7 @@
         <div class="absolute inset-0 w-full">
           <BookmarkMarkers />
         </div>
-        <USlider
-          v-model="seek"
-          size="xs"
-          :min="0"
-          :max="duration"
-          color="neutral"
-        />
+        <USlider v-model="seek" size="xs" :min="0" :max="duration" color="neutral" />
       </div>
       <div class="mt-2 flex justify-between">
         <div class="text-xs font-light">
@@ -66,10 +60,9 @@
         </div>
       </div>
     </div>
-    <PlaybackSpeedDialog v-model="playbackSpeedDialog" />
-
-    <NewBookmarkDialog v-model="newBookmarkDialogOpen" />
   </SlideUpDialog>
+  <NewBookmarkDialog v-model="newBookmarkDialogOpen" />
+  <PlaybackSpeedDialog v-model="playbackSpeedDialog" />
 </template>
 
 <script setup lang="ts">
@@ -79,7 +72,6 @@ import SlideUpDialog from '~/components/SlideUpDialog.vue'
 import { useBookmarksStore } from '~/stores/bookmarksStore'
 import NewBookmarkDialog from '~/components/NewBookmarkDialog.vue'
 import TickerText from '~/components/TickerText.vue'
-import { decode } from 'html-entities'
 
 const router = useRouter()
 
@@ -94,24 +86,14 @@ const store = useNowPlayingStore()
 const { currentPodcastDialogOpen, podcast, episode, audioState, duration, currentTime, timeLeftFormatted } =
   storeToRefs(store)
 
-const goToPodcast = () => {
-  if (!podcast.value?.feedUrl) return
-  if (!episode.value?.guid) return
-  currentPodcastDialogOpen.value = false
-  router.push(
-    `/podcast/episode?url=${encodeURIComponent(podcast.value.feedUrl)}&episodeGuid=${encodeURIComponent(episode.value.guid)}`
-  )
-}
+const { title: podcastTitle, image: podImage } = usePodcast(podcast)
+const { title: episodeTitle, episodeRoute } = useEpisode(episode, podcast)
 
-const podImage = computed(() => podcast.value?.image?.url || podcast.value?.itunesImage)
-const podcastTitle = computed(() => {
-  const title = podcast.value?.title || podcast.value?.itunesSubtitle
-  return title ? decode(title) : ''
-})
-const episodeTitle = computed(() => {
-  const title = episode.value?.title || episode.value?.itunesTitle
-  return title ? decode(title) : ''
-})
+const goToPodcast = () => {
+  if (!episodeRoute.value) return
+  currentPodcastDialogOpen.value = false
+  router.push(episodeRoute.value)
+}
 
 const bookmarked = computed(() => {
   if (!episode.value) return false
@@ -158,7 +140,7 @@ const playIcon = computed(() => {
   return 'i-mdi-play-circle'
 })
 
-const { skipBackwards, skipForwards, seekTo, formatTime } = store
+const { skipBackwards, skipForwards, seekTo } = store
 
 const seek = ref(currentTime.value)
 const seekFormatted = computed(() => formatTime(seek.value))
