@@ -83,8 +83,27 @@ const { title: podTitle, image: podImage, author: podAuthor, podcastRoute } = us
 const {
   title: episodeTitle,
   formattedDate: episodeFormattedDate,
-  description: episodeDescription
+  description: episodeDescription,
+  image: episodeImage
 } = useEpisode(episode, podcast)
+
+// Read share meta from query params (populated during SSR for rich link previews)
+const route = useRoute()
+const shareMeta = {
+  title: computed(() => (route.query.t as string) || episodeTitle.value),
+  description: computed(() => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`),
+  image: computed(() => (route.query.img as string) || episodeImage.value)
+}
+
+useSeoMeta({
+  title: () => shareMeta.title.value,
+  ogTitle: () => shareMeta.title.value,
+  ogDescription: () => shareMeta.description.value,
+  ogImage: () => shareMeta.image.value,
+  twitterTitle: () => shareMeta.title.value,
+  twitterDescription: () => shareMeta.description.value,
+  twitterImage: () => shareMeta.image.value
+})
 
 const status = ref<'success' | 'error' | 'loading' | 'refreshing'>('loading')
 let fetchVersion = 0

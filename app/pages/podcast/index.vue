@@ -171,13 +171,34 @@ const {
   description: podDescription
 } = usePodcast(podcast)
 
+// Read share meta from query params (populated during SSR for rich link previews)
+const route = useRoute()
+const shareMeta = {
+  title: computed(() => (route.query.t as string) || podTitle.value),
+  description: computed(() => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`),
+  image: computed(() => (route.query.img as string) || podImage.value)
+}
+
+useSeoMeta({
+  title: () => shareMeta.title.value,
+  ogTitle: () => shareMeta.title.value,
+  ogDescription: () => shareMeta.description.value,
+  ogImage: () => shareMeta.image.value,
+  twitterTitle: () => shareMeta.title.value,
+  twitterDescription: () => shareMeta.description.value,
+  twitterImage: () => shareMeta.image.value
+})
+
 const canShare = computed(() => 'share' in navigator)
 const share = () => {
   if (!navigator.share) return
-  const text = 'Listen on your favorite podcast app'
-  const shareUrl = window.location.href
+  const params = new URLSearchParams({ url: url.value })
+  if (podTitle.value) params.set('t', podTitle.value)
+  if (podImage.value) params.set('img', podImage.value)
+  if (podAuthor.value) params.set('desc', `by ${podAuthor.value}`)
+  const shareUrl = `${window.location.origin}/podcast?${params.toString()}`
   try {
-    navigator.share({ title: podTitle.value, text, url: shareUrl })
+    navigator.share({ title: podTitle.value, text: 'Listen on LovePodcasts.com — for the love of pods.', url: shareUrl })
   } catch (e) {
     console.error(e)
   }

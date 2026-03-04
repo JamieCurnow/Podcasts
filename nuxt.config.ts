@@ -97,7 +97,17 @@ export default defineNuxtConfig({
         // theme-color
         { name: 'theme-color', content: '#EBEBEB', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#171717', media: '(prefers-color-scheme: dark)' },
-        { name: 'mobile-web-app-capable', content: 'yes' }
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        // Open Graph
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'Podcasts' },
+        { property: 'og:description', content: 'Listen on LovePodcasts.com — for the love of pods.' },
+        { property: 'og:image', content: '/pwa-icons/manifest-icon-512.maskable.png' },
+        // Twitter Card
+        { name: 'twitter:card', content: 'summary' },
+        { name: 'twitter:title', content: 'Podcasts' },
+        { name: 'twitter:description', content: 'Listen on LovePodcasts.com — for the love of pods.' },
+        { name: 'twitter:image', content: '/pwa-icons/manifest-icon-512.maskable.png' }
       ],
       link: [...pawIconLinks]
     }

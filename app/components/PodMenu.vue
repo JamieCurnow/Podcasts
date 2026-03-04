@@ -31,6 +31,22 @@ const thisEpisodeDownload = computed(() =>
   downloads.value?.find((d) => d.episodeGuid === props.episode.guid && d.feedUrl === props.podcast.feedUrl)
 )
 
+const { episodeRoute, image: episodeImage } = useEpisode(
+  () => props.episode,
+  () => props.podcast
+)
+
+const getShareUrl = () => {
+  if (!episodeRoute.value) return props.episode.link
+  const base = window.location.origin
+  const url = new URL(`${base}${episodeRoute.value}`)
+  if (props.episode.title) url.searchParams.set('t', props.episode.title)
+  if (episodeImage.value) url.searchParams.set('img', episodeImage.value)
+  const podTitle = props.podcast.title || props.podcast.itunesAuthor
+  if (podTitle) url.searchParams.set('desc', podTitle)
+  return url.toString()
+}
+
 const items = computed(() => {
   const group: DropdownMenuItem[] = []
   if (thisEpisodeDownload.value) {
@@ -50,8 +66,8 @@ const items = computed(() => {
       onSelect: () => {
         navigator.share({
           title: props.episode.title,
-          text: props.episode.description,
-          url: props.episode.link
+          text: 'Listen on LovePodcasts.com — for the love of pods.',
+          url: getShareUrl()
         })
       }
     })
