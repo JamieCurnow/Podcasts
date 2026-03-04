@@ -87,7 +87,10 @@ const {
 } = useEpisode(episode, podcast)
 
 const status = ref<'success' | 'error' | 'loading' | 'refreshing'>('loading')
+let fetchVersion = 0
+
 const getData = async () => {
+  const version = ++fetchVersion
   try {
     status.value = 'loading'
     podcast.value = undefined
@@ -95,35 +98,36 @@ const getData = async () => {
     let start = 0
     let foundEpisode: Episode | undefined
     let fetchedPodcast: Podcast | undefined
+    const limit = amountOfPodsToInitiallyFetch.value || 20
+    const maxPages = 50
 
-    while (!foundEpisode) {
+    for (let page = 0; page < maxPages; page++) {
+      if (version !== fetchVersion) return
+
       const res = await $fetch(`/api/podcast/feed`, {
         method: 'GET',
-        query: { url: url.value, start, limit: amountOfPodsToInitiallyFetch.value }
+        query: { url: url.value, start, limit }
       })
 
-      if (!fetchedPodcast) {
-        fetchedPodcast = res.podcast
-      }
+      if (version !== fetchVersion) return
 
-      if (res.episodes && res.episodes.length > 0) {
-        foundEpisode = res.episodes.find((e) => e.guid === episodeGuid.value)
-        if (foundEpisode) {
-          break
-        }
-        start += amountOfPodsToInitiallyFetch.value
-      } else {
-        // No more episodes
-        break
-      }
+      if (!fetchedPodcast) fetchedPodcast = res.podcast
+
+      if (!res.episodes?.length) break
+
+      foundEpisode = res.episodes.find((e) => e.guid === episodeGuid.value)
+      if (foundEpisode) break
+
+      start += limit
     }
+
+    if (version !== fetchVersion) return
 
     if (fetchedPodcast && foundEpisode) {
       podcast.value = fetchedPodcast
       episode.value = foundEpisode
       status.value = 'success'
     } else if (fetchedPodcast) {
-      // podcast loaded but not episode
       podcast.value = fetchedPodcast
       status.value = 'error'
       error.value = 'Episode not found.'
@@ -132,6 +136,7 @@ const getData = async () => {
       error.value = `Failed to fetch podcast for ${url.value}`
     }
   } catch (e) {
+    if (version !== fetchVersion) return
     status.value = 'error'
     console.error(`Failed to fetch ${url.value}`)
     error.value = `Failed to fetch ${url.value}`
