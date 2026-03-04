@@ -49,6 +49,7 @@ const menuItems = [
   { icon: 'i-mdi-bookmark-multiple-outline', title: 'Bookmarks', to: '/bookmarks' },
   { icon: 'i-ic-baseline-arrow-circle-down', title: 'Downloads', to: '/downloads' },
   { icon: 'i-ic-baseline-history', title: 'History', to: '/history' },
+  { icon: 'i-ic-baseline-bar-chart', title: 'Stats for Nerds', to: '/stats' },
   { icon: 'i-ic-baseline-settings', title: 'Settings', to: '/settings' }
 ]
 </script>

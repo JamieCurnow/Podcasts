@@ -12,10 +12,14 @@ export const useSubsStore = defineStore(
     })
 
     const episodes = ref<EpisodeMeta[] | undefined>(undefined)
-    const updateEpisodeMeta = (meta: Pick<EpisodeMeta, 'feedUrl' | 'guid' | 'currentTime' | 'duration'>) => {
+    const updateEpisodeMeta = (
+      meta: Pick<EpisodeMeta, 'feedUrl' | 'guid' | 'currentTime' | 'duration'> & {
+        listenedTimeDelta?: number
+      }
+    ) => {
       if (!episodes.value) episodes.value = []
 
-      const { currentTime, duration, feedUrl, guid } = meta
+      const { currentTime, duration, feedUrl, guid, listenedTimeDelta } = meta
       // we'll say it's finished if the user is at least 95% through the pod
       const currentTimePercentage = (currentTime / duration) * 100
       const finished = currentTimePercentage >= 99
@@ -28,15 +32,18 @@ export const useSubsStore = defineStore(
         finished,
         lastListenedAt: new Date().getTime(),
         started: true,
-        startedAt: new Date().getTime()
+        startedAt: new Date().getTime(),
+        listenedTime: listenedTimeDelta || 0
       }
 
       // if the episode is already in the list, update it
       const idx = episodes.value.findIndex((e) => e.guid === meta.guid && e.feedUrl === meta.feedUrl)
       if (idx !== -1) {
+        const existing = episodes.value[idx]!
         episodes.value?.splice(idx, 1, {
           ...fullMeta,
-          startedAt: episodes.value[idx]!.startedAt || fullMeta.startedAt
+          startedAt: existing.startedAt || fullMeta.startedAt,
+          listenedTime: (existing.listenedTime || 0) + (listenedTimeDelta || 0)
         })
       } else {
         episodes.value?.push(fullMeta)

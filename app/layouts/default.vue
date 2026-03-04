@@ -23,6 +23,7 @@ const topNavPaths = [
   '/queue',
   '/downloads',
   '/history',
+  '/stats',
   '/settings',
   '/import'
 ]

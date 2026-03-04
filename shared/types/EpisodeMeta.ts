@@ -15,4 +15,6 @@ export interface EpisodeMeta {
   startedAt: number
   /** when the user last listened to the pod - like if they listen again after starting */
   lastListenedAt: number
+  /** actual seconds spent listening (excludes seeks) */
+  listenedTime?: number
 }

@@ -643,6 +643,24 @@ A grid of podcast cover tiles with subscribe/unsubscribe toggle buttons. Links t
 
 ---
 
+## `<SleepTimerDialog>`
+
+A `<SlideUpDialog>` with two views: an inactive state showing a vertical wheel picker (CSS scroll-snap) for selecting a sleep duration (5–60 min or "End of episode"), and an active state showing a countdown display with a cancel button. Reads/writes `useSleepTimerStore`.
+
+### Props (via `v-model`)
+
+| Prop         | Type    | Description          |
+| ------------ | ------- | -------------------- |
+| `modelValue` | Boolean | Open/close the panel |
+
+### Example
+
+```vue
+<SleepTimerDialog v-model="isOpen" />
+```
+
+---
+
 ## `<SlideUpDialog>`
 
 A reusable slide-up bottom sheet with swipe-to-close. Uses `useSwipe` on the dialog element. Locks body scroll while open via `useGlobalStateStore().bodyScrollLock`. The `preventSwipe` prop disables swipe-to-close (used when the seek slider is being dragged inside).

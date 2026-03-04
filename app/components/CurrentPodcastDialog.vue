@@ -2,7 +2,7 @@
   <SlideUpDialog
     v-model="currentPodcastDialogOpen"
     height="668px"
-    :prevent-swipe="preventSwipe || playbackSpeedDialog"
+    :prevent-swipe="preventSwipe || playbackSpeedDialog || sleepTimerDialog"
   >
     <!-- swipe down to close section -->
     <div v-if="episode" class="flex flex-col justify-center px-12">
@@ -56,17 +56,28 @@
               <UIcon class="size-6" :name="bookmarkIcon" />
             </UButton>
           </div>
-          <div class="w-1/3" />
+          <div class="flex w-1/3 justify-end">
+            <UButton size="lg" variant="ghost" @click="sleepTimerDialog = true">
+              <template v-if="sleepTimerStore.isActive && sleepTimerStore.mode === 'timed'">
+                <span class="text-xs tabular-nums">{{ sleepTimerStore.remainingFormatted }}</span>
+              </template>
+              <template v-else>
+                <UIcon class="size-6" :name="sleepTimerStore.isActive ? 'i-mdi-timer-sand' : 'i-mdi-timer-outline'" />
+              </template>
+            </UButton>
+          </div>
         </div>
       </div>
     </div>
   </SlideUpDialog>
   <NewBookmarkDialog v-model="newBookmarkDialogOpen" />
   <PlaybackSpeedDialog v-model="playbackSpeedDialog" />
+  <SleepTimerDialog v-model="sleepTimerDialog" />
 </template>
 
 <script setup lang="ts">
 import PlaybackSpeedDialog from '~/components/PlaybackSpeedDialog.vue'
+import SleepTimerDialog from '~/components/SleepTimerDialog.vue'
 import { useUserConfigStore } from '~/stores/userConfigStore'
 import SlideUpDialog from '~/components/SlideUpDialog.vue'
 import { useBookmarksStore } from '~/stores/bookmarksStore'
@@ -79,8 +90,10 @@ const bookmarksStore = useBookmarksStore()
 const { removeBookmark, isBookmarked } = bookmarksStore
 
 const userConfigStore = useUserConfigStore()
+const sleepTimerStore = useSleepTimerStore()
 const playbackSpeedDialog = ref(false)
 const newBookmarkDialogOpen = ref(false)
+const sleepTimerDialog = ref(false)
 
 const store = useNowPlayingStore()
 const { currentPodcastDialogOpen, podcast, episode, audioState, duration, currentTime, timeLeftFormatted } =

@@ -138,6 +138,21 @@ App settings page. Sections: About (GitHub/sponsor links), General (initial epis
 
 ---
 
+## `/stats`
+
+Stats for Nerds page. Displays aggregated listening statistics derived from existing Pinia store data. All computation happens in `useStatsStore` (computed-only, no persistence).
+
+### Functionality
+
+- Headline stats: total listening time, episodes started/completed, podcasts subscribed
+- Fun stats: completion rate, streaks, average episode length, time saved at speed, bookmarks/downloads/queue counts
+- Top podcasts by episode count
+- Listening patterns: day-of-week bar chart, peak listening hour
+- Empty state when no listening data exists
+- Wrapped in `<ClientOnly>` (store data is client-side only)
+
+---
+
 ## Patterns & Learnings
 
 - No auth is required for any page — there's no `authed` layout in use. This app is fully public/local.

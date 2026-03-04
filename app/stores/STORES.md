@@ -306,6 +306,81 @@ const { isLoading } = storeToRefs(useLoadingStore())
 
 ---
 
+## `useSleepTimerStore`
+
+Timestamp-based sleep timer. Stores `endTimestamp` (Unix ms) and compares against `Date.now()` on each `timeupdate` tick from the audio element. Supports two modes: timed (pauses after N minutes) and end-of-episode (prevents queue auto-advance when episode ends).
+
+### State
+
+| Key               | Type                                      | Description                          |
+| ----------------- | ----------------------------------------- | ------------------------------------ |
+| `endTimestamp`    | `Ref<number \| null>`                     | Unix ms when timed timer fires       |
+| `mode`            | `Ref<'timed' \| 'endOfEpisode' \| null>`  | Active timer type                    |
+| `selectedMinutes` | `Ref<number \| null>`                     | Original selection (for display)     |
+| `now`             | `Ref<number>`                             | Reactive clock updated by checkTimer |
+| `isActive`        | `ComputedRef<boolean>`                    | Whether any timer is active          |
+| `remainingSeconds`| `ComputedRef<number>`                     | Seconds left on timed timer          |
+| `remainingFormatted` | `ComputedRef<string>`                  | HH:MM:SS formatted remaining time   |
+
+### Methods
+
+| Method       | Signature                                                    | Description                                              |
+| ------------ | ------------------------------------------------------------ | -------------------------------------------------------- |
+| `start`      | `(opts: { minutes: number } \| { endOfEpisode: true }) => void` | Starts a timed or end-of-episode timer               |
+| `cancel`     | `() => void`                                                 | Clears all timer state                                   |
+| `checkTimer` | `() => void`                                                 | Called from timeupdate; pauses audio if timed timer expired |
+
+### Persistence
+
+Key: `pod_persist_sleep_timer` — persists `endTimestamp`, `mode`, `selectedMinutes`. Stale timestamps trigger immediate pause+cancel on first `checkTimer`.
+
+### Usage
+
+```ts
+const sleepTimerStore = useSleepTimerStore()
+sleepTimerStore.start({ minutes: 30 })
+sleepTimerStore.start({ endOfEpisode: true })
+sleepTimerStore.cancel()
+```
+
+---
+
+## `useStatsStore`
+
+A read-only derived store that aggregates listening statistics from other stores. Has **no persisted state** — all values are computed from `useSubsStore`, `useHistoryStore`, `useBookmarksStore`, `useDownloadsStore`, `useQueueStore`, and `useUserConfigStore`.
+
+### Computed Values
+
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `totalListeningTimeSeconds` | `ComputedRef<number>` | Sum of `currentTime` across all episodes |
+| `totalListeningTimeFormatted` | `ComputedRef<string>` | Human-readable total time (e.g. "2d 5h") |
+| `episodesStarted` | `ComputedRef<number>` | Count of started episodes |
+| `episodesCompleted` | `ComputedRef<number>` | Count of finished episodes |
+| `podcastsSubscribed` | `ComputedRef<number>` | Number of subscribed feeds |
+| `completionRate` | `ComputedRef<number>` | Percentage of started episodes completed |
+| `averageEpisodeLengthFormatted` | `ComputedRef<string>` | Mean duration of started episodes |
+| `timeSavedFormatted` | `ComputedRef<string>` | Time saved at current playback speed |
+| `bookmarkCount` | `ComputedRef<number>` | Total bookmarks |
+| `completedDownloads` | `ComputedRef<number>` | Completed download count |
+| `queueSize` | `ComputedRef<number>` | Current queue length |
+| `historyCount` | `ComputedRef<number>` | History entry count |
+| `topPodcasts` | `ComputedRef<{ feedUrl, count }[]>` | Top 5 podcasts by started episode count |
+| `longestStreak` | `ComputedRef<number>` | Longest consecutive listening day streak |
+| `currentStreak` | `ComputedRef<number>` | Current consecutive day streak |
+| `listeningByDayOfWeek` | `ComputedRef<number[]>` | Episode counts by day (Sun–Sat) |
+| `mostActiveHour` | `ComputedRef<string \| null>` | Peak listening hour (e.g. "9AM") |
+| `hasAnyData` | `ComputedRef<boolean>` | Whether any listening data exists |
+
+### Usage
+
+```ts
+const statsStore = useStatsStore()
+const { totalListeningTimeFormatted, episodesCompleted } = storeToRefs(statsStore)
+```
+
+---
+
 ## Patterns & Learnings
 
 - All stores are persisted via `pinia-plugin-persistedstate`. Use `persist: { key: 'pod_persist_*', pick: [...] }`. Always prefix keys with `pod_persist_`.

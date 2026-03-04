@@ -70,6 +70,7 @@ export const useNowPlayingStore = defineStore(
       at?: number
     }) => {
       reset()
+      _prevTimeUpdatePos = null
       episode.value = opts.episode
       podcast.value = opts.podcast
       const url = opts.episode.enclosure.url
@@ -132,6 +133,9 @@ export const useNowPlayingStore = defineStore(
       updatePositionState()
     }
 
+    // Track previous timeupdate position to calculate actual listening time
+    let _prevTimeUpdatePos: number | null = null
+
     const updatePositionState = () => {
       const a = audio.value
       if (!a) return
@@ -144,6 +148,18 @@ export const useNowPlayingStore = defineStore(
       currentTime.value = c
       // only update duration if it's changed
       if (d !== duration.value) duration.value = d
+
+      // Calculate actual listened time delta (ignore seeks)
+      // A normal timeupdate delta at 1x speed over 1s throttle is ~1s.
+      // Cap at 3s to account for playback speeds up to ~2x plus some tolerance.
+      let listenedTimeDelta = 0
+      if (_prevTimeUpdatePos !== null) {
+        const delta = c - _prevTimeUpdatePos
+        if (delta > 0 && delta <= 3) {
+          listenedTimeDelta = delta
+        }
+      }
+      _prevTimeUpdatePos = c
 
       navigator.mediaSession.setPositionState({
         duration: Math.round(d),
@@ -159,7 +175,8 @@ export const useNowPlayingStore = defineStore(
           feedUrl,
           guid: episodeGuid,
           currentTime: Math.round(c),
-          duration: Math.round(d)
+          duration: Math.round(d),
+          listenedTimeDelta
         })
       }
     }
@@ -244,11 +261,20 @@ export const useNowPlayingStore = defineStore(
       })
       el.addEventListener('timeupdate', function () {
         updatePositionStateThrottled()
+        useSleepTimerStore().checkTimer()
       })
       // listen for audio finish event
       el.addEventListener('ended', () => {
         navigator.mediaSession.playbackState = 'paused'
         audioState.value = 'paused'
+
+        // end-of-episode sleep timer: cancel and don't auto-advance
+        const sleepTimer = useSleepTimerStore()
+        if (sleepTimer.mode === 'endOfEpisode') {
+          sleepTimer.cancel()
+          return
+        }
+
         // if the currently playing episode is in the queue, remove it
         if (podcast.value && episode.value) {
           useQueueStore().removeFromQueue({ podcast: podcast.value, episode: episode.value })
