@@ -59,7 +59,7 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Episode detail page (metadata, play controls, chapters, people, description, funding)
 - [x] Onboarding/start page when no subscriptions exist
 - [ ] Podcast search via Podcast Index API (discover new podcasts without needing the RSS URL)
-- [ ] Episode search within a podcast (filter/search episode titles in a podcast's feed)
+- [ ] Episode search within a podcast (filter/search episode info in a podcast's feed)
 - [ ] Trending/popular feeds from Podcast Index for new user discovery
 - [ ] "Similar podcasts" suggestions based on categories/tags from subscribed feeds (local-only, no tracking)
 
