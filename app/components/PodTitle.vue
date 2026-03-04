@@ -5,8 +5,8 @@
         <PodCover less-rounded class="w-10 mt-1" :img="episodeImage" />
       </div>
       <div class="flex flex-col grow" :class="{ 'flex-col-reverse': subHeaderAbove }">
-        <div v-if="!noTitle" class="text-base dark:font-light">{{ podTitle }}</div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">{{ subText }}</div>
+        <div v-if="!noTitle" class="text-base font-medium">{{ podTitle }}</div>
+        <div class="text-sm opacity-60">{{ subText }}</div>
       </div>
     </div>
   </NuxtLink>
