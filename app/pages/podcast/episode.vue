@@ -69,8 +69,9 @@ import { storeToRefs } from 'pinia'
 
 definePageMeta({ layout: 'default', keepalive: true })
 
-const url = computed(() => useRoute().query.url as string)
-const episodeGuid = computed(() => useRoute().query.episodeGuid as string)
+const route = useRoute()
+const url = computed(() => route.query.url as string)
+const episodeGuid = computed(() => route.query.episodeGuid as string)
 
 const podcast = ref<Podcast | undefined>(undefined)
 const episode = ref<Episode | undefined>(undefined)
@@ -88,7 +89,6 @@ const {
 } = useEpisode(episode, podcast)
 
 // Read share meta from query params (populated during SSR for rich link previews)
-const route = useRoute()
 const shareMeta = {
   title: computed(() => (route.query.t as string) || episodeTitle.value),
   description: computed(() => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`),

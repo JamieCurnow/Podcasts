@@ -135,7 +135,8 @@ definePageMeta({ layout: 'default', keepalive: true })
 
 const iconColors = 'text-neutral-500 dark:text-neutral-400'
 
-const url = computed(() => useRoute().query.url as string)
+const route = useRoute()
+const url = computed(() => route.query.url as string)
 const { urls } = storeToRefs(useSubsStore())
 const { amountOfPodsToInitiallyFetch } = storeToRefs(useUserConfigStore())
 const { currentPodcastDialogOpen } = storeToRefs(useNowPlayingStore())
@@ -172,7 +173,6 @@ const {
 } = usePodcast(podcast)
 
 // Read share meta from query params (populated during SSR for rich link previews)
-const route = useRoute()
 const shareMeta = {
   title: computed(() => (route.query.t as string) || podTitle.value),
   description: computed(() => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`),
