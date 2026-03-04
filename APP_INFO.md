@@ -6,7 +6,7 @@ Find information here about the purpose, brand, and target audience of the app.
 
 A free, open-source podcast app — no ads, no tracking, just pure podcasting.
 
-Podcasts is a privacy-first PWA podcast client. Users subscribe to podcast RSS feeds, browse episodes, and listen with a full-featured player (playback speed, bookmarks, chapters, skip forward/back, queue). All data lives locally on-device — there's no account, no server-side user data, and no analytics. It supports offline listening via episode downloads and OPML import/export for moving subscriptions to/from other apps.
+Podcasts is a privacy-first PWA podcast client. Users subscribe to podcast RSS feeds, browse episodes, and listen with a full-featured player (playback speed, bookmarks, chapters, skip forward/back, queue, sleep timer). All data lives locally on-device — there's no account, no server-side user data, and no analytics. It supports offline listening via episode downloads, OPML import/export for moving subscriptions to/from other apps, play history tracking, listening statistics, and episode sharing via the Web Share API.
 
 ## Brand / style
 
@@ -32,3 +32,8 @@ Podcast listeners who want a clean, private, no-frills experience. People who ar
 - As a listener, I want to import/export my subscriptions as OPML so I can move between apps without losing my feeds.
 - As a listener, I want chapters displayed for episodes that support them so I can jump to sections.
 - As a listener, I want the app to remember where I was in every episode so I can pick up where I left off.
+- As a listener, I want a sleep timer so the podcast stops playing after a set time or at the end of the episode.
+- As a listener, I want to see my play history so I can revisit episodes I've listened to.
+- As a listener, I want listening statistics so I can see how much I've listened and my habits over time.
+- As a listener, I want to share a podcast or episode with friends via my device's share sheet.
+- As a listener, I want the app to work as an installable PWA with lock screen controls so it feels like a native app.

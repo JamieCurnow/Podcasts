@@ -23,6 +23,11 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Circular progress ring on episode play chips
 - [x] Ticker text animation for long episode titles in now-playing dialog
 - [x] Track actual listened time per episode (throttled, capped at 3s delta to ignore seeks)
+- [ ] Volume boost / audio normalization (even out volume differences between podcasts)
+- [ ] Trim silence (automatically skip silent sections to save listening time)
+- [ ] Configurable skip intervals (let users choose forward/back skip durations)
+- [ ] Continuous playback mode (auto-play next episode from same podcast, not just queue)
+- [ ] Crossfade between episodes (smooth transition between queue items)
 
 ## Sleep Timer
 
@@ -53,6 +58,10 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Podcast detail page (cover, title, author, description, people, funding links)
 - [x] Episode detail page (metadata, play controls, chapters, people, description, funding)
 - [x] Onboarding/start page when no subscriptions exist
+- [ ] Podcast search via Podcast Index API (discover new podcasts without needing the RSS URL)
+- [ ] Episode search within a podcast (filter/search episode titles in a podcast's feed)
+- [ ] Trending/popular feeds from Podcast Index for new user discovery
+- [ ] "Similar podcasts" suggestions based on categories/tags from subscribed feeds (local-only, no tracking)
 
 ## Queue
 
@@ -61,6 +70,7 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Sequential auto-play on episode end
 - [x] Deduplicated queue entries
 - [x] Persisted queue state
+- [ ] Drag-to-reorder queue items
 
 ## Offline & Downloads
 
@@ -71,6 +81,7 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Auto-cleanup of corrupt download entries on mount
 - [x] Download progress ring indicator on download button
 - [x] Persisted download metadata
+- [ ] Auto-download new episodes from selected podcasts
 
 ## Bookmarks
 
@@ -81,6 +92,7 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Dedicated bookmarks page with quick-play
 - [x] Remove individual bookmarks
 - [x] Bookmark toggle button in now-playing dialog
+- [ ] Export bookmarks as markdown or JSON
 
 ## Play History
 
@@ -128,6 +140,8 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 
 - [x] Share podcast via Web Share API (from podcast detail page)
 - [x] Share episode via Web Share API (from episode context menu)
+- [ ] Share at timestamp (share a link to a specific moment in an episode)
+- [ ] Listening activity summary (weekly/monthly recap of listening stats as a shareable card)
 
 ## Podcasting 2.0 Support
 
@@ -136,6 +150,7 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Best-guess chapter parsing from episode descriptions (Lex Fridman style timestamps)
 - [x] `podcast:person` — people associated with podcasts and episodes
 - [x] `podcast:funding` — funding/support links
+- [ ] `podcast:transcript` — render transcripts when available
 
 ## Settings
 
@@ -159,6 +174,9 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Noto Sans typeface (Google Fonts via `@nuxt/fonts`)
 - [x] Neutral colour palette — no bold brand colours
 - [x] Episode context menu (three-dot dropdown: remove download, share)
+- [ ] Gesture-based controls (swipe left/right on now-playing for skip forward/back)
+- [ ] Keyboard shortcuts (play/pause, skip, volume for desktop/tablet users)
+- [ ] Multi-language UI (i18n support with community translations)
 
 ## PWA & Offline
 
@@ -171,6 +189,8 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Same-origin images cached with CacheFirst (30-day TTL, max 500 entries)
 - [x] Full iOS splash screen support (15+ device sizes)
 - [x] Maskable icons (192px, 512px)
+- [ ] New episode notifications (background check with push/badge notifications)
+- [ ] Auto-add new episodes from selected podcasts to queue
 
 ## Server / Backend
 
@@ -181,6 +201,20 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] 30-day cache for proxied images
 - [x] Deployed on Cloudflare Workers (Nitro `cloudflare-module` preset)
 - [x] GitHub Actions CI/CD deployment
+
+## Organisation
+
+- [ ] Playlists / custom collections (group episodes across podcasts into themed playlists)
+- [ ] Folders / tags for subscriptions (organize podcasts into custom categories)
+- [ ] Pin favourite podcasts to the top of the library
+- [ ] Archive episodes (hide from feed without deleting progress)
+- [ ] Episode notes / personal annotations (add personal notes to any episode, beyond bookmarks)
+
+## Sync & Portability
+
+- [ ] Cross-device sync via file export (export/import full app state as JSON — subs, progress, bookmarks, queue)
+- [ ] Gpodder sync protocol (optional self-hosted sync with Gpodder-compatible servers)
+- [ ] Backup to clipboard (quick copy app state for manual transfer)
 
 ## Privacy & Philosophy
 
