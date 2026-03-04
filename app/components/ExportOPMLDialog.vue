@@ -26,14 +26,14 @@
               />
             </div>
             <div class="flex justify-end gap-4">
-              <UButton size="lg" @click="open = false" color="neutral">Cancel</UButton>
+              <UButton size="lg" color="neutral" @click="open = false">Cancel</UButton>
               <UButton
                 :loading="exporting"
                 size="lg"
                 :disabled="noSelected"
-                @click="exportSelected"
                 color="primary"
                 icon="i-heroicons-arrow-down-tray"
+                @click="exportSelected"
               >
                 Export
               </UButton>

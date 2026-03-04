@@ -1,10 +1,10 @@
 <template>
   <div>
     <button
+      v-if="chaptersAvailable"
       class="text-left h-10 w-full flex items-center gap-2 bg-neutral-100 dark:bg-neutral-800 hover:opacity-80 px-3 py-1"
       :class="{ 'rounded-md': !chaptersOpen, 'rounded-t-md': chaptersOpen }"
       @click="toggleChapters()"
-      v-if="chaptersAvailable"
     >
       <div>Chapters</div>
       <div v-if="!gettingChapters">
@@ -37,7 +37,7 @@ import type { Episode } from '~~/shared/types/index'
 import type { PodcastChapterJson, PodcastChapterJsonChapter } from '~~/shared/types/PodcastChapterJson'
 
 // cache chapters for long - they are not likely to change. 1 week?
-const CHAPTERS_CACHE_MAX_AGE_SECONDS = 604800 // 1 week
+// const CHAPTERS_CACHE_MAX_AGE_SECONDS = 604800 // 1 week
 
 const props = defineProps({
   episode: {
@@ -116,7 +116,7 @@ const getChapters = async () => {
   } catch (e) {
     console.error('Error fetching chapters:', e)
     useToast().add({
-      color: 'red',
+      color: 'error',
       title: 'Error',
       description: 'There was an error fetching the chapters.'
     })

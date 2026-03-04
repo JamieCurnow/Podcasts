@@ -1,5 +1,5 @@
 <template>
-  <button @click="loadPodcast()" class="flex gap-4 px-3 py-1 text-left hover:opacity-80 w-full">
+  <button class="flex gap-4 px-3 py-1 text-left hover:opacity-80 w-full" @click="loadPodcast()">
     <!-- <div class="">{{ index + 1 }}</div> -->
     <div class="flex flex-col gap-1 pb-2">
       <div>
@@ -52,7 +52,7 @@ const startTime = computed(() => formatTimePadded(props.chapter.startTime || 0))
 const nowPlayingStore = useNowPlayingStore()
 
 const loadingPod = ref(false)
-const loadPodcast = async (opts?: { at?: number }) => {
+const loadPodcast = async () => {
   loadingPod.value = true
   await nowPlayingStore.loadPodcast({
     episode: props.episode,

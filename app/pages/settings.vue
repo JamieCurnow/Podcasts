@@ -115,11 +115,11 @@
           <ClientOnly>
             <UButton
               :disabled="!history?.length"
-              @click="clearAllHistory()"
               color="error"
               variant="solid"
               :icon="history?.length ? 'mdi-close' : 'mdi-check'"
               trailing
+              @click="clearAllHistory()"
             >
               Clear all history
             </UButton>

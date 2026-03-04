@@ -29,5 +29,7 @@ const props = defineProps({
 })
 
 const cacheForImages = 60 * 60 * 24 * 7 * 4 // 4 weeks
-const proxyImg = computed(() => props.img ? getProxyUrl({ url: props.img, cacheMaxAgeSeconds: cacheForImages }) : '')
+const proxyImg = computed(() =>
+  props.img ? getProxyUrl({ url: props.img, cacheMaxAgeSeconds: cacheForImages }) : ''
+)
 </script>

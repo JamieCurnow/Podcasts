@@ -71,10 +71,10 @@ export const useDownloadsStore = defineStore(
         // splice remove the download from the downloads array if it fails
         downloads.value?.splice(downloadsIndex, 1)
         useToast().add({
-          color: 'red',
+          color: 'error',
           title: 'Download Failed',
           description: `Failed to download ${opts.episode.title}. Contact the podcast publisher to let them know.`,
-          timeout: 5000
+          duration: 5000
         })
       }
     }

@@ -16,7 +16,7 @@
         class="no-underline!"
         >Add by RSS</UButton
       >
-      <UButton @click="showImportDialog" icon="i-heroicons-arrow-up-tray" size="lg" color="neutral">
+      <UButton icon="i-heroicons-arrow-up-tray" size="lg" color="neutral" @click="showImportDialog">
         Import from OPML
       </UButton>
     </div>
@@ -59,9 +59,5 @@ const importDialogVisible = ref(false)
 
 const showImportDialog = () => {
   importDialogVisible.value = true
-}
-
-const notify = () => {
-  useToast().add({ color: 'success', description: 'Notification test', timeout: 0 })
 }
 </script>

@@ -52,7 +52,8 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@vite-pwa/nuxt',
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt'
+    'pinia-plugin-persistedstate/nuxt',
+    '@nuxt/eslint'
   ],
 
   imports: { dirs: ['~/types'] },

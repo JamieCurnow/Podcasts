@@ -68,7 +68,7 @@ const addPodcast = async () => {
 
     subsStore.addSubscription(rssUrl.value)
     router.push(`/podcast?url=${encodeURIComponent(rssUrl.value)}`)
-  } catch (e: any) {
+  } catch (e: unknown) {
     error.value = 'Failed to add podcast. Please check the RSS feed URL.'
     console.error(e)
   } finally {

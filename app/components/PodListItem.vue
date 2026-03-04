@@ -43,5 +43,8 @@ const props = defineProps({
   }
 })
 
-const { title, description, episodeRoute } = useEpisode(() => props.episode, () => props.podcast)
+const { title, description, episodeRoute } = useEpisode(
+  () => props.episode,
+  () => props.podcast
+)
 </script>

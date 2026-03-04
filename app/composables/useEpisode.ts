@@ -2,14 +2,18 @@ import type { Episode, Podcast } from '~~/shared/types/index'
 import { decode } from 'html-entities'
 import { getTimeLeftText } from '~/utils/getTimeLeftText'
 
-export function useEpisode(episode: MaybeRefOrGetter<Episode | undefined>, podcast?: MaybeRefOrGetter<Podcast | undefined>) {
+export function useEpisode(
+  episode: MaybeRefOrGetter<Episode | undefined>,
+  podcast?: MaybeRefOrGetter<Podcast | undefined>
+) {
   const e = computed(() => toValue(episode))
   const p = computed(() => (podcast ? toValue(podcast) : undefined))
 
   const dayjs = useDayjs()
 
   const title = computed(
-    () => decode(e.value?.title) || decode(e.value?.itunesTitle) || decode(e.value?.itunesSubtitle) || 'No Title'
+    () =>
+      decode(e.value?.title) || decode(e.value?.itunesTitle) || decode(e.value?.itunesSubtitle) || 'No Title'
   )
 
   const description = computed(() => e.value?.contentEncoded || e.value?.description || undefined)
@@ -24,7 +28,7 @@ export function useEpisode(episode: MaybeRefOrGetter<Episode | undefined>, podca
 
   const audioUrl = computed(() => e.value?.enclosure?.url || undefined)
 
-  const encodedGuid = computed(() => e.value?.guid ? encodeURIComponent(e.value.guid) : '')
+  const encodedGuid = computed(() => (e.value?.guid ? encodeURIComponent(e.value.guid) : ''))
 
   const uniqueId = computed(() => {
     const feedUrl = p.value?.feedUrl

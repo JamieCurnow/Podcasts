@@ -205,7 +205,8 @@ export const useNowPlayingStore = defineStore(
           console.log('TODO: stop', audio.value.currentTime)
         })
       } catch (error) {
-        console.error('Warning! The "stop" media session action is not supported.')
+        console.error(error)
+        console.warn('Warning! The "stop" media session action is not supported.')
       }
 
       // seek to
@@ -214,7 +215,7 @@ export const useNowPlayingStore = defineStore(
           if (!audio.value) return
           if (!event.seekTime) return
 
-          if (event.fastSeek && 'fastSeek' in audio) {
+          if (event.fastSeek && 'fastSeek' in audio.value) {
             audio.value.fastSeek(event.seekTime)
             return
           }
@@ -222,7 +223,8 @@ export const useNowPlayingStore = defineStore(
           updatePositionState()
         })
       } catch (error) {
-        console.error('Warning! The "seekto" media session action is not supported.')
+        console.error(error)
+        console.warn('Warning! The "seekto" media session action is not supported.')
       }
     })
 

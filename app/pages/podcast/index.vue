@@ -164,7 +164,12 @@ const podcast = ref<Podcast | undefined>(undefined)
 const episodes = ref<Episode[]>([])
 const error = ref<string | undefined>(undefined)
 
-const { title: podTitle, image: podImage, author: podAuthor, description: podDescription } = usePodcast(podcast)
+const {
+  title: podTitle,
+  image: podImage,
+  author: podAuthor,
+  description: podDescription
+} = usePodcast(podcast)
 
 const canShare = computed(() => 'share' in navigator)
 const share = () => {

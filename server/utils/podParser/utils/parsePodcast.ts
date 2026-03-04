@@ -59,7 +59,7 @@ export const parsePodcast = (xmlText: string): { podcast: Podcast; episodes: Epi
   const episodes: Episode[] = ensureArray<EpisodeItem[]>(channel.item).map((item) => {
     const pscChaptersRaw = item['psc:chapters']?.['psc:chapter'] || []
 
-    const pscChapters = ensureArray(pscChaptersRaw).map((chapter: any) => ({
+    const pscChapters = ensureArray(pscChaptersRaw).map((chapter: unknown) => ({
       start: getAttribute(chapter, '@_start'),
       title: getAttribute(chapter, '@_title'),
       href: getAttribute(chapter, '@_href'),

@@ -3,8 +3,8 @@
     <UCheckbox v-model="selected" color="primary" />
     <div
       class="flex gap-2 items-center cursor-pointer hover:opacity-80"
-      @click="selected = !selected"
       :class="{ 'opacity-50': !selected }"
+      @click="selected = !selected"
     >
       <PodCover :img="image" class="size-10" />
       <div class="text-lg font-semibold line-clamp-1">

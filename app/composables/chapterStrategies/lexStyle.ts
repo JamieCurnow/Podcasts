@@ -5,7 +5,7 @@ import type { PodcastChapterJsonChapter } from '~~/shared/types/PodcastChapterJs
  * Format:
  * (00:00) – Introduction
  * (9:02:19) – Cold War 2.0
- * 
+ *
  * OR:
  * \n(2:44:51) &#8211; How OpenClaw works<br />\n(2:56:09) &#8211; AI slop<br />
  */
@@ -44,9 +44,9 @@ export const lexStyle = (description: string) => {
   }
 
   if (chapters.length > 0) {
-      console.log('Parsed lexStyle chapters:', chapters)
-      return chapters
-    } else {
-      return []
-    }
+    console.log('Parsed lexStyle chapters:', chapters)
+    return chapters
+  } else {
+    return []
+  }
 }

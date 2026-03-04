@@ -6,11 +6,13 @@
         :podcast="podcast"
         class="px-4"
         sub-header="date"
-        :extra-menu-items="[{
-          label: 'Remove from History',
-          icon: 'i-mdi-delete-outline',
-          onSelect: () => removeFromHistory({ podcast, episode }, i)
-        }]"
+        :extra-menu-items="[
+          {
+            label: 'Remove from History',
+            icon: 'i-mdi-delete-outline',
+            onSelect: () => removeFromHistory({ podcast, episode }, i)
+          }
+        ]"
       />
       <Divider v-if="i + 1 !== staticHistory.length" />
     </template>

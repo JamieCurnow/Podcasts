@@ -58,7 +58,10 @@ const props = defineProps({
   }
 })
 
-const { formattedDuration, audioUrl: episodeAudioUrl } = useEpisode(() => props.episode, () => props.podcast)
+const { formattedDuration, audioUrl: episodeAudioUrl } = useEpisode(
+  () => props.episode,
+  () => props.podcast
+)
 
 const { getEpisodeMeta } = useSubsStore()
 const episodeMeta = getEpisodeMeta({ feedUrl: props.podcast.feedUrl, guid: props.episode.guid })

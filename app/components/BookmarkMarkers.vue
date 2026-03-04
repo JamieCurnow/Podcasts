@@ -16,7 +16,7 @@
 const nowPlayingStore = useNowPlayingStore()
 const bookmarksStore = useBookmarksStore()
 const { bookmarks } = storeToRefs(bookmarksStore)
-const { podcast, episode, duration, currentTime } = storeToRefs(nowPlayingStore)
+const { episode, duration } = storeToRefs(nowPlayingStore)
 
 const iconSize = 16
 // size-3 thumb (xs slider) = 12px, radius = 6px

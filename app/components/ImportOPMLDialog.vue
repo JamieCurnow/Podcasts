@@ -8,13 +8,13 @@
             <div><p>Import your podcast subscriptions from an OPML file</p></div>
           </div>
           <div v-if="!file">
-            <input type="file" accept=".opml,.xml" ref="fileInput" @change="onFileChange" class="hidden" />
+            <input ref="fileInput" type="file" accept=".opml,.xml" class="hidden" @change="onFileChange" />
             <UButton
               v-if="fileInput"
               size="lg"
               color="neutral"
-              @click="fileInput.click()"
               icon="i-heroicons-document-plus"
+              @click="fileInput.click()"
             >
               Select OPML File
             </UButton>
@@ -39,13 +39,13 @@
                 />
               </div>
               <div class="flex justify-end gap-4">
-                <UButton size="lg" @click="open = false" color="neutral">Cancel</UButton>
+                <UButton size="lg" color="neutral" @click="open = false">Cancel</UButton>
                 <UButton
                   :loading="importing"
                   size="lg"
                   :disabled="noSelected"
-                  @click="importSelected"
                   color="success"
+                  @click="importSelected"
                 >
                   Import
                 </UButton>

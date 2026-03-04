@@ -27,7 +27,10 @@ const props = defineProps({
 })
 
 const { title: podTitle, podcastRoute } = usePodcast(() => props.podcast)
-const { image: episodeImage, relativeDate, formattedDate } = useEpisode(() => props.episode, () => props.podcast)
+const { image: episodeImage, relativeDate } = useEpisode(
+  () => props.episode,
+  () => props.podcast
+)
 
 const localPublishedDate = computed(() => {
   if (!props.episode.pubDate) return ''
@@ -39,5 +42,6 @@ const subText = computed(() => {
   if (props.subHeader === 'timeAgo') return relativeDate.value
   if (props.subHeader === 'date') return localPublishedDate.value
   if (props.subHeader === 'podcastTitle') return podTitle.value
+  return ''
 })
 </script>

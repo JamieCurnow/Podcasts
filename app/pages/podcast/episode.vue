@@ -51,10 +51,7 @@
       <PodcastPeople :people="episode.persons" />
     </div>
     <!-- description -->
-    <div
-      class="pt-2 px-4 text-sm whitespace-pre-wrap"
-      v-html="episodeDescription"
-    />
+    <div class="pt-2 px-4 text-sm whitespace-pre-wrap" v-html="episodeDescription" />
     <!-- funding -->
     <div v-if="podcast.funding?.length" class="pt-4 px-4">
       <PodcastFunding :podcast="podcast" />
@@ -83,7 +80,11 @@ const userConfigStore = useUserConfigStore()
 const { amountOfPodsToInitiallyFetch } = storeToRefs(userConfigStore)
 
 const { title: podTitle, image: podImage, author: podAuthor, podcastRoute } = usePodcast(podcast)
-const { title: episodeTitle, formattedDate: episodeFormattedDate, description: episodeDescription } = useEpisode(episode, podcast)
+const {
+  title: episodeTitle,
+  formattedDate: episodeFormattedDate,
+  description: episodeDescription
+} = useEpisode(episode, podcast)
 
 const status = ref<'success' | 'error' | 'loading' | 'refreshing'>('loading')
 const getData = async () => {
@@ -145,5 +146,4 @@ watch(
   },
   { immediate: true }
 )
-
 </script>

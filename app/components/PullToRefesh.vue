@@ -55,9 +55,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (key: 'pull', amount: number): void
-  (key: 'refresh'): void
-  (key: 'releaseAfterRefresh'): void
-  (key: 'release'): void
+  (key: 'refresh' | 'releaseAfterRefresh' | 'release'): void
 }>()
 
 const container = ref<HTMLElement | null>(null)
