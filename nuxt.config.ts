@@ -64,6 +64,12 @@ export default defineNuxtConfig({
     }
   },
 
+  icon: {
+    clientBundle: {
+      scan: true
+    }
+  },
+
   routeRules: {
     /**
      * Pre-render rules need to be absolute paths - no wildcards.

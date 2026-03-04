@@ -29,7 +29,6 @@
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.4.1",
     "tailwindcss": "^4.2.1",
-    "vite": "^7.3.1",
     "vue": "latest"
   },
   "devDependencies": {
