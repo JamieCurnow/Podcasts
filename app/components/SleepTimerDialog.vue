@@ -37,6 +37,8 @@
             ref="scrollContainer"
             class="scrollbar-hide h-[200px] overflow-y-auto overflow-x-hidden snap-y snap-mandatory"
             @scroll="onScroll"
+            @touchstart.stop
+            @touchmove.stop
           >
             <!-- Top spacer -->
             <div class="h-[80px]" />
