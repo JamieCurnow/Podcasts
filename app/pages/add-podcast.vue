@@ -34,6 +34,15 @@
           You can also use <a href="https://podcastindex.org/" target="_blank">Podcast Index</a> to find
           podcast RSS feeds. Look out for the "Copy RSS" button on podcast pages.
         </p>
+        <UButton
+          variant="subtle"
+          size="sm"
+          icon="i-mdi-podcast"
+          :disabled="loading"
+          @click="addPodcast('https://lexfridman.com/feed/podcast/')"
+        >
+          Try it with Lex Fridman Podcast
+        </UButton>
       </div>
     </div>
   </div>
@@ -49,7 +58,8 @@ const subsStore = useSubsStore()
 const { urls } = storeToRefs(subsStore)
 const router = useRouter()
 
-const addPodcast = async () => {
+const addPodcast = async (url?: string) => {
+  if (url) rssUrl.value = url
   if (!rssUrl.value) {
     error.value = 'Please enter a URL.'
     return
