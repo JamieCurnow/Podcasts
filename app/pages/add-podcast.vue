@@ -19,7 +19,7 @@
           square
           size="xl"
           :loading="loading"
-          @click="addPodcast"
+          @click="addPodcast()"
         />
       </div>
       <div v-if="error" class="text-red-500 mt-2">
