@@ -126,6 +126,31 @@ Lists recently played episodes from `useHistoryStore` (most recent first). Snaps
 
 ---
 
+## `/playlists`
+
+Lists all user-created playlists. Each playlist shows a cover collage, name, description, and episode count. Links to `/playlists/:id`. Includes a "New Playlist" button.
+
+### Functionality
+
+- No auth required
+- Reads from persisted `playlistsStore`
+- Navigates to playlist detail on creation
+
+---
+
+## `/playlists/:id`
+
+Playlist detail page. Shows playlist header (cover collage, name, description, episode count), edit/delete actions, and a "Play All" button that loads the first episode and queues the rest. Episodes are shown as `<PodListItem>` with a "Remove from Playlist" extra menu item.
+
+### Functionality
+
+- No auth required
+- Inline editing of playlist name and description
+- Delete with confirmation
+- Reads from persisted `playlistsStore`
+
+---
+
 ## `/settings`
 
 App settings page. Sections: About (GitHub/sponsor links), General (initial episodes to fetch, pull-down weight), Import/Export OPML, and Danger Zone (clear all history).

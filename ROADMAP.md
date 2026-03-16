@@ -204,7 +204,7 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 
 ## Organisation
 
-- [ ] Playlists / custom collections (group episodes across podcasts into themed playlists, sortable order, shareable via link or export)
+- [x] Playlists / custom collections (group episodes across podcasts into themed playlists, sortable order, shareable via link or export)
 - [ ] Folders / tags for subscriptions (organize podcasts into custom categories)
 - [ ] Pin favourite podcasts to the top of the library
 - [ ] Archive episodes (hide from feed without deleting progress)

@@ -46,6 +46,7 @@ const isOpen = defineModel({ type: Boolean, default: false })
 const menuItems = [
   { icon: 'i-ic-baseline-subscriptions', title: 'Subscriptions', to: '/library' },
   { icon: 'i-ic-baseline-playlist-add', title: 'Queue', to: '/queue' },
+  { icon: 'i-mdi-playlist-music', title: 'Playlists', to: '/playlists' },
   { icon: 'i-mdi-bookmark-multiple-outline', title: 'Bookmarks', to: '/bookmarks' },
   { icon: 'i-ic-baseline-arrow-circle-down', title: 'Downloads', to: '/downloads' },
   { icon: 'i-ic-baseline-history', title: 'History', to: '/history' },

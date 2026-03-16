@@ -4,6 +4,26 @@ This file lists all components used in the app, what they do, and how to use the
 
 ---
 
+## `<AddToPlaylistDialog>`
+
+A `UModal` that lets the user add an episode to an existing playlist or create a new one. Shows all playlists with a check icon for playlists that already contain the episode. Includes a "New Playlist" button that opens `<NewPlaylistDialog>`.
+
+### Props
+
+| Prop         | Type      | Required | Description            |
+| ------------ | --------- | -------- | ---------------------- |
+| `modelValue` | Boolean   | Yes      | Controls open state    |
+| `episode`    | `Episode` | Yes      | Episode to add         |
+| `podcast`    | `Podcast` | Yes      | Parent podcast         |
+
+### Example
+
+```vue
+<AddToPlaylistDialog v-model="isOpen" :episode="episode" :podcast="podcast" />
+```
+
+---
+
 ## `<AudioPlaying>`
 
 Animated three-bar equaliser icon indicating audio is currently playing.
@@ -220,6 +240,30 @@ A `USlideover` side navigation menu with links to: Subscriptions, Queue, Bookmar
 
 ---
 
+## `<NewPlaylistDialog>`
+
+A `UModal` for creating a new playlist with a name and optional description. Emits `created` with the new playlist ID on success.
+
+### Props
+
+| Prop         | Type    | Required | Description         |
+| ------------ | ------- | -------- | ------------------- |
+| `modelValue` | Boolean | Yes      | Controls open state |
+
+### Events
+
+| Event     | Payload  | Description                    |
+| --------- | -------- | ------------------------------ |
+| `created` | `string` | Emitted with new playlist ID  |
+
+### Example
+
+```vue
+<NewPlaylistDialog v-model="isOpen" @created="onCreated" />
+```
+
+---
+
 ## `<NewBookmarkDialog>`
 
 A `<SlideUpDialog>` for creating a new bookmark at the current playback position. Shows the formatted current time and a textarea for optional notes. Saves via `useBookmarksStore().addBookmark()`.
@@ -252,6 +296,25 @@ None
 
 ```vue
 <NowPlayingBar />
+```
+
+---
+
+## `<PlaylistCover>`
+
+A 2x2 grid of podcast cover images from a playlist's episodes. Shows up to 4 unique podcast covers. Falls back to a playlist icon when empty.
+
+### Props
+
+| Prop       | Type       | Required | Default | Description           |
+| ---------- | ---------- | -------- | ------- | --------------------- |
+| `playlist` | `Playlist` | Yes      | —       | Playlist to display   |
+| `size`     | `'sm' \| 'md' \| 'lg'` | No | `'md'` | Size variant         |
+
+### Example
+
+```vue
+<PlaylistCover :playlist="playlist" size="lg" />
 ```
 
 ---

@@ -4,6 +4,8 @@
       <UIcon name="i-mdi-dots-vertical" class="size-7 dark:text-neutral-400 text-gray-500" />
     </button>
   </UDropdownMenu>
+
+  <AddToPlaylistDialog v-model="showAddToPlaylist" :episode="episode" :podcast="podcast" />
 </template>
 
 <script setup lang="ts">
@@ -30,6 +32,8 @@ const { downloads } = storeToRefs(downloadStore)
 const thisEpisodeDownload = computed(() =>
   downloads.value?.find((d) => d.episodeGuid === props.episode.guid && d.feedUrl === props.podcast.feedUrl)
 )
+
+const showAddToPlaylist = ref(false)
 
 const { episodeRoute, image: episodeImage } = useEpisode(
   () => props.episode,
@@ -58,6 +62,14 @@ const items = computed(() => {
       }
     })
   }
+
+  group.push({
+    label: 'Add to Playlist',
+    icon: 'i-mdi-playlist-plus',
+    onSelect: () => {
+      showAddToPlaylist.value = true
+    }
+  })
 
   if (navigator?.share) {
     group.push({

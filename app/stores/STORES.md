@@ -381,6 +381,56 @@ const { totalListeningTimeFormatted, episodesCompleted } = storeToRefs(statsStor
 
 ---
 
+## `usePlaylistsStore`
+
+Manages user-created playlists — custom collections of episodes across different podcasts.
+
+### State
+
+| Key         | Type              | Description          |
+| ----------- | ----------------- | -------------------- |
+| `playlists` | `Ref<Playlist[]>` | Array of playlists   |
+
+The `Playlist` interface is exported from the store file:
+
+```ts
+interface Playlist {
+  id: string
+  name: string
+  description?: string
+  items: { podcast: Podcast; episode: Episode }[]
+  createdAt: number
+  updatedAt: number
+}
+```
+
+### Methods
+
+| Method               | Signature                                                          | Description                                |
+| -------------------- | ------------------------------------------------------------------ | ------------------------------------------ |
+| `getPlaylist`        | `(id: string) => ComputedRef<Playlist \| undefined>`               | Returns reactive playlist by ID            |
+| `createPlaylist`     | `(opts: { name, description? }) => Playlist`                       | Creates and returns a new playlist         |
+| `deletePlaylist`     | `(id: string) => void`                                             | Removes a playlist                         |
+| `updatePlaylist`     | `(id: string, opts: { name?, description? }) => void`              | Updates playlist metadata                  |
+| `addToPlaylist`      | `(id: string, opts: { podcast, episode }) => void`                 | Adds an episode (deduped by feedUrl+guid)  |
+| `removeFromPlaylist` | `(id: string, opts: { feedUrl, guid }) => void`                    | Removes an episode from a playlist         |
+| `reorderPlaylist`    | `(id: string, fromIndex: number, toIndex: number) => void`         | Moves an item within the playlist          |
+
+### Persistence
+
+Key: `pod_persist_playlists` — persists `playlists`.
+
+### Usage
+
+```ts
+const { playlists } = storeToRefs(usePlaylistsStore())
+const { createPlaylist, addToPlaylist, deletePlaylist } = usePlaylistsStore()
+const playlist = createPlaylist({ name: 'My Favourites' })
+addToPlaylist(playlist.id, { podcast, episode })
+```
+
+---
+
 ## Patterns & Learnings
 
 - All stores are persisted via `pinia-plugin-persistedstate`. Use `persist: { key: 'pod_persist_*', pick: [...] }`. Always prefix keys with `pod_persist_`.
