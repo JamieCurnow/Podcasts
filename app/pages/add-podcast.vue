@@ -11,7 +11,7 @@
           :disabled="loading"
           autofocus
           icon="i-mdi-rss-box"
-          @keyup.enter="addPodcast"
+          @keyup.enter="addPodcast()"
         />
         <UButton
           variant="solid"
@@ -59,7 +59,7 @@ const { urls } = storeToRefs(subsStore)
 const router = useRouter()
 
 const addPodcast = async (url?: string) => {
-  if (url) rssUrl.value = url
+  if (url && typeof url === 'string') rssUrl.value = url
   if (!rssUrl.value) {
     error.value = 'Please enter a URL.'
     return
