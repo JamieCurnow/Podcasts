@@ -9,7 +9,6 @@
           size="xl"
           class="w-full"
           :disabled="loading"
-          autofocus
           icon="i-mdi-rss-box"
           @keyup.enter="addPodcast()"
         />

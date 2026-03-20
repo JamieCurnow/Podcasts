@@ -10,6 +10,7 @@ const noCache = () => ({
 const buildRevision = Date.now().toString()
 
 const preRenderRoutes = [
+  '/about',
   '/podcast',
   '/podcast/episode',
   '/add-podcast',
