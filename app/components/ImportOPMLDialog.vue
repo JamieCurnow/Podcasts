@@ -24,6 +24,15 @@
               <Loading class="size-16" />
             </div>
             <div v-else class="flex flex-col gap-4">
+              <div v-if="failedFeeds.length" class="rounded-md bg-error/10 p-3">
+                <div class="flex items-center gap-2 text-sm font-medium text-error">
+                  <UIcon name="i-heroicons-exclamation-triangle" class="size-4 shrink-0" />
+                  {{ failedFeeds.length }} feed{{ failedFeeds.length > 1 ? 's' : '' }} failed to load
+                </div>
+                <ul class="mt-2 text-xs text-error/80 list-disc pl-5 max-h-24 overflow-y-auto">
+                  <li v-for="feed in failedFeeds" :key="feed.url" class="break-all">{{ feed.name }}</li>
+                </ul>
+              </div>
               <div>Pods to import:</div>
               <div v-if="!podcasts.length">No podcasts found</div>
               <div v-else>
@@ -31,12 +40,14 @@
                   <UButton v-if="noSelected" variant="outline" @click="selectAll">Select all</UButton>
                   <UButton v-else variant="outline" @click="deselectAll">Deselect all</UButton>
                 </div>
-                <PodcastListItem
-                  v-for="podcast in podcasts"
-                  :key="podcast.feedUrl"
-                  v-model="podcast.selected"
-                  :podcast="podcast"
-                />
+                <div class="max-h-80 overflow-y-auto">
+                  <PodcastListItem
+                    v-for="podcast in podcasts"
+                    :key="podcast.feedUrl"
+                    v-model="podcast.selected"
+                    :podcast="podcast"
+                  />
+                </div>
               </div>
               <div class="flex justify-end gap-4">
                 <UButton size="lg" color="neutral" @click="open = false">Cancel</UButton>
@@ -75,6 +86,7 @@ watch(open, (val) => {
   if (!val) {
     file.value = null
     podcasts.value = []
+    failedFeeds.value = []
     if (fileInput.value) {
       fileInput.value.value = ''
     }
@@ -82,6 +94,7 @@ watch(open, (val) => {
 })
 
 const podcasts = ref<(Podcast & { selected: boolean })[]>([])
+const failedFeeds = ref<{ url: string; name: string }[]>([])
 
 const noSelected = computed(() => !podcasts.value.some((pod) => pod.selected))
 
@@ -111,14 +124,15 @@ watch(file, async (val) => {
   if (val) {
     loading.value = true
     const fileContent = await val.text()
-    const newUrls = parseOpml(fileContent)
+    const feeds = parseOpml(fileContent)
     const maybePods = await Promise.all(
-      newUrls.map((url) =>
+      feeds.map((feed) =>
         $fetch('/api/podcast/feed', {
-          query: { url, start: 0, limit: amountOfPodsToInitiallyFetch.value }
+          query: { url: feed.url, start: 0, limit: amountOfPodsToInitiallyFetch.value }
         }).catch(() => null)
       )
     )
+    failedFeeds.value = feeds.filter((_, i) => !maybePods[i]?.podcast)
     const pods = maybePods.map((res) => res?.podcast).filter((pod): pod is Podcast => !!pod)
     const uniquePods = pods.reduce((acc, pod) => {
       if (!acc.find((p) => p.feedUrl === pod.feedUrl)) {

@@ -18,12 +18,14 @@
                 <UButton v-if="noSelected" variant="outline" @click="selectAll">Select all</UButton>
                 <UButton v-else variant="outline" @click="deselectAll">Deselect all</UButton>
               </div>
-              <PodcastListItem
-                v-for="podcast in podcasts"
-                :key="podcast.feedUrl"
-                v-model="podcast.selected"
-                :podcast="podcast"
-              />
+              <div class="max-h-80 overflow-y-auto">
+                <PodcastListItem
+                  v-for="podcast in podcasts"
+                  :key="podcast.feedUrl"
+                  v-model="podcast.selected"
+                  :podcast="podcast"
+                />
+              </div>
             </div>
             <div class="flex justify-end gap-4">
               <UButton size="lg" color="neutral" @click="open = false">Cancel</UButton>

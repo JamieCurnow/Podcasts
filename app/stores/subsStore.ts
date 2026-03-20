@@ -66,6 +66,17 @@ export const useSubsStore = defineStore(
       }
     }
 
+    const removeSubscription = (url: string) => {
+      if (!urls.value) return
+      urls.value = urls.value.filter((u) => u !== url)
+    }
+
+    const reorderSubscriptions = (fromIndex: number, toIndex: number) => {
+      if (!urls.value) return
+      const item = urls.value.splice(fromIndex, 1)[0]
+      if (item) urls.value.splice(toIndex, 0, item)
+    }
+
     onMounted(() => {
       if (!urls.value) {
         // addSubscription('https://lexfridman.com/feed/podcast/')
@@ -83,7 +94,9 @@ export const useSubsStore = defineStore(
       episodes,
       updateEpisodeMeta,
       getEpisodeMeta,
-      addSubscription
+      addSubscription,
+      removeSubscription,
+      reorderSubscriptions
     }
   },
   { persist: { key: 'pod_persist_subs', pick: ['urls', 'lastPersisted', 'episodes'] } }

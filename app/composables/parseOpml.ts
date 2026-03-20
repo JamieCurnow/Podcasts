@@ -4,21 +4,22 @@
  *
  * This is specifically for podcasts, so we will focus on the relevant fields.
  *
- * We'd like to return an array of strings that are the URLs of the podcast RSS feeds.
+ * Returns an array of objects with the feed URL and name (from text/title attributes).
  */
 export const parseOpml = (opmlString: string) => {
   const parser = new DOMParser()
   const xmlDoc = parser.parseFromString(opmlString, 'text/xml')
   const outlines = xmlDoc.getElementsByTagName('outline')
-  const rssUrls: string[] = []
+  const feeds: { url: string; name: string }[] = []
 
   for (let i = 0; i < outlines.length; i++) {
     const outline = outlines[i]
     const xmlUrl = outline?.getAttribute('xmlUrl')
     if (xmlUrl) {
-      rssUrls.push(xmlUrl)
+      const name = outline?.getAttribute('text') || outline?.getAttribute('title') || xmlUrl
+      feeds.push({ url: xmlUrl, name })
     }
   }
 
-  return rssUrls
+  return feeds
 }
