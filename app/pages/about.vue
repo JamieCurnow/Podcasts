@@ -95,7 +95,7 @@
               class="hidden md:block absolute -bottom-12 -right-12 w-72 rounded-xl overflow-hidden shadow-xl shadow-neutral-900/10 dark:shadow-black/30 border border-neutral-200 dark:border-neutral-700/50 bg-neutral-200 dark:bg-neutral-800 rotate-3"
             >
               <div
-                class="aspect-[9/16] flex items-center justify-center text-neutral-400 dark:text-neutral-600 text-xs"
+                class="aspect-9/16 flex items-center justify-center text-neutral-400 dark:text-neutral-600 text-xs"
               >
                 <div class="text-center">
                   <UIcon name="i-heroicons-photo" class="size-8 mb-1 opacity-40" />
@@ -116,7 +116,7 @@
             v-for="(pillar, i) in pillars"
             :key="pillar.title"
             v-animate
-            class="rounded-2xl p-8 border border-neutral-200/60 dark:border-white/[0.06] bg-neutral-100/50 dark:bg-white/[0.02] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
+            class="rounded-2xl p-8 border border-neutral-200/60 dark:border-white/6 bg-neutral-100/50 dark:bg-white/2 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
             :style="{ transitionDelay: `${i * 80}ms` }"
           >
             <span class="text-3xl mb-4 block" aria-hidden="true">{{ pillar.icon }}</span>
