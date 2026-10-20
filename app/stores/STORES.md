@@ -37,11 +37,18 @@ On mount it rehydrates the last episode/podcast from persistence and loads the a
 | Method          | Signature                                                                              | Description                                              |
 | --------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `loadPodcast`   | `(opts: { episode, podcast, dontPlay?, at? }) => Promise<void>`                        | Loads and plays an episode, optionally at a given time   |
-| `play`          | `() => void`                                                                           | Resumes playback                                         |
+| `play`          | `() => void`                                                                           | Resumes playback (reloads the source first if the stream died) |
 | `pause`         | `() => void`                                                                           | Pauses playback                                          |
 | `skipForwards`  | `() => void`                                                                           | Skips forward 30 seconds                                 |
 | `skipBackwards` | `() => void`                                                                           | Skips back 10 seconds                                    |
 | `seekTo`        | `(time: number) => void`                                                               | Seeks to a specific second                               |
+
+### Media Session & stream recovery
+
+- Lock screen / notification widget: play, pause, seek, and `nexttrack`/`previoustrack` mapped to skip +30s / -10s (headphone double/triple taps send these).
+- Position state is pushed on `loadedmetadata`, `durationchange`, `play`, `pause`, `seeked`, `ratechange` and (throttled) `timeupdate`.
+- If the stream errors (network/decode) or sits in `waiting` for 20s while playing, `recoverPlayback` reloads the source and resumes at the same position. Max 3 retries a minute, then it pauses and toasts. Errors while paused reload without playing.
+- While paused it holds a Web Lock (`pod_paused_keep_alive`, max 1 hour) so Chrome doesn't freeze the page in the background, which is what removes the paused widget.
 
 ### Persistence
 
@@ -439,3 +446,6 @@ addToPlaylist(playlist.id, { podcast, episode })
 - Cross-store calls are common (e.g. `nowPlayingStore` calls `subsStore.updateEpisodeMeta`). In setup syntax you can call `useOtherStore()` directly inside another store — no need to pass the pinia instance.
 - `useDownloadsStore` is the only store that touches IndexedDB. Its helpers (`getBlobFromIndexedDB`, `saveBlobToIndexedDB`) are exported from the store file and used by `nowPlayingStore` to load downloaded audio.
 - `formatTime` was moved out of `nowPlayingStore` into `app/utils/formatTime.ts`. It's now auto-imported everywhere. The store still uses it internally for `timeLeftFormatted` and `currentTimeFormatted`.
+- The OS media widget extrapolates its seek bar from the last `setPositionState` call, so call it on every play/pause/seek/rate change, not just `timeupdate`. Don't round the values: rounding can make position > duration, which throws.
+- A `<audio>` element that hit a network error can't be revived with `play()`; it needs `src` re-set and `load()`. Some feeds (e.g. Changelog: op3.dev → pscrb.fm → cdn.changelog.com) route every range request through tracking redirects, so mid-episode drops happen.
+- Chrome only drops the paused OS media widget when the page is frozen or the player errors (see `web_media_player_impl.cc` `UpdatePlayState_ComputePlayState`). JS timers can't keep it alive. Holding a Web Lock blocks Chrome's page freezing. A looping silent clip would also work, but Chrome won't let a page fake a paused state while a player is actually playing, so the widget would show a pause button.
