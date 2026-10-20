@@ -3,7 +3,7 @@
     <!-- Nav -->
     <nav
       ref="navRef"
-      class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      class="fixed top-0 left-0 right-0 z-50 pt-[env(safe-area-inset-top)] transition-[background-color,box-shadow,backdrop-filter] duration-300 ease-out"
       :class="scrolled ? 'bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-sm' : ''"
     >
       <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
@@ -25,7 +25,7 @@
           </a>
           <NuxtLink
             to="/"
-            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-lg bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
+            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-lg bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] transition-[scale,background-color,border-color,color] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
           >
             Open App
           </NuxtLink>
@@ -51,7 +51,7 @@
           <div class="flex flex-col sm:flex-row gap-3 mb-8">
             <NuxtLink
               to="/"
-              class="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold rounded-xl bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
+              class="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold rounded-xl bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] transition-[scale,background-color,border-color,color] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
             >
               Open App
               <UIcon name="i-heroicons-arrow-right-20-solid" class="size-4" />
@@ -60,7 +60,7 @@
               :href="GITHUB_URL"
               target="_blank"
               rel="noopener"
-              class="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold rounded-xl border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500 hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
+              class="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold rounded-xl border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500 hover:scale-[1.02] active:scale-[0.98] transition-[scale,background-color,border-color,color] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
             >
               <UIcon name="i-mdi-github" class="size-5" />
               View on GitHub
@@ -116,8 +116,8 @@
             v-for="(pillar, i) in pillars"
             :key="pillar.title"
             v-animate
-            class="rounded-2xl p-8 border border-neutral-200/60 dark:border-white/6 bg-neutral-100/50 dark:bg-white/2 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
-            :style="{ transitionDelay: `${i * 80}ms` }"
+            class="rounded-2xl p-8 border border-neutral-200/60 dark:border-white/6 bg-neutral-100/50 dark:bg-white/2 hover:-translate-y-0.5 hover:shadow-md"
+            :style="{ '--reveal-delay': `${i * 80}ms` }"
           >
             <span class="text-3xl mb-4 block" aria-hidden="true">{{ pillar.icon }}</span>
             <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-2">
@@ -146,7 +146,7 @@
             v-for="(feature, i) in features"
             :key="feature.label"
             v-animate
-            :style="{ transitionDelay: `${i * 60}ms` }"
+            :style="{ '--reveal-delay': `${i * 60}ms` }"
           >
             <span class="text-2xl mb-3 block" aria-hidden="true">{{ feature.icon }}</span>
             <p class="font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
@@ -194,7 +194,7 @@
           :href="GITHUB_URL"
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-white text-neutral-900 hover:bg-neutral-100 hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-white text-neutral-900 hover:bg-neutral-100 hover:scale-[1.02] active:scale-[0.98] transition-[scale,background-color,border-color,color] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
         >
           <UIcon name="i-mdi-github" class="size-4" />
           View on GitHub
@@ -213,7 +213,7 @@
         </p>
         <NuxtLink
           to="/"
-          class="inline-flex items-center gap-2 px-8 py-4 text-base font-semibold rounded-xl bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
+          class="inline-flex items-center gap-2 px-8 py-4 text-base font-semibold rounded-xl bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] transition-[scale,background-color,border-color,color] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900"
         >
           Open App
           <UIcon name="i-heroicons-arrow-right-20-solid" class="size-4" />
@@ -377,17 +377,28 @@ const features = [
   transform: translateY(0);
 }
 
-/* Scroll-triggered fade-up */
+/* Scroll-triggered fade-up. The stagger delay only applies to the reveal, so hover lift stays instant */
 .animate-hidden {
   opacity: 0;
   transform: translateY(20px) scale(0.98);
   transition:
-    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    translate 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
 }
 
 .animate-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* reduced motion: keep the fades, drop the movement */
+@media (prefers-reduced-motion: reduce) {
+  .hero-content,
+  .hero-screenshots,
+  .animate-hidden {
+    transform: none;
+  }
 }
 </style>

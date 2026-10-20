@@ -66,6 +66,7 @@
             id="initial-fetch-amount"
             v-model="amountOfPodsToInitiallyFetch"
             type="number"
+            inputmode="numeric"
             min="1"
             max="50"
             class="w-full"
@@ -82,7 +83,15 @@
           Controls how hard it "feels" in the UI to pull down to refresh. A lower number means it feels harder
           to pull down.
         </p>
-        <UInput id="pull-down-weight" v-model="pullDownWeight" type="number" min="0.1" max="1" step="0.01" />
+        <UInput
+          id="pull-down-weight"
+          v-model="pullDownWeight"
+          type="number"
+          inputmode="decimal"
+          min="0.1"
+          max="1"
+          step="0.01"
+        />
       </div>
     </div>
 

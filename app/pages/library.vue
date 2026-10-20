@@ -14,26 +14,44 @@
       </div>
 
       <!-- Edit mode: list view with drag-to-reorder + unsubscribe -->
-      <div v-if="editing" class="flex flex-col gap-2">
+      <!-- TransitionGroup slides rows into their new place on reorder and fades out unsubscribes -->
+      <TransitionGroup
+        v-if="editing"
+        tag="div"
+        class="relative flex flex-col gap-2 animate-enter"
+        move-class="transition-transform duration-200 ease-out"
+        leave-active-class="absolute inset-x-0 transition-[opacity,scale] duration-150 ease-out"
+        leave-to-class="opacity-0 scale-95"
+      >
         <div
           v-for="(pod, index) in podcasts"
           :key="pod.feedUrl"
+          data-row
           draggable="true"
-          class="flex items-center gap-3 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900 transition-all duration-150"
+          class="flex items-center gap-3 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900 border-t-2 transition-[opacity,scale,border-color,box-shadow] duration-150 ease-out"
           :class="{
-            'opacity-50 scale-95': dragIndex === index,
-            'border-t-2 border-primary': dropIndex === index && dropIndex !== dragIndex,
-            'border-t-2 border-transparent': dropIndex !== index || dropIndex === dragIndex
+            'opacity-50 scale-95': dragIndex === index && touchDelta === null,
+            'relative z-10 scale-[1.02] shadow-lg': dragIndex === index && touchDelta !== null,
+            'border-primary': dropIndex === index && dropIndex !== dragIndex,
+            'border-transparent': dropIndex !== index || dropIndex === dragIndex
           }"
+          :style="
+            dragIndex === index && touchDelta !== null
+              ? { transform: `translateY(${touchDelta}px)` }
+              : undefined
+          "
           @dragstart="onDragStart($event, index)"
           @dragover.prevent="onDragOver(index)"
           @dragend="onDragEnd"
-          @touchstart="onTouchStart($event, index)"
-          @touchmove.prevent="onTouchMove"
-          @touchend="onTouchEnd"
         >
-          <!-- Drag handle -->
-          <div class="cursor-grab active:cursor-grabbing text-neutral-400 touch-none">
+          <!-- Drag handle: touch drags start here only, so the rest of the row still scrolls the page -->
+          <div
+            class="cursor-grab active:cursor-grabbing text-neutral-400 touch-none p-2 -m-2"
+            @touchstart="onTouchStart($event, index)"
+            @touchmove.prevent="onTouchMove"
+            @touchend="onTouchEnd"
+            @touchcancel="onTouchEnd"
+          >
             <UIcon name="i-heroicons-bars-3" class="size-5" />
           </div>
 
@@ -50,20 +68,22 @@
             color="error"
             variant="ghost"
             size="sm"
+            :aria-label="`Unsubscribe from ${pod.title}`"
             @click="unsubscribe(pod.feedUrl, index)"
           />
         </div>
         <!-- Drop indicator for last position -->
         <div
           v-if="dragIndex !== null"
-          class="h-1 rounded transition-all duration-150"
+          key="drop-end"
+          class="h-1 rounded transition-colors duration-150"
           :class="{
             'bg-primary': dropIndex === podcasts.length,
             'bg-transparent': dropIndex !== podcasts.length
           }"
           @dragover.prevent="onDragOver(podcasts.length)"
         />
-      </div>
+      </TransitionGroup>
 
       <!-- Normal mode: grid view -->
       <SearchPods v-else hide-sub-indicator :podcasts="podcasts" />
@@ -107,24 +127,28 @@ const onDragEnd = () => {
   dropIndex.value = null
 }
 
-// Touch-based drag for mobile
+// Touch-based drag for mobile. The row follows the finger (touchDelta) while dragging
 const touchStartY = ref(0)
 const touchItemHeight = ref(0)
+const touchDelta = ref<number | null>(null)
 
 const onTouchStart = (e: TouchEvent, index: number) => {
+  if (dragIndex.value !== null) return // ignore a second finger mid-drag
   dragIndex.value = index
+  touchDelta.value = 0
   touchStartY.value = e.touches[0]!.clientY
-  const target = e.currentTarget as HTMLElement
-  touchItemHeight.value = target.offsetHeight + 8 // include gap
+  const row = (e.currentTarget as HTMLElement).closest('[data-row]') as HTMLElement | null
+  touchItemHeight.value = (row?.offsetHeight || 0) + 8 // include gap
 }
 
 const onTouchMove = (e: TouchEvent) => {
-  if (dragIndex.value === null || !podcasts.value) return
-  const currentY = e.touches[0]!.clientY
-  const delta = currentY - touchStartY.value
+  if (dragIndex.value === null || !podcasts.value || !touchItemHeight.value) return
+  const delta = e.touches[0]!.clientY - touchStartY.value
+  touchDelta.value = delta
   const indexOffset = Math.round(delta / touchItemHeight.value)
-  const newIndex = Math.max(0, Math.min(podcasts.value.length, dragIndex.value + indexOffset))
-  dropIndex.value = newIndex
+  // dropIndex means "insert before", so moving down k rows targets the row after the k-th
+  const target = indexOffset > 0 ? dragIndex.value + indexOffset + 1 : dragIndex.value + indexOffset
+  dropIndex.value = Math.max(0, Math.min(podcasts.value.length, target))
 }
 
 const onTouchEnd = () => {
@@ -133,6 +157,7 @@ const onTouchEnd = () => {
   }
   dragIndex.value = null
   dropIndex.value = null
+  touchDelta.value = null
 }
 
 const applyReorder = (from: number, to: number) => {

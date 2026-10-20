@@ -4,13 +4,14 @@
       v-if="chaptersAvailable"
       class="text-left h-10 w-full flex items-center gap-2 bg-neutral-100 dark:bg-neutral-800 hover:opacity-80 px-3 py-1"
       :class="{ 'rounded-md': !chaptersOpen, 'rounded-t-md': chaptersOpen }"
+      :aria-expanded="chaptersOpen"
       @click="toggleChapters()"
     >
       <div>Chapters</div>
       <div v-if="!gettingChapters">
         <UIcon
           name="i-ic-outline-arrow-drop-down"
-          class="size-5 mt-1"
+          class="size-5 mt-1 transition-transform duration-200 ease-out"
           :class="{ 'rotate-180': chaptersOpen }"
         />
       </div>
@@ -18,16 +19,25 @@
         <Loading class="size-5" />
       </div>
     </button>
-    <div v-if="chaptersOpen" class="flex flex-col gap-2 bg-neutral-100 dark:bg-neutral-800 rounded-b-md">
-      <PodcastChapter
-        v-for="(chapter, i) in chapters"
-        :key="i"
-        :chapter="chapter"
-        :index="i"
-        :episode="episode"
-        :podcast="podcast"
-        class="border-b border-neutral-50 dark:border-neutral-900 last:border-0 first:pt-3"
-      />
+    <!-- 0fr → 1fr grid rows animates to the content's real height without measuring it -->
+    <div
+      class="grid transition-[grid-template-rows,opacity] duration-200 ease-out"
+      :class="chaptersOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+      :inert="!chaptersOpen"
+    >
+      <div class="overflow-hidden">
+        <div class="flex flex-col gap-2 bg-neutral-100 dark:bg-neutral-800 rounded-b-md">
+          <PodcastChapter
+            v-for="(chapter, i) in chapters"
+            :key="i"
+            :chapter="chapter"
+            :index="i"
+            :episode="episode"
+            :podcast="podcast"
+            class="border-b border-neutral-50 dark:border-neutral-900 last:border-0 first:pt-3"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>

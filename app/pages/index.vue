@@ -5,15 +5,13 @@
     :pull-down-weight="pullDownWeight"
     @refresh="refresh()"
   >
-    <template #pull-content>
-      <div v-if="!loading" class="h-32 flex justify-center pt-4 w-full bg-neutral-50 dark:bg-neutral-900">
-        <div class="font-semibold text-lg">{{ refreshing ? 'Loading...' : 'Pull to refresh' }}</div>
-      </div>
+    <template #pull-content="{ progress }">
+      <PullToRefreshIndicator v-if="!loading" :progress="progress" :refreshing="refreshing" />
     </template>
 
     <div v-if="!loading && urls?.length" class="flex flex-col gap-2 bg-neutral-50 dark:bg-neutral-900">
       <!-- <Divider /> -->
-      <div>
+      <div class="animate-enter">
         <SubsHorizontalScroll :podcasts="pods" />
       </div>
       <div class="mx-1">
@@ -28,7 +26,12 @@
           ref="lastInList"
           class="-mt-[8px]"
         ></div>
-        <PodListItem :episode="episode" :podcast="podcast" class="px-4" />
+        <PodListItem
+          :episode="episode"
+          :podcast="podcast"
+          class="px-4 animate-enter"
+          :style="{ animationDelay: `${staggerDelay(i)}ms` }"
+        />
         <Divider />
       </template>
 
@@ -201,6 +204,9 @@ const episodesSortedByDate = computed(() => {
     [] as { episode: Episode; podcast: Podcast }[]
   )
 })
+
+// the first screenful cascades in (40ms apart), anything loaded later just fades up on its own
+const staggerDelay = (i: number) => (i < 8 ? (i + 1) * 40 : 0)
 
 const loadingMore = ref(false)
 const loadMore = async () => {

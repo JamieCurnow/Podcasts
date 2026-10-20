@@ -6,10 +6,13 @@
         <NuxtLink to="/library" class="no-underline!">More</NuxtLink>
       </div> -->
     </div>
-    <div class="w-full max-w-full overflow-x-scroll pb-3">
-      <div class="flex gap-3 min-w-max first:pl-4 last:pr-4">
-        <div v-for="(pod, i) in podsWithImages" :key="i">
-          <NuxtLink :to="pod.route" class="cursor-pointer no-underline!">
+    <!-- native scroll with snapping, contained so a sideways flick never triggers browser back -->
+    <div
+      class="w-full max-w-full overflow-x-auto overscroll-x-contain snap-x snap-proximity scroll-px-4 scrollbar-hide pb-3"
+    >
+      <div class="flex gap-3 min-w-max px-4">
+        <div v-for="(pod, i) in podsWithImages" :key="i" class="snap-start">
+          <NuxtLink :to="pod.route" class="pressable block cursor-pointer no-underline!">
             <PodCover :img="pod.img" class="w-24" />
           </NuxtLink>
         </div>

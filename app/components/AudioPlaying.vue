@@ -21,47 +21,55 @@
   box-sizing: border-box;
 }
 
+/* full-height bars scaled from the bottom: scaleY stays on the compositor where height would re-layout every frame */
 .playing__bar {
   @apply bg-gray-400 dark:bg-neutral-400;
   display: inline-block;
   width: 27%;
   height: 100%;
+  transform-origin: bottom;
   animation: up-and-down 1.3s ease infinite alternate;
 }
 
 .playing__bar1 {
-  height: 60%;
+  transform: scaleY(0.6);
 }
 
 .playing__bar2 {
-  height: 30%;
+  transform: scaleY(0.3);
   animation-delay: -2.2s;
 }
 
 .playing__bar3 {
-  height: 75%;
+  transform: scaleY(0.75);
   animation-delay: -3.7s;
 }
 
 @keyframes up-and-down {
   10% {
-    height: 30%;
+    transform: scaleY(0.3);
   }
 
   30% {
-    height: 100%;
+    transform: scaleY(1);
   }
 
   60% {
-    height: 50%;
+    transform: scaleY(0.5);
   }
 
   80% {
-    height: 75%;
+    transform: scaleY(0.75);
   }
 
   100% {
-    height: 60%;
+    transform: scaleY(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playing__bar {
+    animation: none;
   }
 }
 </style>

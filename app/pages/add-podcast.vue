@@ -6,6 +6,12 @@
         <UInput
           v-model="rssUrl"
           placeholder="Enter podcast RSS feed URL"
+          type="url"
+          inputmode="url"
+          autocapitalize="none"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="go"
           size="xl"
           class="w-full"
           :disabled="loading"
@@ -21,7 +27,7 @@
           @click="addPodcast()"
         />
       </div>
-      <div v-if="error" class="text-red-500 mt-2">
+      <div v-if="error" class="text-red-500 mt-2 animate-enter">
         {{ error }}
       </div>
       <div class="text-neutral-500 dark:text-neutral-400 mt-4 space-y-2">

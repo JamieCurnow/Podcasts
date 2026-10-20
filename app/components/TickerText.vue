@@ -58,4 +58,11 @@ onBeforeUnmount(() => {
 .animate-ticker {
   animation: ticker-animation 15s linear infinite;
 }
+
+/* no scrolling text: clip to the first copy instead */
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker {
+    animation: none;
+  }
+}
 </style>

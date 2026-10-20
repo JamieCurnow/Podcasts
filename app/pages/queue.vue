@@ -5,9 +5,12 @@
       <Divider v-if="i + 1 !== queue.length" />
     </template>
   </div>
-  <div v-else class="text-2xl text-center pt-20 text-neutral-300 dark:text-neutral-600">
-    No episodes in the queue
-  </div>
+  <EmptyState
+    v-else
+    icon="i-ic-baseline-playlist-add"
+    title="Your queue's empty"
+    body="Tap the queue icon on any episode and it'll play next in line."
+  />
 </template>
 
 <script setup lang="ts">
