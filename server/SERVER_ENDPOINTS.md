@@ -34,6 +34,8 @@ Fetches and parses a podcast RSS feed URL, returning structured podcast metadata
   - `400` — `url` param missing
   - `500` — Feed fetch or parse failed
 
+- **Caching:** `Cache-Control: public, max-age=3600, s-maxage=3600` (route rule in `nuxt.config.ts`). On Cloudflare, successful responses are also stored in the edge cache for an hour (`edgeCache` util).
+
 ### Example
 
 ```
@@ -60,6 +62,7 @@ A general-purpose proxy for external URLs. Intended for images and other media t
   - If `cacheMaxAge` is provided, uses that value.
   - If the URL looks like an image (`.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, etc.), defaults to a 30-day cache.
   - Otherwise no `Cache-Control` header is set.
+  - On Cloudflare, successful responses with a `Cache-Control` are also stored in the edge cache (`edgeCache` util). CORS headers aren't stored, so they're still worked out per request.
 
 - **CORS:** Controlled via `CORS_DOMAINS` env var (comma-separated). If unset, allows all origins (`*`).
 
@@ -81,3 +84,4 @@ GET /api/proxy?url=https%3A%2F%2Fexample.com%2Fimage.jpg&cacheMaxAge=604800
 - This app has no MongoDB, no Firebase auth. Don't add auth or DB calls to endpoints.
 - The only two server routes are `/api/podcast/feed` (RSS parsing) and `/api/proxy` (general proxy) — keep it that way unless there's a strong reason to add more.
 - The proxy endpoint reads `CORS_DOMAINS` from env to restrict allowed origins. In dev this defaults to `*`.
+- Cloudflare Workers doesn't CDN-cache Worker responses (Firebase Hosting did, from `Cache-Control`). Podcast cover images all go through `/api/proxy`, so without the edge cache every cover load would hit the Worker and the origin.

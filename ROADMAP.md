@@ -199,8 +199,9 @@ A comprehensive feature list for **Podcasts** — a privacy-first, open-source P
 - [x] Custom RSS parser supporting iTunes, Podcasting 2.0, and PSC namespaces
 - [x] 1-hour cache headers on feed responses (client + edge)
 - [x] 30-day cache for proxied images
-- [x] Deployed on Cloudflare Workers (Nitro `cloudflare-module` preset)
-- [x] GitHub Actions CI/CD deployment
+- [x] Deployed on Firebase Hosting + Cloud Functions (manual `firebase deploy`)
+- [x] One-click self-host on Cloudflare Workers (Nitro `cloudflare-module` preset)
+- [ ] CI/CD deployment
 
 ## Organisation
 

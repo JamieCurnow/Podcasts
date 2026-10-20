@@ -2,7 +2,24 @@
 
 Documentation for the server-side utilities in `server/utils/`.
 
-> **Note:** This app does not use MongoDB or Firebase. The utilities here are a custom podcast RSS feed parser.
+> **Note:** This app has no database or auth. The utilities here are a custom podcast RSS feed parser and an edge cache helper.
+
+---
+
+## `edgeCache` — Cloudflare edge cache
+
+Located at `server/utils/edgeCache.ts` (auto-imported). Caches API responses in the Workers Cache API (`caches.default`). Firebase Hosting's CDN cached API responses from `Cache-Control`; Cloudflare doesn't for Worker responses, so we do it ourselves. No-op outside Workers (Firebase, node, `nuxt dev`) and on `*.workers.dev`, where the Cache API doesn't work.
+
+```ts
+const cached = await matchEdgeCache({ event })
+if (cached) return cached
+// ...build the response
+putEdgeCache({ event, response: new Response(body, { headers: { 'Cache-Control': 'public, max-age=3600' } }) })
+```
+
+- The cache key is the full request URL, including the query string.
+- `putEdgeCache` only stores responses whose `Cache-Control` has a `max-age`, and stores them in the background with `event.waitUntil`.
+- Only cache successful responses, and don't put per-request headers (e.g. CORS) on the cached response.
 
 ---
 

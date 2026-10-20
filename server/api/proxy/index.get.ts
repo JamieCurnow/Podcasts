@@ -13,6 +13,25 @@ export default defineEventHandler(async (event) => {
   const isImgRegex = /\.(png|jpe?g|gif|webp|bmp|ico|svg|tiff?|eps)$/i
   const isImg = isImgRegex.test(proxyUrl)
 
+  // Set CORS headers
+  const corsDomain = process.env.CORS_DOMAINS || ''
+  const corsDomains = corsDomain
+    .split(',')
+    .map((d) => d.trim())
+    .filter((d) => d.length > 0)
+  const origin = event.node.req.headers.origin
+  if (corsDomains.length) {
+    if (origin && corsDomains.includes(origin))
+      event.node.res.setHeader('Access-Control-Allow-Origin', origin)
+  } else {
+    // if no domains are specified, allow all
+    event.node.res.setHeader('Access-Control-Allow-Origin', '*')
+  }
+
+  // Not stored with the cached response, so CORS (set above) is still worked out per request
+  const cached = await matchEdgeCache({ event })
+  if (cached) return cached
+
   let res = await fetch(proxyUrl, {
     headers: {
       // Pass through some headers from the original request to appear more like a browser
@@ -30,37 +49,31 @@ export default defineEventHandler(async (event) => {
     redirectCount++
   }
 
-  // Set CORS headers
-  const corsDomain = process.env.CORS_DOMAINS || ''
-  const corsDomains = corsDomain
-    .split(',')
-    .map((d) => d.trim())
-    .filter((d) => d.length > 0)
-  const origin = event.node.req.headers.origin
-  if (corsDomains.length) {
-    if (origin && corsDomains.includes(origin))
-      event.node.res.setHeader('Access-Control-Allow-Origin', origin)
-  } else {
-    // if no domains are specified, allow all
-    event.node.res.setHeader('Access-Control-Allow-Origin', '*')
-  }
-
   // Set Cache-Control headers
+  let cacheControl: string | undefined
   if (cacheMaxAge) {
-    const cacheControl = `public, max-age=${cacheMaxAge}`
-    event.node.res.setHeader('Cache-Control', cacheControl)
+    cacheControl = `public, max-age=${cacheMaxAge}`
   } else if (isImg) {
     // Replicate the 30-day cache for images from the original worker
-    const cacheControl = `public, max-age=${60 * 60 * 24 * 30}`
-    event.node.res.setHeader('Cache-Control', cacheControl)
+    cacheControl = `public, max-age=${60 * 60 * 24 * 30}`
   }
+  if (cacheControl) event.node.res.setHeader('Cache-Control', cacheControl)
 
   // Set content type from the fetched resource
   const contentType = res.headers.get('Content-Type')
   if (contentType) event.node.res.setHeader('Content-Type', contentType)
 
   // Stream the response body
-  if (res.body) return sendStream(event, res.body)
+  if (!res.body) return ''
 
-  return ''
+  // Cache cacheable responses at the edge (Cloudflare only) while streaming them to the client
+  if (res.ok && cacheControl) {
+    const [body, cacheBody] = res.body.tee()
+    const headers: Record<string, string> = { 'Cache-Control': cacheControl }
+    if (contentType) headers['Content-Type'] = contentType
+    putEdgeCache({ event, response: new Response(cacheBody, { headers }) })
+    return sendStream(event, body)
+  }
+
+  return sendStream(event, res.body)
 })

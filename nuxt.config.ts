@@ -37,6 +37,8 @@ export default defineNuxtConfig({
       nodeCompat: true,
       wrangler: {
         name: 'podcasts-app',
+        // serve prerendered /library/index.html at /library (no redirect to /library/), matching Firebase
+        assets: { html_handling: 'drop-trailing-slash' },
         observability: {
           enabled: true,
           head_sampling_rate: 1,

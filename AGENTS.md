@@ -90,14 +90,18 @@ Read `APP_INFO.md` for the full brief on this app's purpose, brand, and target a
 ### Backend
 
 - **Server:** Nitro (uses H3 under the hood) — this is Nuxt's built-in server
-- **Preset:** `cloudflare-module` (deploys to Cloudflare Workers)
+- **Preset:** `cloudflare-module` in `nuxt.config.ts` (used for Cloudflare Workers deploys). Firebase's framework integration builds with its own preset when deploying to Firebase.
 - **No database, no auth** — this is a fully client-side, anonymous app. All state lives in Pinia stores (persisted via localStorage/IndexedDB).
 - Only two server endpoints: `/api/podcast/feed` (RSS parser) and `/api/proxy` (CORS proxy)
 
 ### Hosting & Deployment
 
-- **App hosting:** Cloudflare Workers (via Nitro `cloudflare-module` preset)
-- **Deployment:** GitHub Actions (see `.github/workflows/`)
+- **Live site (lovepodcasts.com):** Cloudflare Workers, Worker `podcasts-app` (Nitro `cloudflare-module` preset) with `lovepodcasts.com` as a custom domain. Static/prerendered files are served from Workers static assets.
+- **Deployment:** GitHub Actions (`.github/workflows/deploy.yml`) builds every PR and deploys `main`. Manual: `npm run deploy`.
+- **Logs:** Workers Observability (100% sampling, invocation logs), configured in `nuxt.config.ts` > `nitro.cloudflare.wrangler`.
+- **Analytics:** Cloudflare Web Analytics, auto-injected at the edge (no tracking code in the app). `www` 301s to the apex via a zone redirect rule.
+- **Fallback:** Firebase Hosting (project `hark-pods`) is kept deployed. Rollback steps are in README.md > "Rolling back to Firebase". `npm run deploy:firebase` deploys there (Firebase uses its own Node preset).
+- **Edge caching:** Cloudflare doesn't CDN-cache Worker responses, so cacheable API responses use the `edgeCache` server util.
 - **No secrets management** — no env secrets needed beyond optional `CORS_DOMAINS` for the proxy endpoint
 
 ---
@@ -182,7 +186,7 @@ Always read and follow the rules in the markdown files in `.agent/rules/`. They 
 - **creating-pages.md** — Componentise, keep pages as layout/routing only
 - **composables.md** — Check existing → VueUse → create new
 - **stores.md** — Pinia setup style, HMR block, storeToRefs
-- **fetching-data.md** — This app uses plain `fetch` or store methods, not `$authedFetch` — that pattern doesn't apply here
+- **fetching-data.md** — `$fetch` to our own `/api/*` routes, `getProxyUrl()` for third-party URLs. No auth headers
 - **error-handling.md** — Frontend: try/catch. Server: `throw createError(...)` (no `useErrorHandle` or `serverError` helpers in this project)
 - **general-code-style.md** — Objects for params, one-line ifs, prettier config
 - **styling.md** — Tailwind only, no custom CSS, use design tokens

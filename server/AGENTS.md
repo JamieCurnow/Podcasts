@@ -24,67 +24,10 @@ There is a SERVER_ENDPOINTS.md file in this directory that documents all of the 
 
 Whenever you make a change to the endpoints or server utils, or if you learn something worth preserving, update the `## Patterns & Learnings` section in the relevant catalog file (`SERVER_ENDPOINTS.md` or `SERVER_UTILS.md`).
 
-## Auth
+## Auth, validation & errors
 
-Auth should be handled as the first thing in the handler. We have some utils that help with this:
+There's no auth and no database: all endpoints are public. There's no `readZodBody`, `getSafeRouterParam` or `serverError` helper here. Validate query params by hand and throw with `createError` (see `.agent/rules/error-handling.md`).
 
-- useServerAuthWithError
-  - eg: const { user, authUser } = await useServerAuthWithError(event)
-  - This will auth the user and throw a 401 error if the user is not authenticated.
-- useServerAuth
+## Caching
 
-  - eg:
-
-  ```
-  const auth = await useServerAuth(event)
-  if (!auth) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
-  const { user, authUser } = auth
-  ```
-
-  - this is helpful if you need to do more complex auth logic rather than just 401.
-
-## Validation
-
-Use `readZodBody` to validate the request body.
-
-eg:
-
-```ts
-const bodySchema = z.object({
-  name: z.string(),
-  age: z.number()
-})
-const { name, age } = await readZodBody(event, bodySchema)
-```
-
-That will throw a 400 error if the body is invalid.
-
-use `getSafeRouterParam` to get a router param.
-eg:
-path: '/api/user/[uid]'
-
-```ts
-const uid = getSafeRouterParam(event, 'uid')
-```
-
-## Errors
-
-There is an auto-imported `serverError` function that can be used to throw errors.
-This will automatically generate an appropriate error message for common status codes,
-or you can add a custom message as the second argument.
-
-eg:
-
-```ts
-throw serverError(404)
-```
-
-or
-
-```ts
-throw serverError(404, 'User not found')
-```
-
-You do not need to wrap the whole handler in a try/catch block as there is a middleware
-the will catch, log, and return the error to the client.
-
+The live site runs on Cloudflare Workers, which doesn't CDN-cache Worker responses. If an endpoint's response should be cached at the edge, use `matchEdgeCache` / `putEdgeCache` from `server/utils/edgeCache.ts` (see SERVER_UTILS.md).

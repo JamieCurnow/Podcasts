@@ -30,3 +30,6 @@ screenshots
 .claude/settings.local.json
 USER.md
 marketing/*
+# wrangler local dev state
+.wrangler/state
+.wrangler/tmp
