@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex gap-2 border border-gray-400 dark:border-neutral-400 rounded-lg h-9 items-center w-min pl-2 pr-4"
+    class="pressable flex gap-2 border border-gray-400 dark:border-neutral-400 rounded-lg h-9 items-center w-min pl-2 pr-4"
     @click="togglePlay()"
   >
     <!-- play btn -->

@@ -1,6 +1,10 @@
 <template>
-  <button class="pt-1" @click="toggle()">
-    <UIcon :name="icon" class="size-7" :class="iconColor" />
+  <button
+    class="pressable pt-1"
+    :aria-label="isInQueue ? 'Remove from queue' : 'Add to queue'"
+    @click="toggle()"
+  >
+    <IconSwap :name="icon" class="size-7 transition-colors duration-150" :class="iconColor" />
   </button>
 </template>
 
@@ -32,7 +36,6 @@ const iconColor = computed(() =>
 )
 
 const toggle = () => {
-  console.log('toggle', isInQueue.value)
   if (isInQueue.value) {
     removeFromQueue({ episode: props.episode, podcast: props.podcast })
   } else {

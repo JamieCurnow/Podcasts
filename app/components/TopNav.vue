@@ -1,12 +1,19 @@
 <template>
-  <div class="flex gap-2 h-20 items-center px-2">
+  <div
+    class="flex gap-2 h-[calc(5rem+env(safe-area-inset-top))] pt-[env(safe-area-inset-top)] items-center px-2"
+  >
     <div class="w-16 flex justify-start">
       <DarkModeToggle />
     </div>
     <div class="flex flex-col grow items-center justify-center">
       <ClientOnly>
-        <NuxtLink to="/">
-          <img :src="logo" alt="logo" class="h-20 -rotate-90" />
+        <NuxtLink to="/" class="pressable">
+          <img
+            :src="logo"
+            alt="logo"
+            class="h-20 -rotate-90 select-none [-webkit-touch-callout:none]"
+            draggable="false"
+          />
         </NuxtLink>
       </ClientOnly>
     </div>

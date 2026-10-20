@@ -1,12 +1,14 @@
 <template>
   <USlideover v-model:open="isOpen">
     <template #content>
-      <div class="flex flex-col gap-4 h-dvh overflow-auto">
+      <div
+        class="flex flex-col gap-4 h-dvh overflow-auto overscroll-contain pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
+      >
         <!-- top bar -->
         <div class="px-6 pt-4">
           <!-- back -->
           <div>
-            <button @click="isOpen = false">
+            <button class="pressable" aria-label="Close menu" @click="isOpen = false">
               <UIcon name="i-ic-close" class="size-7" />
             </button>
           </div>
@@ -17,7 +19,7 @@
           <NuxtLink
             v-for="(item, i) in menuItems"
             :key="i"
-            class="cursor-pointer no-underline!"
+            class="cursor-pointer no-underline! transition-colors duration-150 active:bg-neutral-200 dark:active:bg-neutral-700"
             :to="item.to"
             @click="isOpen = false"
           >

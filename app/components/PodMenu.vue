@@ -1,6 +1,6 @@
 <template>
   <UDropdownMenu :items="items" :content="{ align: 'start', side: 'bottom' }">
-    <button class="pt-1">
+    <button class="pressable pt-1" aria-label="More options">
       <UIcon name="i-mdi-dots-vertical" class="size-7 dark:text-neutral-400 text-gray-500" />
     </button>
   </UDropdownMenu>
