@@ -184,6 +184,12 @@ export default defineNuxtConfig({
       // links like /podcast/episode?url=...&episodeGuid=... back to the home
       // page. Runtime caching below still handles online/offline navigation.
       navigateFallback: null,
+      // Precache the hashed JS/CSS bundle alongside the HTML below. Without this,
+      // @vite-pwa/nuxt's glob only picks up _payload.json files, so after a deploy
+      // the old SW serves the old precached HTML whose /_nuxt/ assets now 404 on the
+      // server (blank, unstyled page). With the bundle precached, the old HTML always
+      // loads with its own assets, then the new SW activates and autoUpdate reloads.
+      globPatterns: ['_nuxt/**/*.{js,css}'],
       // Precache all prerendered pages at SW install time so they're available
       // offline even before the user has visited them. buildRevision ensures
       // Workbox re-fetches them on every deployment.
