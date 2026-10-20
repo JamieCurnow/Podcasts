@@ -1,7 +1,7 @@
 <template>
   <UModal v-model:open="isOpen">
     <template #content>
-      <div class="p-6 flex flex-col gap-4 max-h-[70dvh] overflow-auto">
+      <div class="p-6 flex flex-col gap-4 max-h-[70dvh] overflow-auto overscroll-contain">
         <div class="text-lg font-semibold">Add to Playlist</div>
 
         <button

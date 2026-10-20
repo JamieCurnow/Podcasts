@@ -17,9 +17,12 @@
       <Divider v-if="i + 1 !== staticHistory.length" />
     </template>
   </div>
-  <div v-else class="text-2xl text-center pt-20 text-neutral-300 dark:text-neutral-600">
-    No historic episodes
-  </div>
+  <EmptyState
+    v-else
+    icon="i-ic-baseline-history"
+    title="No listening history yet"
+    body="Episodes you play will show up here."
+  />
 </template>
 
 <script setup lang="ts">

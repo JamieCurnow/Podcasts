@@ -4,15 +4,12 @@
     :min-close-height="pullToRefreshMinClose"
     @refresh="refresh()"
   >
-    <template #pull-content>
-      <div
+    <template #pull-content="{ progress }">
+      <PullToRefreshIndicator
         v-if="status !== 'loading'"
-        class="h-32 flex justify-center pt-4 w-full bg-neutral-50 dark:bg-neutral-900"
-      >
-        <div class="font-semibold text-lg">
-          {{ status === 'refreshing' ? 'Loading...' : 'Pull to refresh' }}
-        </div>
-      </div>
+        :progress="progress"
+        :refreshing="status === 'refreshing'"
+      />
     </template>
 
     <div
@@ -23,7 +20,7 @@
       <div class="px-4">
         <!-- back -->
         <div>
-          <button @click="$router.back()">
+          <button class="pressable" aria-label="Back" @click="$router.back()">
             <UIcon name="i-ic-outline-arrow-back" class="size-7" />
           </button>
         </div>
@@ -51,7 +48,7 @@
           <!-- sub -->
           <div>
             <button
-              class="flex gap-2 pl-1 h-8 rounded-lg w-32"
+              class="pressable flex gap-2 pl-1 h-8 rounded-lg w-32"
               :class="
                 thisPodIsSubbed
                   ? 'text-neutral-900 dark:text-neutral-100 bg-neutral-300 dark:bg-neutral-600'
@@ -60,7 +57,7 @@
               @click="toggleSub()"
             >
               <div>
-                <UIcon
+                <IconSwap
                   :name="thisPodIsSubbed ? 'i-ic-sharp-check-circle' : 'i-ic-baseline-add-circle'"
                   class="size-8"
                   :class="
@@ -81,7 +78,7 @@
           </div>
           <!-- share -->
           <div v-if="canShare" class="ml-2 mt-1">
-            <button @click="share()">
+            <button class="pressable" aria-label="Share" @click="share()">
               <UIcon name="i-ic-outline-share" class="size-6" :class="iconColors" />
             </button>
           </div>
@@ -175,7 +172,9 @@ const {
 // Read share meta from query params (populated during SSR for rich link previews)
 const shareMeta = {
   title: computed(() => (route.query.t as string) || podTitle.value),
-  description: computed(() => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`),
+  description: computed(
+    () => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`
+  ),
   image: computed(() => (route.query.img as string) || podImage.value)
 }
 
@@ -198,7 +197,11 @@ const share = () => {
   if (podAuthor.value) params.set('desc', `by ${podAuthor.value}`)
   const shareUrl = `${window.location.origin}/podcast?${params.toString()}`
   try {
-    navigator.share({ title: podTitle.value, text: 'Listen on LovePodcasts.com — for the love of pods.', url: shareUrl })
+    navigator.share({
+      title: podTitle.value,
+      text: 'Listen on LovePodcasts.com — for the love of pods.',
+      url: shareUrl
+    })
   } catch (e) {
     console.error(e)
   }

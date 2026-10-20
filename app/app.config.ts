@@ -6,7 +6,7 @@ export default defineAppConfig({
     },
     button: {
       slots: {
-        base: 'cursor-pointer'
+        base: 'cursor-pointer pressable'
       },
       variants: {
         variant: {
@@ -25,7 +25,18 @@ export default defineAppConfig({
     slideover: {
       slots: {
         content: 'bg-neutral-100 dark:bg-neutral-800'
-      }
+      },
+      // the default 200ms ease-in-out starts slow; drawers should use the iOS drawer curve in and leave quicker
+      compoundVariants: [
+        {
+          transition: true,
+          side: 'right',
+          class: {
+            content:
+              'data-[state=open]:animate-[slide-in-from-right_400ms_var(--ease-drawer)] data-[state=closed]:animate-[slide-out-to-right_250ms_var(--ease-drawer)]'
+          }
+        }
+      ]
     },
     dropdownMenu: {
       slots: {

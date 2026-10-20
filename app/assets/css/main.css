@@ -3,25 +3,72 @@
 
 @theme {
   --font-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion tokens. These replace Tailwind's weak default ease-out / ease-in-out curves,
+  so `ease-out`, `ease-in-out` and `ease-drawer` utilities all use them. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* `animate-enter`: fade + small rise for content arriving on screen. Pair with an
+  inline animation-delay for a stagger. `backwards` so it holds the start frame during the
+  delay but leaves no transform behind once it's done. */
+  --animate-enter: enter 300ms var(--ease-out) backwards;
+  /* `animate-fade-in-delayed`: only shows if it's still around after 200ms, so fast loads
+  never flash a spinner. */
+  --animate-fade-in-delayed: fade-in 200ms var(--ease-out) 200ms backwards;
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
 }
 
 @layer base {
   html {
     @apply text-black bg-neutral-50 dark:text-neutral-300 dark:bg-neutral-900;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    /* we have our own pull to refresh, so stop the browser's and the iOS rubber band */
+    overscroll-behavior: none;
   }
 
   body {
     @apply border-none text-black dark:text-neutral-300 dark:bg-neutral-900;
+    overscroll-behavior: none;
+    /* viewport-fit=cover lets the page under the notch in landscape, pad it back out */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* controls fire click straight away and don't select their label on long press */
+  button,
+  [role='button'] {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  a {
+    touch-action: manipulation;
   }
 }
 
-/* html.dark {
-  @apply text-neutral-300 bg-neutral-900;
-} */
-
-/* prevent pull down refresh on chrome mobile */
-body {
-  overscroll-behavior-y: contain;
+/* iOS zooms into any input under 16px and never zooms back out. Unlayered so it beats text-sm. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }
 
 .disable-scroll {
@@ -41,10 +88,34 @@ button {
   @apply cursor-pointer;
 }
 
+/* Press feedback for anything tappable. Unlayered so it wins over a component's own
+transition-colors while still transitioning colours. */
+.pressable {
+  transition-property: scale, opacity, color, background-color, border-color;
+  transition-duration: 160ms;
+  transition-timing-function: var(--ease-out);
+}
+
+.pressable:active:not(:disabled) {
+  scale: 0.97;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* gentler, not zero: keep fades, drop movement */
+  .animate-enter {
+    animation-name: fade-in;
+  }
+
+  .pressable:active:not(:disabled) {
+    scale: none;
+    opacity: 0.7;
+  }
 }

@@ -1,12 +1,12 @@
 <template>
   <div ref="container" class="relative w-full">
     <div ref="pullContent" class="absolute top-0 left-0 w-full">
-      <slot name="pull-content"> </slot>
+      <slot name="pull-content" :progress="progress"> </slot>
     </div>
 
     <div
       class="will-change-transform"
-      :class="{ 'transition-transform transform-gpu duration-300 ease-in-out': !shouldPullDown }"
+      :class="{ 'transition-transform duration-500 ease-drawer': !shouldPullDown }"
       :style="{ transform: `translateY(${amountToPullDown}px)` }"
     >
       <!-- <div class="absolute top-0 left-0 bg-black/50">
@@ -105,10 +105,15 @@ const refreshThresholdAmount = computed(() => {
   return maxPullAmount.value * 0.8
 })
 
+// 0 → 1 as the pull approaches the refresh threshold, for the indicator in the pull-content slot
+const progress = computed(() => Math.min(1, amountToPullDown.value / refreshThresholdAmount.value))
+
 watchEffect(() => {
   // if we pull down enough, trigger the refresh
   if (amountToPullDown.value >= refreshThresholdAmount.value && !hasTriggered.value) {
     hasTriggered.value = true
+    // a tiny tick where supported (Android), like a native pull to refresh
+    navigator.vibrate?.(10)
     emit('refresh')
   }
 })

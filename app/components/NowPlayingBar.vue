@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-auto transform duration-300 ease-in-out fixed flex justify-center bottom-20 left-0 h-14 w-full text-neutral-500 dark:text-neutral-400"
+    class="mx-auto fixed flex justify-center bottom-[calc(5rem+env(safe-area-inset-bottom))] left-0 h-14 w-full text-neutral-500 transition-transform duration-300 ease-out dark:text-neutral-400"
     :class="{ 'translate-y-full': audioState === 'idle' }"
     @click="currentPodcastDialogOpen = true"
   >
@@ -14,18 +14,23 @@
         <div class="truncate pr-2 text-sm grow">
           {{ episodeTitle }}
         </div>
-        <div class="pt-1 pr-2">
-          <button @click.stop="togglePlay()">
-            <UIcon :name="icon" class="size-6" :class="{ 'animate-spin': icon === 'i-mdi-loading' }" />
+        <div class="pr-1">
+          <button
+            class="pressable flex size-10 items-center justify-center"
+            :aria-label="audioState === 'playing' ? 'Pause' : 'Play'"
+            @click.stop="togglePlay()"
+          >
+            <IconSwap :name="icon" class="size-6" :class="{ 'animate-spin': icon === 'i-mdi-loading' }" />
           </button>
         </div>
       </div>
     </div>
     <!-- seek bar -->
-    <div class="max-w-4xl absolute bottom-0 h-[1px] dark:bg-neutral-700 bg-neutral-200 w-full">
+    <div class="max-w-4xl absolute bottom-0 h-px dark:bg-neutral-700 bg-neutral-200 w-full">
+      <!-- scaleX rather than width: it updates every timeupdate and shouldn't cost a layout -->
       <div
-        :style="{ width: `${currentTimePercentage}%` }"
-        class="bg-neutral-400 dark:bg-neutral-500 h-[1px]"
+        :style="{ transform: `scaleX(${currentTimePercentage / 100})` }"
+        class="bg-neutral-400 dark:bg-neutral-500 h-px origin-left"
       ></div>
     </div>
   </div>

@@ -3,14 +3,14 @@
     <UIcon name="i-mdi-arrow-down-circle-outline" class="size-6 dark:text-neutral-400 text-gray-500" />
   </button> -->
   <ClientOnly>
-    <button class="pt-1" @click="localStartDownload()">
+    <button class="pressable pt-1" aria-label="Download episode" @click="localStartDownload()">
       <PlayRing
         :invert="downloadStatus === 'inProgress'"
         :percentage="downloadPercentage"
         class="w-6 h-6"
         stroke="stroke-[3]"
       >
-        <UIcon
+        <IconSwap
           :name="icon"
           class="dark:text-neutral-400 text-gray-500"
           :class="{

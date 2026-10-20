@@ -21,7 +21,9 @@
           </div>
         </div>
         <div class="mt-12 flex w-full justify-center">
-          <UButton size="lg" variant="ghost" color="error" @click="sleepTimerStore.cancel()"> Cancel timer </UButton>
+          <UButton size="lg" variant="ghost" color="error" @click="sleepTimerStore.cancel()">
+            Cancel timer
+          </UButton>
         </div>
       </template>
 
@@ -35,7 +37,7 @@
           <!-- Scroll container -->
           <div
             ref="scrollContainer"
-            class="scrollbar-hide h-[200px] overflow-y-auto overflow-x-hidden snap-y snap-mandatory"
+            class="scrollbar-hide h-[200px] overflow-y-auto overflow-x-hidden overscroll-contain touch-pan-y snap-y snap-mandatory"
             @scroll="onScroll"
             @touchstart.stop
             @touchmove.stop

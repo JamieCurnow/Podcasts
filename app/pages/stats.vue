@@ -47,9 +47,20 @@
           <div class="flex flex-col gap-3">
             <StatRow label="Completion Rate" :value="`${completionRate}%`" />
             <StatRow label="Average Episode Length" :value="averageEpisodeLengthFormatted" />
-            <StatRow v-if="currentStreak > 0" label="Current Streak" :value="`${currentStreak} day${currentStreak !== 1 ? 's' : ''} 🔥`" />
-            <StatRow label="Longest Streak" :value="`${longestStreak} day${longestStreak !== 1 ? 's' : ''}`" />
-            <StatRow v-if="timeSavedAtSpeedSeconds > 0" label="Time Saved at Speed" :value="timeSavedFormatted" />
+            <StatRow
+              v-if="currentStreak > 0"
+              label="Current Streak"
+              :value="`${currentStreak} day${currentStreak !== 1 ? 's' : ''} 🔥`"
+            />
+            <StatRow
+              label="Longest Streak"
+              :value="`${longestStreak} day${longestStreak !== 1 ? 's' : ''}`"
+            />
+            <StatRow
+              v-if="timeSavedAtSpeedSeconds > 0"
+              label="Time Saved at Speed"
+              :value="timeSavedFormatted"
+            />
             <StatRow label="Bookmarks" :value="String(bookmarkCount)" />
             <StatRow label="Downloads" :value="String(completedDownloads)" />
             <StatRow label="Queue Size" :value="String(queueSize)" />
@@ -96,7 +107,7 @@
               class="flex-1 flex flex-col items-center gap-1"
             >
               <div
-                class="w-full bg-primary rounded-t transition-all"
+                class="w-full bg-primary rounded-t transition-[height] duration-300 ease-out"
                 :style="{ height: barHeight(count) }"
               />
               <div class="text-[10px] text-neutral-500 dark:text-neutral-400">

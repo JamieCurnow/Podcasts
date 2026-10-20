@@ -1,5 +1,8 @@
 <template>
-  <button class="flex gap-4 px-3 py-1 text-left hover:opacity-80 w-full" @click="loadPodcast()">
+  <button
+    class="flex gap-4 px-3 py-1 text-left hover:opacity-80 active:bg-neutral-200 dark:active:bg-neutral-700 transition-colors duration-150 w-full"
+    @click="loadPodcast()"
+  >
     <!-- <div class="">{{ index + 1 }}</div> -->
     <div class="flex flex-col gap-1 pb-2">
       <div>

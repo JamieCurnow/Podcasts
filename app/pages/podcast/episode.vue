@@ -7,7 +7,7 @@
     <div class="px-4">
       <!-- back -->
       <div>
-        <button @click="$router.back()">
+        <button class="pressable" aria-label="Back" @click="$router.back()">
           <UIcon name="i-ic-outline-arrow-back" class="size-7" />
         </button>
       </div>
@@ -91,7 +91,9 @@ const {
 // Read share meta from query params (populated during SSR for rich link previews)
 const shareMeta = {
   title: computed(() => (route.query.t as string) || episodeTitle.value),
-  description: computed(() => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`),
+  description: computed(
+    () => (route.query.desc as string) || `Listen on LovePodcasts.com — for the love of pods.`
+  ),
   image: computed(() => (route.query.img as string) || episodeImage.value)
 }
 

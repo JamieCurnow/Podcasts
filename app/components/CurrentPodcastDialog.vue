@@ -9,8 +9,14 @@
       <div class="self-center">
         <UIcon name="i-ic-round-horizontal-rule" class="size-10 text-neutral-300 dark:text-neutral-600" />
       </div>
-      <PodCover :img="podImage" class="size-[300px] self-center" :width="400" :height="400" />
-      <div class="pt-10 text-center text-lg font-semibold" @click="goToPodcast">
+      <!-- shrinks on short screens so the controls stay on screen -->
+      <PodCover
+        :img="podImage"
+        class="size-[min(300px,calc(100dvh-24rem))] self-center"
+        :width="400"
+        :height="400"
+      />
+      <div class="pt-10 text-center text-lg font-semibold cursor-pointer" @click="goToPodcast">
         <TickerText :text="episodeTitle || ''" />
       </div>
       <div class="text-center text-sm line-clamp-1">
@@ -21,13 +27,17 @@
     <div class="flex flex-col justify-center px-12">
       <!-- play buttons -->
       <div class="flex items-center justify-center gap-10 pt-8">
-        <UButton variant="ghost" @click="skipBackwards()">
+        <UButton variant="ghost" aria-label="Back 10 seconds" @click="skipBackwards()">
           <UIcon name="i-ic-round-replay-10" class="size-10" />
         </UButton>
-        <UButton variant="ghost" @click="togglePlay()">
-          <UIcon :name="playIcon" class="size-14" />
+        <UButton
+          variant="ghost"
+          :aria-label="audioState === 'playing' ? 'Pause' : 'Play'"
+          @click="togglePlay()"
+        >
+          <IconSwap :name="playIcon" class="size-14" />
         </UButton>
-        <UButton variant="ghost" @click="skipForwards()">
+        <UButton variant="ghost" aria-label="Forward 30 seconds" @click="skipForwards()">
           <UIcon name="i-ic-round-forward-30" class="size-10" />
         </UButton>
       </div>
@@ -52,17 +62,20 @@
             </UButton>
           </div>
           <div class="flex w-1/3 justify-center">
-            <UButton size="lg" variant="ghost" @click="toggleBookmark">
-              <UIcon class="size-6" :name="bookmarkIcon" />
+            <UButton size="lg" variant="ghost" aria-label="Bookmark" @click="toggleBookmark">
+              <IconSwap class="size-6" :name="bookmarkIcon" />
             </UButton>
           </div>
           <div class="flex w-1/3 justify-end">
-            <UButton size="lg" variant="ghost" @click="sleepTimerDialog = true">
+            <UButton size="lg" variant="ghost" aria-label="Sleep timer" @click="sleepTimerDialog = true">
               <template v-if="sleepTimerStore.isActive && sleepTimerStore.mode === 'timed'">
                 <span class="text-xs tabular-nums">{{ sleepTimerStore.remainingFormatted }}</span>
               </template>
               <template v-else>
-                <UIcon class="size-6" :name="sleepTimerStore.isActive ? 'i-mdi-timer-sand' : 'i-mdi-timer-outline'" />
+                <IconSwap
+                  class="size-6"
+                  :name="sleepTimerStore.isActive ? 'i-mdi-timer-sand' : 'i-mdi-timer-outline'"
+                />
               </template>
             </UButton>
           </div>
@@ -160,7 +173,6 @@ const seekFormatted = computed(() => formatTime(seek.value))
 watch(
   [currentTime, currentPodcastDialogOpen],
   ([val]) => {
-    console.log({ currentTime, currentPodcastDialogOpen, preventSwipe: preventSwipe.value })
     if (preventSwipe.value) return
     nextTick(() => {
       seek.value = val

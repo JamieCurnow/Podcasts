@@ -10,7 +10,7 @@
           a 15.9155 15.9155 0 0 1 0 -31.831"
       />
       <path
-        class="fill-none"
+        class="fill-none transition-[stroke-dasharray] duration-300 ease-linear"
         :class="[stroke, invert ? lightColor : darkColor]"
         :style="{ fill: 'none' }"
         :stroke-dasharray="`${props.percentage}, 100`"
