@@ -94,12 +94,17 @@ export default defineNuxtConfig({
       title: 'Podcasts',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          name: 'viewport',
+          content:
+            'width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content'
+        },
         // description
         { id: 'description', name: 'description', content: 'For the love of pods' },
-        // theme-color
-        { name: 'theme-color', content: '#EBEBEB', media: '(prefers-color-scheme: light)' },
+        // theme-color (matches the html background, kept in sync with the in-app toggle by plugins/mobile.client.ts)
+        { name: 'theme-color', content: '#fafafa', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#171717', media: '(prefers-color-scheme: dark)' },
+        { name: 'color-scheme', content: 'light dark' },
         { name: 'mobile-web-app-capable', content: 'yes' },
         // Open Graph
         { property: 'og:type', content: 'website' },
