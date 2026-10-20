@@ -120,6 +120,26 @@ None
 
 ---
 
+## `<EmptyState>`
+
+Centred empty-list message with an icon, a title and optional body copy. Fades up on mount. Default slot sits under the text for a CTA button. Used by the queue, downloads, history and bookmarks pages.
+
+### Props
+
+| Prop    | Type   | Required | Description            |
+| ------- | ------ | -------- | ---------------------- |
+| `icon`  | String | Yes      | Iconify icon name      |
+| `title` | String | Yes      | Main line              |
+| `body`  | String | No       | Supporting line        |
+
+### Example
+
+```vue
+<EmptyState icon="i-ic-baseline-history" title="No listening history yet" body="Episodes you play will show up here." />
+```
+
+---
+
 ## `<ExportOPMLDialog>`
 
 A `UModal` that lets the user export their podcast subscriptions as an OPML file. Fetches each subscribed feed on open, shows a checklist of podcasts using `<PodcastListItem>`, and downloads the OPML via `createOpml()` when the user confirms.
@@ -140,7 +160,7 @@ A `UModal` that lets the user export their podcast subscriptions as an OPML file
 
 ## `<FullScreenLoading>`
 
-Centres a large `<Loading>` spinner in 50% of the viewport height.
+Centres a large `<Loading>` spinner in 50% of the viewport height. Fades in after a 200ms delay (`animate-fade-in-delayed`) so quick, cached loads never flash a spinner.
 
 ### Props
 
@@ -150,6 +170,24 @@ None
 
 ```vue
 <FullScreenLoading />
+```
+
+---
+
+## `<IconSwap>`
+
+A `UIcon` that cross-fades (opacity + scale 0.9 + 2px blur, 150ms) when its `name` changes, instead of popping. Use it for icons that show state: play/pause, bookmarked, queued, subscribed, downloaded. Any other attrs (`class`, etc.) go on the icon.
+
+### Props
+
+| Prop   | Type   | Required | Description       |
+| ------ | ------ | -------- | ----------------- |
+| `name` | String | Yes      | Iconify icon name |
+
+### Example
+
+```vue
+<IconSwap :name="isPlaying ? 'i-mdi-pause' : 'i-mdi-play'" class="size-6" />
 ```
 
 ---
@@ -380,7 +418,7 @@ Icon button that adds or removes an episode from the queue. Icon and colour chan
 
 ## `<PodCover>`
 
-Displays a podcast cover image routed through `/api/proxy` for caching (4-week cache). Rounded corners default to `rounded-lg`; `less-rounded` uses `rounded-md`.
+Displays a podcast cover image routed through `/api/proxy` for caching (4-week cache). Rounded corners default to `rounded-lg`; `less-rounded` uses `rounded-md`. Fades in once loaded (checks `img.complete` on mount for cached/prerendered images), and isn't draggable or long-press selectable.
 
 ### Props
 
@@ -653,7 +691,7 @@ A `NuxtLink` to the podcast page (`/podcast?url=...`) showing the podcast cover 
 
 ## `<PullToRefesh>`
 
-Pull-to-refresh wrapper. Detects downward swipe while scrolled to top and emits `refresh` once the threshold is passed. Uses `useSwipe`, `useScroll`, and `useElementSize` from VueUse. The `#pull-content` slot is shown above the main content during the pull.
+Pull-to-refresh wrapper. Detects downward swipe while scrolled to top and emits `refresh` once the threshold is passed. Uses `useSwipe`, `useScroll`, and `useElementSize` from VueUse. The `#pull-content` slot is shown above the main content during the pull and gets a `progress` slot prop (0 → 1 towards the refresh threshold). Release springs back on the `ease-drawer` curve. Vibrates briefly (where supported) when the refresh triggers.
 
 ### Props
 
@@ -678,12 +716,25 @@ Pull-to-refresh wrapper. Detects downward swipe while scrolled to top and emits 
 
 ```vue
 <PullToRefesh @refresh="reload()">
-  <template #pull-content>
-    <div>Pull to refresh</div>
+  <template #pull-content="{ progress }">
+    <PullToRefreshIndicator :progress="progress" :refreshing="refreshing" />
   </template>
   <div>...page content...</div>
 </PullToRefesh>
 ```
+
+---
+
+## `<PullToRefreshIndicator>`
+
+The standard `#pull-content` for `<PullToRefesh>`: an arrow that fades in and turns with the pull, swapping to a spinner while refreshing.
+
+### Props
+
+| Prop         | Type    | Required | Description                         |
+| ------------ | ------- | -------- | ----------------------------------- |
+| `progress`   | Number  | Yes      | 0 → 1, from the `pull-content` slot |
+| `refreshing` | Boolean | Yes      | Show the spinner                    |
 
 ---
 
@@ -726,7 +777,7 @@ A `<SlideUpDialog>` with two views: an inactive state showing a vertical wheel p
 
 ## `<SlideUpDialog>`
 
-A reusable slide-up bottom sheet with swipe-to-close. Uses `useSwipe` on the dialog element. Locks body scroll while open via `useGlobalStateStore().bodyScrollLock`. The `preventSwipe` prop disables swipe-to-close (used when the seek slider is being dragged inside).
+A reusable slide-up bottom sheet with drag-to-dismiss. Slides on the `ease-drawer` curve (500ms). While dragging it follows the finger (upward drags get heavier the further you pull); on release it closes if dragged past `userConfig.swipeDownBeforeCloseAmount` px **or** flicked faster than 0.11px/ms, otherwise it springs back. Locks body scroll while open via `useGlobalStateStore().bodyScrollLock`. The `preventSwipe` prop disables drag (used when the seek slider is being dragged inside). Pads for the home indicator (`safe-area-inset-bottom`) and never grows taller than the visible viewport.
 
 ### Props (via `v-model`)
 
@@ -766,7 +817,7 @@ A horizontally scrollable strip of podcast cover images. Only shows podcasts tha
 
 ## `<TickerText>`
 
-Auto-scrolling ticker text. Checks if the text overflows its container and, if so, applies a 20-second CSS `ticker-animation` loop. A duplicate span is appended for seamless looping.
+Auto-scrolling ticker text. Checks if the text overflows its container and, if so, applies a 15-second CSS `ticker-animation` loop (off under `prefers-reduced-motion`). A duplicate span is appended for seamless looping.
 
 ### Props
 
@@ -810,3 +861,10 @@ None
 - Components that receive `episode`/`podcast` as required props should use `usePodcast()` and `useEpisode()` composables for derived values (title, image, routes, dates) instead of inline fallback chains. Pass props via getter: `usePodcast(() => props.podcast)`.
 - `PodListItem`, `PodTitle`, `PodPlayChip`, `PodcastListItem`, and `SubsHorizontalScroll` use the new composables. `CurrentPodcastDialog` and `NowPlayingBar` use inline computed values because their store refs are nullable.
 - `PodcastChapter` uses `formatTimePadded()` from `app/utils/formatTime.ts` for zero-padded chapter timestamps.
+- **Motion tokens live in `main.css` `@theme`.** `ease-out`, `ease-in-out` and `ease-drawer` utilities use strong custom curves (Tailwind's defaults are too weak). Entering/exiting UI: `ease-out`. Sheets and drawers: `ease-drawer`. Never `ease-in`. Keep UI motion under 300ms (sheets up to 500ms).
+- **Press feedback:** add the `pressable` class to anything tappable that isn't a `UButton` (UButton gets it via `app.config.ts`). It scales to 0.97 on `:active` in 160ms. `plugins/mobile.client.ts` adds the passive `touchstart` listener iOS needs for `:active` to fire at all.
+- **Entrances:** `animate-enter` (fade + 8px rise, 300ms) with an inline `animationDelay` for staggers, 30-40ms apart and capped so long lists don't drag. It uses `backwards` fill so no transform is left on the element afterwards. Only on views seen occasionally (feed load, library, empty states), never on route changes or frequent toggles.
+- **Animate `transform`/`opacity`/`scale`, not `width`/`height`.** e.g. the now-playing seek bar uses `scaleX`, `<AudioPlaying>` bars use `scaleY`. The one exception is accordions: `<PodcastChapters>` uses the `grid-rows-[0fr]` → `grid-rows-[1fr]` trick.
+- **Reduced motion:** gentler, not zero. Keep fades, drop movement (`motion-reduce:` variants or a `prefers-reduced-motion` block next to the animation).
+- **Mobile baseline is in `main.css`:** no tap highlight, `overscroll-behavior: none` (we have our own pull to refresh), 16px inputs on touch screens (iOS zoom), `touch-action: manipulation` + no text selection on buttons. Fixed bars pad with `env(safe-area-inset-*)` (the viewport has `viewport-fit=cover`). Use `dvh`/`svh`, never `vh`/`h-screen`. Inner scroll areas get `overscroll-contain`.
+- **Hover:** Tailwind v4's `hover:` is already gated to `(hover: hover)`, so it's safe on touch. Plain CSS `:hover` rules need wrapping in `@media (hover: hover) and (pointer: fine)` by hand.

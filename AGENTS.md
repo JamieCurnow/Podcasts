@@ -130,7 +130,8 @@ Read `APP_INFO.md` for the full brief on this app's purpose, brand, and target a
 | `pages/`        | File-based routing pages                                                 | `PAGES.md`, `AGENTS.md`       |
 | `stores/`       | Pinia stores for global state                                            | `STORES.md`, `AGENTS.md`      |
 | `layouts/`      | Layout wrapper (`default` only — no auth layout)                         | —                             |
-| `assets/css/`   | Design system (Tailwind v4 config, fonts, colors)                        | —                             |
+| `assets/css/`   | Design system (Tailwind v4 config, fonts, colors, motion tokens, mobile baseline) | `COMPONENTS.md` Patterns |
+| `plugins/`      | Client plugins (`mobile.client.ts`: iOS `:active` support, theme-color sync) | —                          |
 | `utils/`        | Client-side utilities (`getProxyUrl`, `getTimeLeftText`, `pwaIconLinks`) | —                             |
 | `app.config.ts` | App-level config (UI colors: primary `stone`, neutral `neutral`)         | —                             |
 
