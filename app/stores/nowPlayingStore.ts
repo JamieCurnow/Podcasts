@@ -57,6 +57,7 @@ export const useNowPlayingStore = defineStore(
       errorMessage.value = ''
       src.value = undefined
       if (audio.value) audio.value.src = ''
+      releaseKeepAlive()
       episode.value = undefined
       podcast.value = undefined
       duration.value = 0
@@ -71,6 +72,8 @@ export const useNowPlayingStore = defineStore(
     }) => {
       reset()
       _prevTimeUpdatePos = null
+      _recoveryAttempts = []
+      clearTimeout(_stallTimer)
       episode.value = opts.episode
       podcast.value = opts.podcast
       const url = opts.episode.enclosure.url
@@ -133,6 +136,25 @@ export const useNowPlayingStore = defineStore(
       updatePositionState()
     }
 
+    // Keep the OS media widget's seek bar in sync. The OS extrapolates from the last position we
+    // gave it, so this needs calling on every play/pause/seek/rate change, not just on timeupdate.
+    const syncMediaPositionState = () => {
+      const a = audio.value
+      if (!a || !('setPositionState' in navigator.mediaSession)) return
+      const { duration: d, playbackRate: p, currentTime: c } = a
+      // live streams have an infinite duration and no seek bar
+      if (!d || !Number.isFinite(d) || !p || isNaN(c)) return
+      try {
+        navigator.mediaSession.setPositionState({
+          duration: d,
+          playbackRate: p,
+          position: Math.min(Math.max(c, 0), d)
+        })
+      } catch (error) {
+        console.warn('setPositionState failed', error)
+      }
+    }
+
     // Track previous timeupdate position to calculate actual listening time
     let _prevTimeUpdatePos: number | null = null
 
@@ -161,11 +183,7 @@ export const useNowPlayingStore = defineStore(
       }
       _prevTimeUpdatePos = c
 
-      navigator.mediaSession.setPositionState({
-        duration: Math.round(d),
-        playbackRate: p,
-        position: Math.round(c)
-      })
+      syncMediaPositionState()
 
       const feedUrl = podcast.value?.feedUrl
       const episodeGuid = episode.value?.guid
@@ -203,11 +221,13 @@ export const useNowPlayingStore = defineStore(
         updatePositionState()
       })
 
+      /* Next & Previous track: podcasts don't have tracks, so these skip like the player buttons.
+         Headphone double/triple taps send these, which makes skipping adverts easy. */
+      navigator.mediaSession.setActionHandler('nexttrack', () => skipForwards())
+      navigator.mediaSession.setActionHandler('previoustrack', () => skipBackwards())
+
       /* Play & Pause */
-      navigator.mediaSession.setActionHandler('play', async () => {
-        if (!audio.value) return
-        await audio.value.play()
-      })
+      navigator.mediaSession.setActionHandler('play', () => play())
 
       navigator.mediaSession.setActionHandler('pause', () => {
         if (!audio.value) return
@@ -245,6 +265,77 @@ export const useNowPlayingStore = defineStore(
       }
     })
 
+    // Some hosts drop the stream mid-episode (e.g. Changelog, behind op3 + Podscribe redirects).
+    // The audio element then errors out or sits buffering forever, and play() can't revive it,
+    // so reload the source and carry on from where we were.
+    const stallTimeoutMs = 20_000
+    const maxRecoveriesPerMinute = 3
+    let _stallTimer: ReturnType<typeof setTimeout> | undefined
+    let _recoveryAttempts: number[] = []
+
+    const recoverPlayback = async (opts: { play: boolean }) => {
+      const el = audio.value
+      const currentSrc = el?.currentSrc
+      if (!el || !currentSrc) return
+      clearTimeout(_stallTimer)
+
+      // give up if it keeps failing, so a dead link doesn't retry forever
+      const now = Date.now()
+      _recoveryAttempts = _recoveryAttempts.filter((t) => now - t < 60_000)
+      if (_recoveryAttempts.length >= maxRecoveriesPerMinute) {
+        el.pause()
+        audioState.value = 'paused'
+        useToast().add({
+          color: 'error',
+          title: 'Playback stopped',
+          description: 'Lost connection to the audio. Press play to try again.',
+          duration: 5000
+        })
+        return
+      }
+      _recoveryAttempts.push(now)
+
+      const at = el.currentTime || currentTime.value
+      el.src = currentSrc
+      el.load()
+      // before metadata loads this sets the start position, so it resumes in the right place
+      el.currentTime = at
+      if (!opts.play) return
+      try {
+        await el.play()
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    // Chrome keeps the OS media widget for a paused player until the page gets frozen in the
+    // background (or the player errors). Timers can't prevent freezing (they stop too), but holding
+    // a Web Lock is one of Chrome's "don't freeze this page" signals. So hold one while paused, for
+    // up to an hour, so the widget sticks around like a native app's.
+    const keepAliveMaxMs = 60 * 60 * 1000
+    let _keepAlive: { release: () => void } | undefined
+
+    const holdKeepAlive = () => {
+      if (_keepAlive || !('locks' in navigator)) return
+      let release = () => {}
+      const released = new Promise<void>((resolve) => (release = resolve))
+      const keepAlive = { release }
+      _keepAlive = keepAlive
+      const timer = setTimeout(release, keepAliveMaxMs)
+      navigator.locks
+        .request('pod_paused_keep_alive', () => released)
+        .catch(console.error)
+        .finally(() => {
+          clearTimeout(timer)
+          if (_keepAlive === keepAlive) _keepAlive = undefined
+        })
+    }
+
+    const releaseKeepAlive = () => {
+      _keepAlive?.release()
+      _keepAlive = undefined
+    }
+
     // watch audio element and add some event listeners when it comes in
     watch(audio, (el) => {
       if (!el) return
@@ -254,11 +345,38 @@ export const useNowPlayingStore = defineStore(
       el.addEventListener('play', function () {
         navigator.mediaSession.playbackState = 'playing'
         audioState.value = 'playing'
+        releaseKeepAlive()
       })
       el.addEventListener('pause', function () {
         navigator.mediaSession.playbackState = 'paused'
         audioState.value = 'paused'
+        clearTimeout(_stallTimer)
+        if (src.value) holdKeepAlive()
       })
+      // the OS widget extrapolates its seek bar from the last position state, so refresh it
+      // whenever playback jumps or changes speed
+      for (const event of ['loadedmetadata', 'durationchange', 'play', 'pause', 'seeked', 'ratechange']) {
+        el.addEventListener(event, syncMediaPositionState)
+      }
+      // streams can drop mid-episode, which leaves the element dead until it's reloaded
+      el.addEventListener('error', () => {
+        console.error('audio error', el.error)
+        // only network/decode errors are worth retrying. A bad URL (or the src = '' in reset())
+        // reports MEDIA_ERR_SRC_NOT_SUPPORTED and would just fail again.
+        const code = el.error?.code
+        if (code !== MediaError.MEDIA_ERR_NETWORK && code !== MediaError.MEDIA_ERR_DECODE) return
+        // reload while paused too: Chrome drops the OS media widget for a player in an error state
+        recoverPlayback({ play: !el.paused })
+      })
+      el.addEventListener('waiting', () => {
+        clearTimeout(_stallTimer)
+        _stallTimer = setTimeout(() => {
+          if (el.paused || el.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) return
+          console.warn('audio stalled, reloading')
+          recoverPlayback({ play: true })
+        }, stallTimeoutMs)
+      })
+      el.addEventListener('playing', () => clearTimeout(_stallTimer))
       el.addEventListener('timeupdate', function () {
         updatePositionStateThrottled()
         useSleepTimerStore().checkTimer()
@@ -295,6 +413,11 @@ export const useNowPlayingStore = defineStore(
 
     const play = () => {
       if (!audio.value) return
+      // a dead stream can't be resumed with play(), it needs reloading
+      if (audio.value.error) {
+        _recoveryAttempts = []
+        return recoverPlayback({ play: true })
+      }
       audio.value.play()
       updateMetadata()
     }
